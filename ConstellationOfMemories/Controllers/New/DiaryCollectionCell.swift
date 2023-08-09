@@ -44,7 +44,10 @@ final class DiaryCollectionCell: UITableViewCell {
     // MARK: - LifeCycle
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
+        // configure
+            // + background Color
+            // + selection Style
+            // + UI - AutoLayout
         self.configureDiaryCell()
     }
     required init?(coder: NSCoder) {
@@ -61,15 +64,13 @@ final class DiaryCollectionCell: UITableViewCell {
         self.selectionStyle = .none
         
         
-        // UI - Auto-Layout
+        // UI - AutoLayout
         self.addSubview(self.borderView)
         self.borderView.anchor(top: self.topAnchor, paddingTop: 5,
                                bottom: self.bottomAnchor, paddingBottom: 5,
                                leading: self.leadingAnchor, paddingLeading: 20,
                                trailing: self.trailingAnchor, paddingTrailing: 20,
                                cornerRadius: 20)
-        
-        
     }
     
     

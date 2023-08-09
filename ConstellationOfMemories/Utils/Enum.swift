@@ -8,36 +8,41 @@
 import Foundation
 
 
-// extension
+// extension - UILabel
 enum FontStyle {
     case system
     case bold
     case AvenirLight
 }
-
-// HeaderView
-enum RightHeaderButton {
-    case tableRightButtonTapped
-    case diaryRightButtonTapped
+// Header
+enum LeftBtnTapImgChange {
+    case menuLeftButton
+    case mainLeftButton
+    case tableLeftButton
+    case diaryLeftButton
 }
-enum LeftHeaderButton {
-    case menuLeftButtonTapped
-        // dismiss
-    case mainLeftButtonTapped
-        // menu
-    case tableLeftButtonTapped
-        // dismiss
-        // fix
-    case diaryLeftButtonTapped
-        // dismiss
-        // share
+
+enum imageString: CustomStringConvertible {
+    case back
+    case menu
+    case fix
+    case share
+    case star
+    case check
     
+    var description: String {
+        switch self {
+        case .back: return "arrowshape.backward"
+        case .menu: return "line.3.horizontal"
+        case .fix: return "square.and.pencil"
+        case .share: return "square.and.arrow.up"
+        case .star: return "moon.stars"
+        case .check: return "checkmark"
+        }
+    }
 }
 
 
-// MainvC
-enum TableViewEnum {
-    case hide
-    case show
-}
+
+
 

@@ -9,22 +9,17 @@ import Foundation
 
 
 protocol MainHeaderDelegate {
+    // MenuVC -> MainVC는 MainVC의 BlackView로 대체
     // MainVC -> MenuVC
     func handleGoToMenuVC()
-    // MenuVC -> MainVC
-    func handleBackToMainVC()
-    
-    
     // tableView -> MainVC
     func handleDismiss()
-    
-    
-    // Diary 과련
-    // TableView -> DiaryVC
-    func handleGoToDiaryVC()
+    // TableView -> DiaryVC -> TableView Cell을 통해
     // DiaryVC -> TableView
     func handleBackToTableView()
-    
-    // DiaryVC -> Share!!!!!
-    func handleShareButtonTapped()
+}
+
+
+protocol DiaryHeaderDelegate {
+    func buttonImageChange(fix: Bool)
 }
