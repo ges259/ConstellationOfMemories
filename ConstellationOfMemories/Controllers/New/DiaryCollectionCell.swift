@@ -25,8 +25,8 @@ final class DiaryCollectionCell: UITableViewCell {
             view.layer.borderWidth = 3
         
             view.addSubview(self.stringLabel)
-        stringLabel.anchor(centerX: view,
-                           centerY: view)
+        self.stringLabel.anchor(centerX: view,
+                                centerY: view)
         return view
     }()
     // 오늘의 추억 쓰러가기"
@@ -50,18 +50,12 @@ final class DiaryCollectionCell: UITableViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-//    override func layoutSubviews() {
-//        super.layoutSubviews()
-//
-//        self.contentView.frame = self.contentView.frame.inset(by: UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16))
-//    }
-    
     
     
     // MARK: - HelperFunctions
     private func configureDiaryCell() {
         // background Color
-        self.backgroundColor = .systemGray5
+        self.backgroundColor = .clear
         
         // selection Style
         self.selectionStyle = .none
@@ -70,10 +64,10 @@ final class DiaryCollectionCell: UITableViewCell {
         // UI - Auto-Layout
         self.addSubview(self.borderView)
         self.borderView.anchor(top: self.topAnchor, paddingTop: 5,
-                               bottom: self.bottomAnchor, paddingBottom: 8,
-                               leading: self.leadingAnchor, paddingLeading: 5,
-                               trailing: self.trailingAnchor, paddingTrailing: 16,
-                               cornerRadius: 10)
+                               bottom: self.bottomAnchor, paddingBottom: 5,
+                               leading: self.leadingAnchor, paddingLeading: 20,
+                               trailing: self.trailingAnchor, paddingTrailing: 20,
+                               cornerRadius: 20)
         
         
     }

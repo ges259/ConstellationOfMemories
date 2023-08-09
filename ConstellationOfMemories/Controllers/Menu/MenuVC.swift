@@ -17,7 +17,6 @@ final class MenuVC: UITableViewController {
     
     
     // MARK: - LifeCycle
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         

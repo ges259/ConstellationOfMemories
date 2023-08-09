@@ -8,6 +8,23 @@
 import Foundation
 
 
-protocol DiaryCollectionVCDelegate {
+protocol MainHeaderDelegate {
+    // MainVC -> MenuVC
+    func handleGoToMenuVC()
+    // MenuVC -> MainVC
+    func handleBackToMainVC()
+    
+    
+    // tableView -> MainVC
     func handleDismiss()
+    
+    
+    // Diary 과련
+    // TableView -> DiaryVC
+    func handleGoToDiaryVC()
+    // DiaryVC -> TableView
+    func handleBackToTableView()
+    
+    // DiaryVC -> Share!!!!!
+    func handleShareButtonTapped()
 }
