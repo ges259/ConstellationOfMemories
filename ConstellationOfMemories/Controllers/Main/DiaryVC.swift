@@ -54,7 +54,7 @@ final class DiaryVC: UIView {
     // MARK: - Button
     private lazy var footerButton: UIButton = {
         // 버튼 시스템 이미지 크기 바꾸기
-        let btn = UIButton().buttonSustemImage(btnSize: 31, imageString: .share)
+        let btn = UIButton().buttonSustemImage(btnSize: 30, imageString: .share)
             btn.addTarget(self, action: #selector(self.shareButtonTapped), for: .touchUpInside)
         return btn
     }()
@@ -100,7 +100,6 @@ final class DiaryVC: UIView {
                                   trailing: self.diaryLabel.trailingAnchor,
                                   height: 200,
                                   cornerRadius: 20)
-        
         // footerButton
         self.addSubview(self.footerButton)
         self.footerButton.anchor(bottom: self.safeAreaLayoutGuide.bottomAnchor, paddingBottom: 10,
@@ -139,9 +138,9 @@ final class DiaryVC: UIView {
 
 // MARK: - DiaryHeaderDelegate
 extension DiaryVC: DiaryHeaderDelegate {
-    func buttonImageChange(fix: Bool) {
+    func diaryFixMode(_ fixMode: Bool) {
         // 수정뷰
-        if fix == true {
+        if fixMode == true {
             UIView.animate(withDuration: 0.3) {
                 self.diaryTextView.isEditable = true
                 self.diaryTextView.backgroundColor = .systemGray5

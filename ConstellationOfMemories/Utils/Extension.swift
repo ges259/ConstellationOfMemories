@@ -217,7 +217,7 @@ extension UIButton {
 // MARK: - UIImage
 extension UIImage {
     static func setImg(_ leftBtnImg: imageString) -> UIImage {
-        let imageConfig = UIImage.SymbolConfiguration(pointSize: 25, weight: .light)
+        let imageConfig = UIImage.SymbolConfiguration(pointSize: 31, weight: .light)
         let img: UIImage = UIImage(systemName: leftBtnImg.description,
                                    withConfiguration: imageConfig)!
         return img

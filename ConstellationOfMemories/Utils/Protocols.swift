@@ -21,5 +21,12 @@ protocol MainHeaderDelegate {
 
 
 protocol DiaryHeaderDelegate {
-    func buttonImageChange(fix: Bool)
+    func diaryFixMode(_ fixMode: Bool)
 }
+
+protocol MainMenuDelegate {
+    func handleAchievement()
+    func handleShop()
+    func handleSetup()
+}
+

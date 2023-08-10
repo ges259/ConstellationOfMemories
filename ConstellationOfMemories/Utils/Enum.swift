@@ -16,19 +16,31 @@ enum FontStyle {
 }
 // Header
 enum LeftBtnTapImgChange {
-    case menuLeftButton
-    case mainLeftButton
-    case tableLeftButton
-    case diaryLeftButton
+    case menuViewButton
+    case mainViewButton
+    case tableViewButton
+    case diaryViewButton
 }
+
+enum RightBtnTapImgChange {
+    case fixMode
+    case saveMode
+    case coin
+}
+
 
 enum imageString: CustomStringConvertible {
     case back
     case menu
     case fix
     case share
-    case star
+    case moon
     case check
+    case setup // 설정
+    case star // Main - Footer
+    case achievement // 달성률
+    case shop // 상점
+    case coin // 코인 - rightButton
     
     var description: String {
         switch self {
@@ -36,8 +48,13 @@ enum imageString: CustomStringConvertible {
         case .menu: return "line.3.horizontal"
         case .fix: return "square.and.pencil"
         case .share: return "square.and.arrow.up"
-        case .star: return "moon.stars"
+        case .moon: return "moon.stars"
         case .check: return "checkmark"
+        case .setup: return "gearshape"
+        case .star: return "star"
+        case .achievement: return "star.circle"
+        case .shop: return "homekit"
+        case .coin :return "stop.circle.fill"
         }
     }
 }
