@@ -17,6 +17,12 @@ protocol MainHeaderDelegate {
     // TableView -> DiaryVC -> TableView Cell을 통해
     // DiaryVC -> TableView
     func handleBackToTableView()
+    
+    func handleBackShopToMainVC()
+    
+    func handleBackSetupToMain()
+    
+    func handleBackAchievementToMain()
 }
 
 

@@ -7,7 +7,7 @@
 
 import UIKit
 // UICollectionViewController
-final class ShopCell: UICollectionViewCell {
+final class ShopCollectionViewCell: UICollectionViewCell {
     
     // MARK: - Properties
     
@@ -18,7 +18,7 @@ final class ShopCell: UICollectionViewCell {
         super.init(frame: frame)
         
         
-        self.backgroundColor = .red
+        self.backgroundColor = .systemGray6
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

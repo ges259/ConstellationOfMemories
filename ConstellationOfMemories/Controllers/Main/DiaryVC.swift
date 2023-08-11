@@ -19,9 +19,7 @@ final class DiaryVC: UIView {
     // MARK: - View
         // separator_View
     private lazy var separatorView: UIView = {
-        let view = UIView()
-            view.backgroundColor = .white
-        return view
+        return UIView().viewConfig(backgroundColor: UIColor.white)
     }()
     
     
@@ -40,7 +38,7 @@ final class DiaryVC: UIView {
     
     // MARK: - Label
     lazy var diaryLabel: UILabel = {
-        let lbl = UILabel().label(labelText: "오늘의 하루는 어땠나요?",
+        let lbl = UILabel().labelConfig(labelText: "오늘의 하루는 어땠나요?",
                                   LabelTextColor: .white,
                                   fontName: .bold,
                                   fontSize: 25,

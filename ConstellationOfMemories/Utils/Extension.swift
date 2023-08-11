@@ -115,6 +115,26 @@ extension UIView {
             self.layer.cornerRadius = cornerRadius
         }
     }
+    
+    
+    // MARK: - viewConfig
+    func viewConfig(backgroundColor color: UIColor,
+              borderColor: UIColor? = nil,
+              borderWidth: CGFloat = 3) -> UIView {
+        
+        let view = UIView()
+            // background Color
+            view.backgroundColor = color
+        
+        // configure border
+        if let borderColor = borderColor {
+            // border Color
+            view.layer.borderColor = borderColor.cgColor
+            // border Width
+            view.layer.borderWidth = borderWidth
+        }
+        return view
+    }
 }
 
 
@@ -151,7 +171,7 @@ extension UIStackView {
 
 // MARK: - UILabel
 extension UILabel {
-    func label(labelText: String? = nil,
+    func labelConfig(labelText: String? = nil,
                LabelTextColor: UIColor? = .darkGray,
                
                fontName: FontStyle? = .system,

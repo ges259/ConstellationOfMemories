@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class DiaryCollectionCell: UITableViewCell {
+final class DiaryTableViewCell: UITableViewCell {
     
     // MARK: - Properties
     
@@ -18,11 +18,8 @@ final class DiaryCollectionCell: UITableViewCell {
     
     // MARK: - UIView
     private lazy var borderView: UIView = {
-        let view = UIView()
-            view.backgroundColor = .clear
-        
-            view.layer.borderColor = UIColor.white.cgColor
-            view.layer.borderWidth = 3
+        let view = UIView().viewConfig(backgroundColor: .clear,
+                                 borderColor: UIColor.white)
         
             view.addSubview(self.stringLabel)
         self.stringLabel.anchor(centerX: view,
@@ -31,7 +28,7 @@ final class DiaryCollectionCell: UITableViewCell {
     }()
     // 오늘의 추억 쓰러가기"
     private lazy var stringLabel: UILabel = {
-        return UILabel().label(labelText: "8월 6일에 떠올린 추억",
+        return UILabel().labelConfig(labelText: "8월 6일에 떠올린 추억",
                                LabelTextColor: .white,
                                fontName: .bold,
                                fontSize: 27)

@@ -20,6 +20,9 @@ enum LeftBtnTapImgChange {
     case mainViewButton
     case tableViewButton
     case diaryViewButton
+    case shopVCButton
+    case setupVCButton
+    case achievementVCButton
 }
 
 enum RightBtnTapImgChange {
@@ -27,6 +30,13 @@ enum RightBtnTapImgChange {
     case saveMode
     case coin
 }
+
+enum TableViewEnum {
+    case diary
+    case setup
+    case achivement
+}
+
 
 
 enum imageString: CustomStringConvertible {

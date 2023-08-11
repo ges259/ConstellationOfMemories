@@ -37,6 +37,7 @@ final class HeaderView: UIView {
     
     var buttonConfig: LeftBtnTapImgChange = .mainViewButton {
         didSet {
+            print(buttonConfig)
             self.changeImgWhenViewChanges()
         }
     }
@@ -67,7 +68,7 @@ final class HeaderView: UIView {
     
     // MARK: - Label
     private lazy var titleLabel: UILabel = {
-        return UILabel().label(labelText: "추억 일기",
+        return UILabel().labelConfig(labelText: "추억 일기",
                                LabelTextColor: UIColor.white,
                                fontName: .bold,
                                fontSize: 25)
@@ -153,9 +154,7 @@ extension HeaderView {
      // 함수 작동 원리
         header의 Left버튼을 누르면
             -> 화면 이동(delegate)          <<<- 이 함수가 하는 일
-            -> 변수 buttonConfig이 바뀜      <<<- 이 함수가 하는 일
-     
-                -> didSet을 통해 이미지가 바뀜 - changeImgWhenViewChanges()
+            -> rightButtondml 역할 바꾸기    <<<- 이 함수가 하는 일
      */
     @objc private func headerLeftButtonTapped() {
         switch buttonConfig {
@@ -171,8 +170,6 @@ extension HeaderView {
         case .mainViewButton:
             // 메뉴 오픈 - Delegate
             self.mainHeaderDelegate?.handleGoToMenuVC()
-            // left 버튼 이미지 바꾸기
-            self.buttonConfig = .menuViewButton
             break
             
             
@@ -181,8 +178,6 @@ extension HeaderView {
         case .tableViewButton:
             // MainVC 로 dismiss(테이블뷰 내리기) - Delegate
             self.mainHeaderDelegate?.handleDismiss()
-            // left 버튼 이미지 바꾸기
-            self.buttonConfig = .mainViewButton
             break
             
             
@@ -191,10 +186,26 @@ extension HeaderView {
         case .diaryViewButton:
             // DiaryVC 사라지기
             self.mainHeaderDelegate?.handleBackToTableView()
-            // left 버튼 이미지 및 설정(hide + rightButtonConfig) 바꾸기
-            self.buttonConfig = .tableViewButton
             // fix모드에서 leftButton클릭 시 자동으로 save모드로 바뀜
             self.rightButtonConfig = .saveMode
+            break
+            
+            
+        case .shopVCButton:
+            // 뒤로가기
+            self.mainHeaderDelegate?.handleBackShopToMainVC()
+            break
+            
+            
+        case .setupVCButton:
+            // 뒤로가기
+            self.mainHeaderDelegate?.handleBackSetupToMain()
+            break
+            
+            
+        case .achievementVCButton:
+            // 뒤로가기
+            self.mainHeaderDelegate?.handleBackAchievementToMain()
             break
         }
     }
@@ -229,6 +240,8 @@ extension HeaderView {
         case .mainViewButton:
             // menu Image
             self.leftButton.setImage(.setImg(.menu), for: .normal)
+            self.rightButton.isHidden = true
+            self.titleLabel.text = "추억 일기"
             break
             
             
@@ -245,6 +258,26 @@ extension HeaderView {
         case .diaryViewButton:
             // rightButton 보이게 하기
             self.rightButton.isHidden = false
+            self.rightButton.setImage(.setImg(.fix), for: .normal)
+            break
+            
+            
+        case .shopVCButton:
+            self.rightButton.isHidden = false
+            self.rightButton.setImage(.setImg(.coin), for: .normal)
+            self.titleLabel.text = "상점"
+            break
+            
+            
+        case .setupVCButton:
+            
+            
+            break
+            
+            
+        case .achievementVCButton:
+            
+            
             break
         }
     }
