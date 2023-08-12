@@ -37,7 +37,7 @@ final class HeaderView: UIView {
     
     var buttonConfig: LeftBtnTapImgChange = .mainViewButton {
         didSet {
-            print(buttonConfig)
+//            print(buttonConfig)
             self.changeImgWhenViewChanges()
         }
     }

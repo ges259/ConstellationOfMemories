@@ -65,6 +65,7 @@ final class UserInfoHeader: UIView {
     // MARK: - Helper Functions
     private func configureHeader() {
         // background Color
+        self.backgroundColor = .clear
         
         // profileView
         self.addSubview(self.profileView)

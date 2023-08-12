@@ -14,6 +14,7 @@ struct ReuseIdentifier {
     
     
     static let shopCell: String = "ShopCell"
+    static let collectionHeader: String = "CollectionHeader"
 }
 
 

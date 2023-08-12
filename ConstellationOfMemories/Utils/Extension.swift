@@ -54,6 +54,8 @@ extension UIColor {
     }
     static let textFieldGray: UIColor = UIColor.rgb(red: 149, green: 204, blue: 244)
     
+    static let nightFontColor: UIColor = UIColor(white: 1, alpha: 1)
+    
 }
 
 

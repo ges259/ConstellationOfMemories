@@ -37,8 +37,8 @@ protocol MainMenuDelegate {
 }
 
 
-protocol AchieveMainDelegate {
-    func myStarSegement()
-    func habitSegment()
+protocol SegementMainDelegate {
+    func imageTapped()
+    func shop2Tapped()
 }
 

@@ -16,7 +16,7 @@ final class collectionSegementView: UIView {
     private var item = [Int]()
     
     
-//    var achieveMainDelegate: AchieveMainDelegate?
+    var segementMainDelegate: SegementMainDelegate?
     
     // 콜렉션뷰 토글
     var collectionViewToggle: CollectionViewEnum = .shop
@@ -281,14 +281,16 @@ extension collectionSegementView: UICollectionViewDelegate, UICollectionViewData
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ReuseIdentifier.shopCell, for: indexPath)
-
-//        cell.backgroundColor = collectionViewToggle == .shop ? .blue : .red
         
         
         return cell
     }
     
     // delegate
+    // didSelect_Item_At
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        self.segementMainDelegate?.imageTapped()
+    }
     // 아이템의 크기 설정
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         // 좌우 패딩 30 = 60

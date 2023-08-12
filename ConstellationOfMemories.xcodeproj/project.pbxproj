@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		5F0BE8142A86508D0090AC1F /* UserInfoHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F0BE8132A86508D0090AC1F /* UserInfoHeader.swift */; };
 		5F0BE8182A8664D40090AC1F /* SetupTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F0BE8172A8664D40090AC1F /* SetupTableViewCell.swift */; };
-		5F0BE81A2A86ABD90090AC1F /* AchievementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F0BE8192A86ABD90090AC1F /* AchievementView.swift */; };
+		5F0BE81A2A86ABD90090AC1F /* collectionSegementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F0BE8192A86ABD90090AC1F /* collectionSegementView.swift */; };
 		5F15D1AF2A812768005A00E1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F15D1AE2A812768005A00E1 /* AppDelegate.swift */; };
 		5F15D1B12A812768005A00E1 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F15D1B02A812768005A00E1 /* SceneDelegate.swift */; };
 		5F15D1B32A812768005A00E1 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F15D1B22A812768005A00E1 /* ViewController.swift */; };
@@ -32,7 +32,7 @@
 /* Begin PBXFileReference section */
 		5F0BE8132A86508D0090AC1F /* UserInfoHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoHeader.swift; sourceTree = "<group>"; };
 		5F0BE8172A8664D40090AC1F /* SetupTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupTableViewCell.swift; sourceTree = "<group>"; };
-		5F0BE8192A86ABD90090AC1F /* AchievementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AchievementView.swift; sourceTree = "<group>"; };
+		5F0BE8192A86ABD90090AC1F /* collectionSegementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = collectionSegementView.swift; sourceTree = "<group>"; };
 		5F15D1AB2A812768005A00E1 /* ConstellationOfMemories.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ConstellationOfMemories.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5F15D1AE2A812768005A00E1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5F15D1B02A812768005A00E1 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -71,7 +71,7 @@
 				5F15D1E22A817765005A00E1 /* HeaderView.swift */,
 				5F0BE8132A86508D0090AC1F /* UserInfoHeader.swift */,
 				5F0BE8162A8664B80090AC1F /* TableView */,
-				5F0BE8192A86ABD90090AC1F /* AchievementView.swift */,
+				5F0BE8192A86ABD90090AC1F /* collectionSegementView.swift */,
 			);
 			path = UIView;
 			sourceTree = "<group>";
@@ -239,7 +239,7 @@
 				5F15D1B92A812768005A00E1 /* ConstellationOfMemories.xcdatamodeld in Sources */,
 				5F15D1AF2A812768005A00E1 /* AppDelegate.swift in Sources */,
 				5F0BE8142A86508D0090AC1F /* UserInfoHeader.swift in Sources */,
-				5F0BE81A2A86ABD90090AC1F /* AchievementView.swift in Sources */,
+				5F0BE81A2A86ABD90090AC1F /* collectionSegementView.swift in Sources */,
 				5F15D1E32A817765005A00E1 /* HeaderView.swift in Sources */,
 				5F15D1CC2A8136B3005A00E1 /* Extension.swift in Sources */,
 				5F15D1DF2A815C0E005A00E1 /* DiaryVC.swift in Sources */,
