@@ -36,3 +36,9 @@ protocol MainMenuDelegate {
     func handleSetup()
 }
 
+
+protocol AchieveMainDelegate {
+    func myStarSegement()
+    func habitSegment()
+}
+

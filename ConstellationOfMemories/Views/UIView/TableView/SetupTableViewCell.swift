@@ -36,8 +36,9 @@ final class SetupTableviewCell: UITableViewCell {
     
     // MARK: - Helper Functions
     private func configureCell() {
-        // background Color
-        self.backgroundColor = .clear
+//         background Color
+//        self.backgroundColor = .clear
+        self.backgroundColor = .red
         // Selection Style
         self.selectionStyle = .none
     }

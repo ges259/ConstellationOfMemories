@@ -34,9 +34,11 @@ enum RightBtnTapImgChange {
 enum TableViewEnum {
     case diary
     case setup
-    case achivement
 }
-
+enum CollectionViewEnum {
+    case myStar
+    case shop
+}
 
 
 enum imageString: CustomStringConvertible {
@@ -47,6 +49,7 @@ enum imageString: CustomStringConvertible {
     case moon
     case check
     case setup // 설정
+    case person
     case star // Main - Footer
     case achievement // 달성률
     case shop // 상점
@@ -61,6 +64,7 @@ enum imageString: CustomStringConvertible {
         case .moon: return "moon.stars"
         case .check: return "checkmark"
         case .setup: return "gearshape"
+        case .person: return "person"
         case .star: return "star"
         case .achievement: return "star.circle"
         case .shop: return "homekit"

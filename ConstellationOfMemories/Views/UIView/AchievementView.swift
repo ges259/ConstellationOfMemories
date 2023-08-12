@@ -12,38 +12,25 @@ final class AchievementView: UIView {
     // MARK: - Properties
     
     
-    
+    var achieveMainDelegate: AchieveMainDelegate?
     
     
     // MARK: - Layout
     // UISegmentedControl
     lazy var segmentedControl: UISegmentedControl = {
-        let control = UISegmentedControl(items: ["myStarSegment", "achievementSegment"])
+        let control = UISegmentedControl(items: ["추억 모음", "통계"])
             // segment 배경색 (비 선택창)
             control.backgroundColor = .clear
             // segement 선택창 배경 색
             control.selectedSegmentTintColor = UIColor(white: 1, alpha: 0.3)
-            
-            control.selectedSegmentIndex = 0
         
+//        control.setTitleTextAttributes(<#T##attributes: [NSAttributedString.Key : Any]?##[NSAttributedString.Key : Any]?#>, for: <#T##UIControl.State#>)
             control.addTarget(self, action: #selector(segmentedValueChanged(segment:)), for: .valueChanged)
             
         return control
     }()
-    private lazy var myStarSegment: UIView = {
-        let view = UIView()
-        view.backgroundColor = .red
-        view.alpha = 1
-        return view
-    }()
-    private lazy var achievementSegment: UIView = {
-        let view = UIView()
-        
-        view.backgroundColor = .yellow
-        view.alpha = 0
-        return view
-    }()
-
+    
+    
     
     
     // MARK: - LifeCycle
@@ -74,24 +61,6 @@ final class AchievementView: UIView {
                                      leading: self.leadingAnchor,
                                      trailing: self.trailingAnchor,
                                      height: 50)
-        
-        
-        // myStarSegment
-        self.addSubview(self.myStarSegment)
-        self.myStarSegment.anchor(top: self.segmentedControl.bottomAnchor,
-                                  bottom: self.bottomAnchor,
-                                  leading: self.leadingAnchor,
-                                  trailing: self.trailingAnchor)
-        
-        
-        
-        // achievementSegment
-        self.addSubview(self.achievementSegment)
-        self.achievementSegment.anchor(top: self.segmentedControl.bottomAnchor,
-                                       bottom: self.bottomAnchor,
-                                       leading: self.leadingAnchor,
-                                       trailing: self.trailingAnchor)
-        
     }
     
     
@@ -107,16 +76,20 @@ final class AchievementView: UIView {
             
             UIView.animate(withDuration: 0.3) {
                 // mystarSegment 보이게 하기
-                self.myStarSegment.alpha = 1
-                self.achievementSegment.alpha = 0
+//                self.myStarSegment.alpha = 1
+//                self.achievementSegment.alpha = 0
+                
+                self.achieveMainDelegate?.myStarSegement()
+                
             }
             // 달성률
         } else {
             
             UIView.animate(withDuration: 0.3) {
                 // achivementSegment 보이게 하기
-                self.myStarSegment.alpha = 0
-                self.achievementSegment.alpha = 1
+//                self.myStarSegment.alpha = 0
+//                self.achievementSegment.alpha = 1
+                self.achieveMainDelegate?.habitSegment()
             }
         }
     }

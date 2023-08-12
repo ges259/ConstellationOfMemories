@@ -16,48 +16,44 @@ final class UserInfoHeader: UIView {
     
     
     
-//    // MARK: - View
-//    private lazy var profileView: UIView = {
-//        return UIView().viewConfig(backgroundColor: UIColor.darkGray)
-//    }()
-//
-//
-//
-//    // MARK: - Label
-//    lazy var initialLabel: UILabel = {
-//        return UILabel().labelConfig(labelText: "dfsa",
-//                               LabelTextColor: .white,
-//                               fontName: .system,
-//                               fontSize: 42)
-//    }()
-//    private lazy var fullNameLabel: UILabel = {
-//        return UILabel().labelConfig(labelText: "fdsfd",
-//                               fontName: .system,
-//                               fontSize: 16)
-//    }()
-//    private lazy var emailLabel: UILabel = {
-//        return UILabel().labelConfig(labelText: "edddgg",
-//                               fontName: .system,
-//                               fontSize: 14)
-//    }()
-//
-//
-//
-//    // MARK: - StackView
-//    private lazy var stackView: UIStackView = {
-//        return UIStackView().stackView(arrangedSubviews: [self.fullNameLabel,
-//                                                          self.emailLabel],
-//                                       axis: .vertical,
-//                                       spacing: 4,
-//                                       distribution: .fillEqually)
-//    }()
+    // MARK: - View
+    private lazy var profileView: UIImageView = {
+        let img = UIImageView(image: UIImage.setImg(.person, pointSize: 40))
+        
+        img.tintColor = .white
+        return img
+    }()
+
+
+    // MARK: - Label
+    private lazy var fullNameLabel: UILabel = {
+        return UILabel().labelConfig(labelText: "계은성",
+                                     LabelTextColor: .white,
+                                     fontName: .system,
+                                     fontSize: 16)
+    }()
+    private lazy var emailLabel: UILabel = {
+        return UILabel().labelConfig(labelText: "chwl0571@daum.net",
+                                     LabelTextColor: .white,
+                                     fontName: .system,
+                                     fontSize: 13)
+    }()
+
+    
+    // MARK: - StackView
+    private lazy var stackView: UIStackView = {
+        return UIStackView().stackView(arrangedSubviews: [self.fullNameLabel,
+                                                          self.emailLabel],
+                                       axis: .vertical,
+                                       distribution: .fillEqually)
+    }()
     
     
     // MARK: - LifeCycle
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        self.backgroundColor = .red
+        self.configureHeader()
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -66,17 +62,28 @@ final class UserInfoHeader: UIView {
     
     
     
-    // MARK: - Selectors
-    
-    
-    
-    
-    
-    
     // MARK: - Helper Functions
-//    private func configureHeader() {
-//        
-//    }
+    private func configureHeader() {
+        // background Color
+        
+        // profileView
+        self.addSubview(self.profileView)
+        self.profileView.anchor(leading: self.leadingAnchor, paddingLeading: 20,
+                                centerY: self)
+        
+        
+        // initialLabel
+        self.addSubview(self.stackView)
+        self.stackView.anchor(top: self.profileView.topAnchor,
+                              bottom: self.profileView.bottomAnchor,
+                              leading: self.profileView.trailingAnchor, paddingLeading: 10)
+        
+        
+    }
+    
+    
+    
+    // MARK: - Selectors
     
     
     
