@@ -10,10 +10,28 @@ import UIKit
 final class DiaryVC: UIView {
     
     // MARK: - Properties
-    // 싱글톤
+    // 헤더뷰 싱글톤
     private let headerView = HeaderView.shared
     
+    var diaryData: DiaryData? {
+        didSet {
+            print(#function)
+            // diaryTextView에 텍스트 넣기
+            if let diaryData = diaryData {
+                self.diaryTextView.text = diaryData.diaryText
+            }
+        }
+    }
     
+    
+    
+    
+    
+    // fixToggle이 true이면 Save / Update
+    private var fixToggle: Bool = false
+    
+    // 코어데이터 싱글톤
+    private let coredata = CoreDataManager.shared
     
     
     // MARK: - View
@@ -29,6 +47,7 @@ final class DiaryVC: UIView {
         let tv = UITextView()
             tv.backgroundColor = UIColor.clear
             tv.font = UIFont.systemFont(ofSize: 16)
+//            tv.text = "텍스트를 여기에 입력하세요."
             tv.textColor = .white
             tv.isEditable = false
         return tv
@@ -93,6 +112,8 @@ final class DiaryVC: UIView {
                                   height: 3)
         // diaryTextView
         self.addSubview(self.diaryTextView)
+        self.diaryTextView.delegate = self
+//        self.diaryTextView.alpha = 0
         self.diaryTextView.anchor(top: self.separatorView.bottomAnchor, paddingTop: 10,
                                   leading: self.diaryLabel.leadingAnchor,
                                   trailing: self.diaryLabel.trailingAnchor,
@@ -104,6 +125,27 @@ final class DiaryVC: UIView {
                                    centerX: self)
     }
     
+    // 화면터치하면 키보드가 내려가도록
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+//        diaryTextView.endEditing(true)
+        self.diaryTextView.resignFirstResponder()
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     
     // MARK: - Selectors
@@ -111,7 +153,8 @@ final class DiaryVC: UIView {
         print(#function)
     }
     
-    
+    // 코어데이터에 저장 or 업데이트
+    //self.saveOrUpdate()
     
     
     // MARK: - API
@@ -121,6 +164,20 @@ final class DiaryVC: UIView {
     
     
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /*
  수정상태 == true
     텍스트뷰를 변경가능하고,
@@ -136,24 +193,102 @@ final class DiaryVC: UIView {
 
 // MARK: - DiaryHeaderDelegate
 extension DiaryVC: DiaryHeaderDelegate {
+    
     func diaryFixMode(_ fixMode: Bool) {
-        // 수정뷰
+        // 수정뷰로 진입
         if fixMode == true {
-            UIView.animate(withDuration: 0.3) {
+            UIView.animate(withDuration: 0.5) {
                 self.diaryTextView.isEditable = true
-                self.diaryTextView.backgroundColor = .systemGray5
+                self.diaryTextView.backgroundColor = UIColor(white: 1, alpha: 0.4)
+                // share버튼 숨기기
                 self.footerButton.alpha = 0
             }
             
             
-        // 저장뷰
+        // 저장뷰로 진입
         } else {
-            UIView.animate(withDuration: 0.3) {
+            // fixToggle이 true이면 Create / Update
+            if self.fixToggle == true {
+                self.saveOrUpdate()
+                self.fixToggle = false
+            }
+            
+            UIView.animate(withDuration: 0.5) {
                 self.diaryTextView.isEditable = false
                 self.diaryTextView.backgroundColor = .clear
+                // share버튼 보이게 하기
                 self.footerButton.alpha = 1
             }
         }
     }
+    
+    // MARK: - CoreData
+    func saveOrUpdate() {
+        // 빈칸 또는 placeholder 상태라면 Create / Update하지 않음
+        if self.diaryTextView.text == "텍스트를 여기에 입력하세요." {
+            return
+        }
+        
+        // 코어데이터에 저장
+            // diaryData가 있다면 (전 화면에서 DiaryData를 받아왔다면) -> update
+        if let diaryData = self.diaryData {
+            diaryData.diaryText = self.diaryTextView.text
+            coredata.updateDiaryData(newDiaryData: diaryData)
+            print("데이터 업데이트")
+            
+            // diaryData가 없다면 (전 화면에서 DiaryData를 받아오지 못했다면) -> create
+        } else {
+            // 빈칸이라면 데이터를 생성(create)하지 않음
+            if self.diaryTextView.text == "" {
+                return
+            }
+            
+            coredata.createDiaryData(diaryText: self.diaryTextView.text)
+            print("데이터 생성")
+        }
+    }
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// MARK: - UITextViewDelegate
+// textview의 _____ placeholder
+extension DiaryVC: UITextViewDelegate {
+    // 클릭시 텍스트뷰에 "텍스트를 여기에 입력하세요." 가 있다면 -> ""로 설정
+    // 글자 색상 바꾸기
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        // fixToggle이 true이면 Save / Update
+        self.fixToggle = true
+        
+        if self.diaryTextView.text == "텍스트를 여기에 입력하세요." {
+            self.diaryTextView.text = ""
+            self.diaryTextView.textColor = .white
+        }
+    }
+    
+    // 입력을 끝낸 후 텍스트뷰에 아무것도 없다면 "텍스트를 여기에 입력하세요."로 바꿈
+    
+    // 글자 생상 바꾸기
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if self.diaryTextView.text == "" {
+            self.diaryTextView.text = "텍스트를 여기에 입력하세요."
+            self.diaryTextView.textColor = .white
+        }
+    }
+}

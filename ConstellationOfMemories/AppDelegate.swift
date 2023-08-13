@@ -64,9 +64,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // MARK: - Core Data Saving support
 
     func saveContext () {
+        // 임시 저장소
         let context = persistentContainer.viewContext
+        // 임시저장소에 변화가 있으면
         if context.hasChanges {
             do {
+                // 저장
                 try context.save()
             } catch {
                 // Replace this implementation with code to handle the error appropriately.

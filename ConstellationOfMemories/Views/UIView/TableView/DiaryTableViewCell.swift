@@ -11,7 +11,11 @@ final class DiaryTableViewCell: UITableViewCell {
     
     // MARK: - Properties
     
-    
+    var diaryDate: String? {
+        didSet {
+            self.configureStringLabel()
+        }
+    }
     
     
     
@@ -69,6 +73,15 @@ final class DiaryTableViewCell: UITableViewCell {
                                trailing: self.trailingAnchor, paddingTrailing: 20,
                                cornerRadius: 20)
     }
+    
+    
+    private func configureStringLabel() {
+        guard let date = diaryDate else { return }
+        self.stringLabel.text = "\(date) 떠올린 추억"
+    }
+    
+    
+    
     
     
     

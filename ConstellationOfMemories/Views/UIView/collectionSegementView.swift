@@ -19,7 +19,11 @@ final class collectionSegementView: UIView {
     var segementMainDelegate: SegementMainDelegate?
     
     // 콜렉션뷰 토글
-    var collectionViewToggle: CollectionViewEnum = .shop
+    var collectionViewToggle: CollectionViewEnum = .shop {
+        didSet {
+            self.reuseCollectionView.reloadData()
+        }
+    }
     
     
     

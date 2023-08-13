@@ -11,18 +11,18 @@ import Foundation
 protocol MainHeaderDelegate {
     // MenuVC -> MainVC는 MainVC의 BlackView로 대체
     // MainVC -> MenuVC
-    func handleGoToMenuVC()
+    func handleMainToMenu()
     // tableView -> MainVC
-    func handleDismiss()
+    func handleTableToMain()
     // TableView -> DiaryVC -> TableView Cell을 통해
     // DiaryVC -> TableView
-    func handleBackToTableView()
+    func handleDiaryToTable()
     
-    func handleBackShopToMainVC()
+    func handleShopToMain()
     
-    func handleBackSetupToMain()
+    func handleSetupToMain()
     
-    func handleBackAchievementToMain()
+    func handleAchievementToMain()
 }
 
 

@@ -58,11 +58,7 @@ final class HeaderView: UIView {
      
         // - DiaryViewHideOrShow         - MainVC
      */
-    var rightButtonConfig: RightBtnTapImgChange = .saveMode {
-        didSet {
-            self.headerRightButton(rightButtonConfig)
-        }
-    }
+    var rightButtonConfig: RightBtnTapImgChange = .saveMode
     
     
     
@@ -169,7 +165,7 @@ extension HeaderView {
             // MainVC -> MenuVC
         case .mainViewButton:
             // 메뉴 오픈 - Delegate
-            self.mainHeaderDelegate?.handleGoToMenuVC()
+            self.mainHeaderDelegate?.handleMainToMenu()
             break
             
             
@@ -177,7 +173,7 @@ extension HeaderView {
             // TableView -> MainVC
         case .tableViewButton:
             // MainVC 로 dismiss(테이블뷰 내리기) - Delegate
-            self.mainHeaderDelegate?.handleDismiss()
+            self.mainHeaderDelegate?.handleTableToMain()
             break
             
             
@@ -185,27 +181,29 @@ extension HeaderView {
             // DiaryVC -> TableView
         case .diaryViewButton:
             // DiaryVC 사라지기
-            self.mainHeaderDelegate?.handleBackToTableView()
+            self.mainHeaderDelegate?.handleDiaryToTable()
             // fix모드에서 leftButton클릭 시 자동으로 save모드로 바뀜
-            self.rightButtonConfig = .saveMode
+//            self.rightButtonConfig = .saveMode
+            
+            
             break
             
             
         case .shopVCButton:
             // 뒤로가기
-            self.mainHeaderDelegate?.handleBackShopToMainVC()
+            self.mainHeaderDelegate?.handleShopToMain()
             break
             
             
         case .setupVCButton:
             // 뒤로가기
-            self.mainHeaderDelegate?.handleBackSetupToMain()
+            self.mainHeaderDelegate?.handleSetupToMain()
             break
             
             
         case .achievementVCButton:
             // 뒤로가기
-            self.mainHeaderDelegate?.handleBackAchievementToMain()
+            self.mainHeaderDelegate?.handleAchievementToMain()
             break
         }
     }
@@ -289,26 +287,41 @@ extension HeaderView {
     
     // MARK: - Right Button Config
     /*
-     // 함수 작동 원리
-        rightButton ( fix / save )가 눌리면         <<<- 이 함수가 하는 일
-        -> 함수 headerRightButton() 실행            <<<- 이 함수가 하는 일
+     // 함수 호출 과정
+        rightButton ( fixMode / saveMode )가 눌리면 현재 함수가 실행 됨
      
-            - rightButton의 이미지를 바꿈
-            - delegate 실행
-                -> 상황에 맞게 뷰의 레이아웃 등 변경
+     // 이 함수가 하는 일
+            - rightButton의 이미지를 바꾸고           <<<- 이 함수가 하는 일
+            - delegate 실행                        <<<- 이 함수가 하는 일
+                -> 상황에 맞게 뷰 변경 <- DiaryVC_diaryFixMode(_:)
+     
      */
-    @objc private func headerRightButtonTapped() {
+    @objc func headerRightButtonTapped() {
         switch rightButtonConfig {
+        // 현재: fixMode
+            // fixMode에서 right버튼을 눌렀을 때
         case .fixMode:
-            self.headerRightButton(.fixMode)
-            // save모드로 변경
+            // rightButton 이미지 변경 ( .fix )
+            self.rightButton.setImage(.setImg(.fix), for: .normal)
+            
+            // save모드 진입
+            self.diaryHeaderDelegate?.diaryFixMode(false)
+            
+            // save모드로 변경 ( rightButton 누르면 fixMode로 들어갈 수 있게 )
             self.rightButtonConfig = .saveMode
             break
             
             
+        // 현재: saveMode
+            // saveMode에서 right버튼을 눌렀을 때
         case .saveMode:
-            self.headerRightButton(.saveMode)
-            // fix모드로 변경
+            // rightButton 이미지 변경 ( .check )
+            self.rightButton.setImage(.setImg(.check), for: .normal)
+            
+            // fix모드 진입
+            self.diaryHeaderDelegate?.diaryFixMode(true)
+            
+            // fix모드로 변경 ( rightButton 누르면 다시 saveMode로 돌아올 수 있게 )
             self.rightButtonConfig = .fixMode
             break
             
@@ -316,52 +329,5 @@ extension HeaderView {
         case .coin:
             break
         }
-    }
-    
-    // MARK: - Right Button Action
-    /*
-     // 함수 작동 원리
-        rightButton ( fix / save )가 눌리면   +   rightButton이 눌리면
-        -> 이 함수가 호출 됨
-     
-            - rightButton의 이미지를 바꾸고        <<<- 이 함수가 하는 일
-            - delegate 실행                     <<<- 이 함수가 하는 일
-     
-                -> 상황에 맞게 뷰 변경 <- DiaryVC_diaryFixMode(_:)
-     
-     // ******************************************************
-     // 코드 설명
-        // leftButton과 달리 headerRightButton에서 delegate처리
-        // headerRightButtonTapped() 와 이 함수를 나눠 놓은 이유
-            // 상황에 따라
-                // DiaryVC에서 fixMode로 시작
-                // DiaryVC에서 LeftButton을 누르면 .saveMode로 변경 등
-            // 버튼을 누르지 않고 함수가 작동해야 하는 경우가 있기 때문에 나눠 놓음
-     */
-    func headerRightButton(_ rightButtonConfig: RightBtnTapImgChange) {
-        switch rightButtonConfig {
-        case .fixMode:
-            // rightButton 이미지 변경
-            self.rightButton.setImage(.setImg(.check), for: .normal)
-            
-            // 오른쪽 버튼 이미지 변경
-            self.diaryHeaderDelegate?.diaryFixMode(true)
-            break
-            
-            
-        case .saveMode:
-            // rightButton 이미지 변경
-            self.rightButton.setImage(.setImg(.fix), for: .normal)
-            
-            // 오른쪽 버튼 이미지 변경
-            self.diaryHeaderDelegate?.diaryFixMode(false)
-            break
-            
-            
-        case .coin:
-            break
-        }
-        
-        
     }
 }
