@@ -600,13 +600,13 @@ extension MainVC: MainHeaderDelegate {
     // Diary_Table -> DiaryVC
     private func tableToDiary() {
         // 버튼의 이미지 + 역할을 바꿈
+            // 오늘 일기를 썻다면 fixMode (수정뷰)
+            // 오늘 일기를 쓰지 않았다면 saveMode (저장뷰)
+        self.headerView.rightButtonConfig = self.todayDiaryToggle == true
+            ? .fixMode
+            : .saveMode
+        // 버튼의 이미지 + 역할을 바꿈 (위에서 바꾼 Toggle을 통해 right버튼도 바뀜)
         self.headerView.buttonConfig = .diaryViewButton
-        
-        // Text_View에 텍스트 넣기
-//        diaryVC.diaryTextView
-        
-        
-        
         // diary_View_보이게 하기
             // handleBackToTableView() 에서 닫힘
         self.DiaryViewHideOrShow(show: true)
@@ -741,12 +741,14 @@ extension MainVC: UITableViewDelegate, UITableViewDataSource {
         
         switch tableViewToggle {
         case .diary:
-            // 뷰 전환 (일관성을 위해 함수로 만들어 둠)
-            self.tableToDiary()
+            
             
             
             
             // MARK: - Fix
+            // self.todayDiaryToggle을 바꾸면 fix / save모드 변경
+            
+            
             // 오늘 일기를 적지 않았다면
 //            if indexPath.row == 0 && self.todayDiaryToggle == false {
 //                // fixMode로 진입
@@ -769,9 +771,8 @@ extension MainVC: UITableViewDelegate, UITableViewDataSource {
             
             
             // 이걸 나중에 호출하는게 맞을까?
-            
-            
-            
+            // 뷰 전환 (일관성을 위해 함수로 만들어 둠)
+            self.tableToDiary()
             break
             
             

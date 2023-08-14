@@ -15,7 +15,6 @@ final class DiaryVC: UIView {
     
     var diaryData: DiaryData? {
         didSet {
-            print(#function)
             // diaryTextView에 텍스트 넣기
             if let diaryData = diaryData {
                 self.diaryTextView.text = diaryData.diaryText
@@ -23,12 +22,9 @@ final class DiaryVC: UIView {
         }
     }
     
-    
-    
-    
-    
-    // fixToggle이 true이면 Save / Update
+    // fixToggle이 true이면 -> Save Or Update
     private var fixToggle: Bool = false
+    
     
     // 코어데이터 싱글톤
     private let coredata = CoreDataManager.shared
@@ -113,7 +109,6 @@ final class DiaryVC: UIView {
         // diaryTextView
         self.addSubview(self.diaryTextView)
         self.diaryTextView.delegate = self
-//        self.diaryTextView.alpha = 0
         self.diaryTextView.anchor(top: self.separatorView.bottomAnchor, paddingTop: 10,
                                   leading: self.diaryLabel.leadingAnchor,
                                   trailing: self.diaryLabel.trailingAnchor,
@@ -153,8 +148,6 @@ final class DiaryVC: UIView {
         print(#function)
     }
     
-    // 코어데이터에 저장 or 업데이트
-    //self.saveOrUpdate()
     
     
     // MARK: - API
@@ -197,7 +190,7 @@ extension DiaryVC: DiaryHeaderDelegate {
     func diaryFixMode(_ fixMode: Bool) {
         // 수정뷰로 진입
         if fixMode == true {
-            UIView.animate(withDuration: 0.5) {
+            UIView.animate(withDuration: 0.3) {
                 self.diaryTextView.isEditable = true
                 self.diaryTextView.backgroundColor = UIColor(white: 1, alpha: 0.4)
                 // share버튼 숨기기
@@ -207,13 +200,9 @@ extension DiaryVC: DiaryHeaderDelegate {
             
         // 저장뷰로 진입
         } else {
-            // fixToggle이 true이면 Create / Update
-            if self.fixToggle == true {
                 self.saveOrUpdate()
-                self.fixToggle = false
-            }
             
-            UIView.animate(withDuration: 0.5) {
+            UIView.animate(withDuration: 0.3) {
                 self.diaryTextView.isEditable = false
                 self.diaryTextView.backgroundColor = .clear
                 // share버튼 보이게 하기
@@ -223,7 +212,11 @@ extension DiaryVC: DiaryHeaderDelegate {
     }
     
     // MARK: - CoreData
-    func saveOrUpdate() {
+    private func saveOrUpdate() {
+        if self.fixToggle == false { return }
+        self.fixToggle = false
+        
+        
         // 빈칸 또는 placeholder 상태라면 Create / Update하지 않음
         if self.diaryTextView.text == "텍스트를 여기에 입력하세요." {
             return

@@ -30,11 +30,8 @@ final class HeaderView: UIView {
         - headerLeftButtonTapped() - HeaderView
         - didSelectRowAt           - MainVC
         - blackViewTapped()        - MainVC
-        - starButtonTapped()       - MainVC
+        - starButtonTapped()       - MainVC 등
      */
-    
-    
-    
     var buttonConfig: LeftBtnTapImgChange = .mainViewButton {
         didSet {
 //            print(buttonConfig)
@@ -59,6 +56,13 @@ final class HeaderView: UIView {
         // - DiaryViewHideOrShow         - MainVC
      */
     var rightButtonConfig: RightBtnTapImgChange = .saveMode
+    
+    
+    
+    
+    
+    
+    
     
     
     
@@ -91,6 +95,13 @@ final class HeaderView: UIView {
     
     
     
+    
+    
+    
+    
+    
+    
+    
     // MARK: - LifeCycle
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -103,6 +114,11 @@ final class HeaderView: UIView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    
+    
+    
+    
     
     
     
@@ -126,17 +142,22 @@ final class HeaderView: UIView {
         self.rightButton.anchor(trailing: self.trailingAnchor, paddingTrailing: 20,
                                 centerY: self.titleLabel)
     }
-    
-    
-    
-    
-    
-    // MARK: - API
-    
-    
-    
-
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -182,10 +203,6 @@ extension HeaderView {
         case .diaryViewButton:
             // DiaryVC 사라지기
             self.mainHeaderDelegate?.handleDiaryToTable()
-            // fix모드에서 leftButton클릭 시 자동으로 save모드로 바뀜
-//            self.rightButtonConfig = .saveMode
-            
-            
             break
             
             
@@ -208,6 +225,83 @@ extension HeaderView {
         }
     }
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    // MARK: - Right Button Config
+    /*
+     // 함수 호출 과정
+        rightButton ( fixMode / saveMode )가 눌리면 현재 함수가 실행 됨
+     
+     // 이 함수가 하는 일
+            - rightButton의 이미지를 바꾸고           <<<- 이 함수가 하는 일
+            - delegate 실행                        <<<- 이 함수가 하는 일
+                -> 상황에 맞게 뷰 변경 <- DiaryVC_diaryFixMode(_:)
+     
+     */
+    @objc private func headerRightButtonTapped() {
+        switch rightButtonConfig {
+        // 현재: fixMode
+            // fixMode로 진입
+        case .fixMode:
+            // rightButton 이미지 변경 ( .check )
+            self.rightButton.setImage(.setImg(.check), for: .normal)
+            
+            // fix모드 진입
+            self.diaryHeaderDelegate?.diaryFixMode(true)
+            
+            // save모드로 변경
+                // fix모드에서 rightButton 누르면 save모드로 들어갈 수 있게
+            self.rightButtonConfig = .saveMode
+            break
+            
+            
+            
+        // 현재: saveMode
+            // saveMode로 진입
+        case .saveMode:
+            // rightButton 이미지 변경 ( .fix )
+            self.rightButton.setImage(.setImg(.fix), for: .normal)
+            
+            // save모드 진입
+            self.diaryHeaderDelegate?.diaryFixMode(false)
+            
+            // fix모드로 변경
+                // save모드에서 rightButton 누르면 fix모드로 들어갈 수 있게
+            self.rightButtonConfig = .fixMode
+            break
+            
+            
+        case .coin:
+            break
+        }
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     // MARK: - Button Image Config
     // ***** 뷰가 바뀌었을 때 버튼 이미지 바꿔주는 메서드 (+ hide / show) *****
     /*
@@ -227,14 +321,14 @@ extension HeaderView {
      */
     private func changeImgWhenViewChanges() {
         switch buttonConfig {
-        // MenuVC 화면에서의 버튼 이미지
+        // MenuVC 화면들어오면 -> 버튼 이미지
         case .menuViewButton:
             // back Image
             self.leftButton.setImage(.setImg(.back), for: .normal)
             break
             
             
-        // MainVC 화면에서의 버튼 이미지
+        // MainVC 화면들어오면 -> 버튼 이미지
         case .mainViewButton:
             // menu Image
             self.leftButton.setImage(.setImg(.menu), for: .normal)
@@ -243,7 +337,7 @@ extension HeaderView {
             break
             
             
-        // TableView 화면에서의 버튼 이미지 및 설정
+        // TableView 화면들어오면 -> 버튼 이미지 및 설정
         case .tableViewButton:
             // back Image
             self.leftButton.setImage(.setImg(.back), for: .normal)
@@ -252,81 +346,32 @@ extension HeaderView {
             break
             
             
-        // DiaryVC 화면에서의 버튼 설정
+        // DiaryVC 화면들어오면 -> 버튼 설정
         case .diaryViewButton:
             // rightButton 보이게 하기
             self.rightButton.isHidden = false
-            self.rightButton.setImage(.setImg(.fix), for: .normal)
+            // MainVC - tableToDiary()를 통해
+                // -> rightbuttonConfig를 설정
+                // -> 설정값에 따라 headerRightButtonTapped()를 하여 뷰를 바꿈
+            self.headerRightButtonTapped()
             break
             
             
+        // shopVC 화면들어오면 -> 버튼 이미지 및 텍스트 설정
         case .shopVCButton:
+            // rightButton보이게 하기 + 이미지 바꾸기
             self.rightButton.isHidden = false
             self.rightButton.setImage(.setImg(.coin), for: .normal)
+            // titleLabel 바꾸기
             self.titleLabel.text = "상점"
             break
             
             
         case .setupVCButton:
-            
-            
             break
             
             
         case .achievementVCButton:
-            
-            
-            break
-        }
-    }
-    
-    
-    
-    
-    
-    
-    // MARK: - Right Button Config
-    /*
-     // 함수 호출 과정
-        rightButton ( fixMode / saveMode )가 눌리면 현재 함수가 실행 됨
-     
-     // 이 함수가 하는 일
-            - rightButton의 이미지를 바꾸고           <<<- 이 함수가 하는 일
-            - delegate 실행                        <<<- 이 함수가 하는 일
-                -> 상황에 맞게 뷰 변경 <- DiaryVC_diaryFixMode(_:)
-     
-     */
-    @objc func headerRightButtonTapped() {
-        switch rightButtonConfig {
-        // 현재: fixMode
-            // fixMode에서 right버튼을 눌렀을 때
-        case .fixMode:
-            // rightButton 이미지 변경 ( .fix )
-            self.rightButton.setImage(.setImg(.fix), for: .normal)
-            
-            // save모드 진입
-            self.diaryHeaderDelegate?.diaryFixMode(false)
-            
-            // save모드로 변경 ( rightButton 누르면 fixMode로 들어갈 수 있게 )
-            self.rightButtonConfig = .saveMode
-            break
-            
-            
-        // 현재: saveMode
-            // saveMode에서 right버튼을 눌렀을 때
-        case .saveMode:
-            // rightButton 이미지 변경 ( .check )
-            self.rightButton.setImage(.setImg(.check), for: .normal)
-            
-            // fix모드 진입
-            self.diaryHeaderDelegate?.diaryFixMode(true)
-            
-            // fix모드로 변경 ( rightButton 누르면 다시 saveMode로 돌아올 수 있게 )
-            self.rightButtonConfig = .fixMode
-            break
-            
-            
-        case .coin:
             break
         }
     }
