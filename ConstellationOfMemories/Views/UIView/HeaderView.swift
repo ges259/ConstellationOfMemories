@@ -203,6 +203,12 @@ extension HeaderView {
         case .diaryViewButton:
             // DiaryVC 사라지기
             self.mainHeaderDelegate?.handleDiaryToTable()
+            // 저장뷰인 상태에서 나가면 ( - rightButtonConfig느 fixMode인 상태)
+                // -> headerRightbuttonTapped()에서 fixMode로 넘어가는 애니메이션이 나옴
+                    // 이를 방지하기 위해 saveMode로 바꾸고 실행
+            self.rightButtonConfig = .saveMode
+            // check표시를 클릭하지 않고 왼쪽버튼을 통해 나가도 저장이 될 수 있도록 함
+            self.headerRightButtonTapped()
             break
             
             
@@ -302,7 +308,7 @@ extension HeaderView {
     
     
     
-    // MARK: - Button Image Config
+    // MARK: - Button Image
     // ***** 뷰가 바뀌었을 때 버튼 이미지 바꿔주는 메서드 (+ hide / show) *****
     /*
      // 함수 작동 원리

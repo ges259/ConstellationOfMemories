@@ -32,18 +32,15 @@ final class collectionSegementView: UIView {
     // MARK: - Layout
     // UISegmentedControl
     lazy var segmentedControl: UISegmentedControl = {
-        let control = UISegmentedControl(items: ["추억 모음", "통계"])
+        let control = UISegmentedControl(items: ["별자리 컬렉션", "일기 컬렉션"])
             // segment 배경색 (비 선택창)
             control.backgroundColor = .clear
             // segement 선택창 배경 색
             
         
-        control.setTitleTextAttributes([NSAttributedString.Key.font : UIFont.systemFont(ofSize: 12), NSAttributedString.Key.foregroundColor : UIColor.white], for: .normal)
+            control.setTitleTextAttributes([NSAttributedString.Key.font : UIFont.systemFont(ofSize: 14), NSAttributedString.Key.foregroundColor : UIColor.white], for: .normal)
         
-        control.selectedSegmentTintColor = UIColor(white: 1, alpha: 0.3)
-        
-        
-        
+            control.selectedSegmentTintColor = UIColor(white: 1, alpha: 0.3)
         
             control.selectedSegmentIndex = 0
             control.addTarget(self, action: #selector(segmentedValueChanged(segment:)), for: .valueChanged)
@@ -154,6 +151,7 @@ final class collectionSegementView: UIView {
                 self.achieveSegementHideOrShow(show: true)
                 break
                 
+                
             case .shop:
                 self.shopSegementHideOrShow(show: true)
                 break
@@ -166,6 +164,7 @@ final class collectionSegementView: UIView {
                 self.achieveSegementHideOrShow(show: false)
                 break
                 
+                
             case .shop:
                 self.shopSegementHideOrShow(show: false)
                 break
@@ -173,9 +172,10 @@ final class collectionSegementView: UIView {
         }
     }
     
+    
+    
     func achieveSegementHideOrShow(show: Bool) {
         if show == true {
-            print("myStar")
             self.reuseCollectionView.reloadData()
             
             UIView.animate(withDuration: 0.5) {
@@ -189,7 +189,6 @@ final class collectionSegementView: UIView {
             }
             
         } else {
-            print("achieve")
             UIView.animate(withDuration: 0.5) {
                 // mystarSegment 숨기기
                 self.reuseCollectionView.alpha = 0
@@ -204,7 +203,6 @@ final class collectionSegementView: UIView {
     
     func shopSegementHideOrShow(show: Bool) {
         if show == true {
-            print("shop11111")
             self.reuseCollectionView.reloadData()
             
             UIView.animate(withDuration: 0.5) {
@@ -218,7 +216,6 @@ final class collectionSegementView: UIView {
             }
             
         } else {
-            print("shop22222")
             UIView.animate(withDuration: 0.5) {
                 // mystarSegment 숨기기
                 self.reuseCollectionView.alpha = 0

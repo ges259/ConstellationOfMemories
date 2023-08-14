@@ -42,3 +42,7 @@ protocol SegementMainDelegate {
     func shop2Tapped()
 }
 
+protocol MainDiaryDelegate {
+    func todayDiaryCompleted()
+}
+

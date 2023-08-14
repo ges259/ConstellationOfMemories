@@ -34,6 +34,7 @@ enum RightBtnTapImgChange {
 enum TableViewEnum {
     case diary
     case setup
+    case setupAdditional
 }
 enum CollectionViewEnum {
     case myStar

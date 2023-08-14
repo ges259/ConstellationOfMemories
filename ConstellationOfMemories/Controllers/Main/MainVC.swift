@@ -12,13 +12,6 @@ import UIKit
 final class MainVC: UIViewController {
     
     // MARK: - Properties
-    
-    
-    private var row = [Int]()
-    //
-    var num: Int = 0
-    //
-    
     // header View 싱글톤
     private let headerView: HeaderView = HeaderView.shared
     // CoreData 싱글톤
@@ -27,7 +20,14 @@ final class MainVC: UIViewController {
     private var diaryData: [DiaryData] = []
     
     
+    
+    // MARK: - Fix
+    // 12시가 지나면 false로 자동으로 바꿔지도록.
+    // 방법이...
+        // 서버에서?
     private var todayDiaryToggle: Bool = false
+    
+    
     
     
     
@@ -65,6 +65,7 @@ final class MainVC: UIViewController {
     }()
     // seteup_VC
     private var setupTableView = UITableView()
+//    private var setupAdditionalTableview = UITableView()
 
     // menuBlackView
     // Menu가 열렸을 때 다른 영역을 터치하면 Menu가 닫히도록하기 위해 blackView 설정
@@ -87,7 +88,11 @@ final class MainVC: UIViewController {
         let view = UserInfoHeader(frame: frame)
         return view
     }()
-
+    
+    
+    
+    
+    
     
     
     
@@ -174,6 +179,7 @@ final class MainVC: UIViewController {
                                        width: self.view.frame.width,
                                        height: 150)
         self.headerView.mainHeaderDelegate = self
+        self.headerView.diaryHeaderDelegate = diaryVC
         self.view.addSubview(self.headerView)
         
         
@@ -216,7 +222,7 @@ final class MainVC: UIViewController {
         
         
         // DiaryVC frame
-        self.headerView.diaryHeaderDelegate = diaryVC
+        self.diaryVC.mainDiaryDelegate = self
         self.diaryVC.alpha = 0
         self.diaryVC.frame = CGRect(x: self.view.frame.width - 150,
                                     y: 150,
@@ -249,13 +255,7 @@ final class MainVC: UIViewController {
         
         
         
-        
-        
-        
-        
-        
-        
-        // 코어데이터 접근
+        // 코어데이터에서 데이터 가져오기
         self.diaryData = coreData.readDiaryDatas()
     }
 }
@@ -546,6 +546,10 @@ extension MainVC: MainHeaderDelegate {
     func handleDiaryToTable() {
         // 버튼의 이미지 + 역할을 바꿈
         self.headerView.buttonConfig = .tableViewButton
+        
+        self.diaryData = self.coreData.readDiaryDatas()
+        self.diaryTableView.reloadData()
+        
         // diary_View_숨기기
             // didSelect_Row_At()에서 열림
         self.DiaryViewHideOrShow(show: false)
@@ -599,12 +603,6 @@ extension MainVC: MainHeaderDelegate {
             // 일관성을 위한 함수 설정
     // Diary_Table -> DiaryVC
     private func tableToDiary() {
-        // 버튼의 이미지 + 역할을 바꿈
-            // 오늘 일기를 썻다면 fixMode (수정뷰)
-            // 오늘 일기를 쓰지 않았다면 saveMode (저장뷰)
-        self.headerView.rightButtonConfig = self.todayDiaryToggle == true
-            ? .fixMode
-            : .saveMode
         // 버튼의 이미지 + 역할을 바꿈 (위에서 바꾼 Toggle을 통해 right버튼도 바뀜)
         self.headerView.buttonConfig = .diaryViewButton
         // diary_View_보이게 하기
@@ -654,151 +652,25 @@ extension MainVC: MainMenuDelegate {
 
 
 
-
-
-
-
-
-
-
-
-
-
-// MARK: - TableView_Delegate
-extension MainVC: UITableViewDelegate, UITableViewDataSource {
-    // dataSource
-    // 섹션의 개수
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return tableViewToggle == .diary ? 1 : 2
+// MARK: - AchieveMainDelegate
+// segement_Control
+extension MainVC: SegementMainDelegate {
+    func imageTapped() {
+        print(#function)
     }
     
-    // 섹션 타이틀 이름
-    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        switch tableViewToggle {
-        case .diary:
-            return nil
-            
-            
-        case .setup:
-            
-            return section == 0 ? "일기 작성 시간 설정" : "123412184941956"
-        }
+    func shop2Tapped() {
+        print(#function)
     }
-    
-    // 셀의 개수
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        switch tableViewToggle {
-        case .diary:
-            return self.diaryData.count
-            
-            
-        case .setup:
-            return section == 0 ? 1 : 3
-        }
-    }
-    
-    // cell_For_Row_At
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        switch tableViewToggle {
-        case .diary:
-            let cell = tableView.dequeueReusableCell(withIdentifier: ReuseIdentifier.diaryTableViewCell,
-                                                     for: indexPath) as! DiaryTableViewCell
-            
-            
+}
 
 
-            // 셀의 StringLabel에 표시
-            if indexPath.row == 0 {
-                cell.diaryDate = "오늘"
-            } else if indexPath.row == 1 {
-                cell.diaryDate = "어제"
-            } else if indexPath.row == 2 {
-                cell.diaryDate = "그저께"
-            } else {
-                cell.diaryDate = self.diaryData[indexPath.row].dateString
-            }
-            return cell
-            
-            
-            
-        case .setup:
-            let cell = tableView.dequeueReusableCell(withIdentifier: ReuseIdentifier.setupTableViewCell,
-                                                     for: indexPath) as! SetupTableviewCell
-                
-            
-            
-            //
-            cell.textLabel?.text = String(self.num)
-            num += 1
-            //
-            return cell
-        }
-    }
-    
-    // delegate
-    // didSelect_Row_At
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
-        switch tableViewToggle {
-        case .diary:
-            
-            
-            
-            
-            // MARK: - Fix
-            // self.todayDiaryToggle을 바꾸면 fix / save모드 변경
-            
-            
-            // 오늘 일기를 적지 않았다면
-//            if indexPath.row == 0 && self.todayDiaryToggle == false {
-//                // fixMode로 진입
-//                self.headerView.rightButtonConfig = .saveMode
-//                self.headerView.headerRightButtonTapped()
-//                // 오늘 일기를 적지 않았다면 빈칸으로 교체
-//                self.diaryVC.diaryTextView.text = ""
-//            }
-//
-//            if indexPath.row > 1 {
-//                self.headerView.rightButtonConfig = .fixMode
-//                self.headerView.headerRightButtonTapped()
-//
-//
-//            }
-            self.diaryVC.diaryData = self.diaryData[indexPath.row]
-            
-            
-            
-            
-            
-            // 이걸 나중에 호출하는게 맞을까?
-            // 뷰 전환 (일관성을 위해 함수로 만들어 둠)
-            self.tableToDiary()
-            break
-            
-            
-            
-            
-            
-        case .setup:
-            print(#function)
-            break
-        }
-    }
-    
-    // 높이
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return tableViewToggle == .diary ? 140 : 60
-    }
-    
-    
-    
-    func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
-        if let headerView = view as? UITableViewHeaderFooterView {
-            headerView.contentView.backgroundColor = UIColor(white: 1, alpha: 0.2)
-            
-            // section 헤더의 글자색 바꾸기
-            headerView.textLabel?.textColor = .nightFontColor
-        }
+
+
+
+extension MainVC: MainDiaryDelegate {
+    func todayDiaryCompleted() {
+        self.todayDiaryToggle = true
     }
 }
 
@@ -815,14 +687,187 @@ extension MainVC: UITableViewDelegate, UITableViewDataSource {
 
 
 
-// MARK: - AchieveMainDelegate
-// segement_Control
-extension MainVC: SegementMainDelegate {
-    func imageTapped() {
-        print(#function)
+
+
+
+
+
+// MARK: - TableView
+extension MainVC: UITableViewDelegate, UITableViewDataSource {
+    // 섹션의 개수
+    func numberOfSections(in tableView: UITableView) -> Int {
+        switch tableViewToggle {
+        case .diary: return 1
+        case .setup: return 3
+        case .setupAdditional: return 1
+        }
     }
     
-    func shop2Tapped() {
-        print(#function)
+    
+    
+    // 높이
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        switch tableViewToggle {
+        case .diary: return 140
+        case .setup: return 60
+        case .setupAdditional: return 60
+        }
+    }
+    
+    
+    
+    // 섹션 타이틀 이름
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        switch tableViewToggle {
+            
+        case .diary: return nil
+            
+        case .setup:
+            if section == 0 { return "일기 작성 시간 설정" }
+            else if section == 1 { return "배경화면 설정" }
+            else { return "글자 색상 설정" }
+            
+        case .setupAdditional: return nil
+        }
+    }
+    
+    
+    
+    // 셀의 개수
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        switch tableViewToggle {
+            
+        case .diary:
+            return self.todayDiaryToggle == false
+                ? self.diaryData.count + 1
+                : self.diaryData.count
+            
+            
+        case .setup:
+            if section == 0 { return 1
+            } else if section == 1 { return 1
+            } else { return 1 }
+            
+            
+        case .setupAdditional:
+            // MARK: - Fix
+            return 4
+        }
+    }
+    
+    
+    
+    // cell_For_Row_At
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        switch tableViewToggle {
+        case .diary:
+            let cell = tableView.dequeueReusableCell(withIdentifier: ReuseIdentifier.diaryTableViewCell, for: indexPath) as! DiaryTableViewCell
+            
+            // 셀의 StringLabel에 Text표시
+            if indexPath.row == 0 { cell.diaryDate = "오늘"
+            } else if indexPath.row == 1 { cell.diaryDate = "어제"
+            } else if indexPath.row == 2 { cell.diaryDate = "그저께"
+            } else {
+                cell.diaryDate = self.diaryData[indexPath.row - 3].dateString
+            }
+            return cell
+            
+            
+        case .setup:
+            let cell = tableView.dequeueReusableCell(withIdentifier: ReuseIdentifier.setupTableViewCell, for: indexPath) as! SetupTableviewCell
+            
+            if indexPath.section == 0 { cell.titleLabel.text = "일기 작성 시간"
+            } else if indexPath.section == 1 { cell.titleLabel.text = "아침 배경화면 설정"
+            } else { cell.titleLabel.text = "글자 색상 변경" }
+            return cell
+            
+            
+            
+        case .setupAdditional:
+            
+            // MARK: - Fix
+            let cell = tableView.dequeueReusableCell(withIdentifier: ReuseIdentifier.diaryTableViewCell, for: indexPath) as! DiaryTableViewCell
+            
+            return cell
+        }
+    }
+    
+    
+    
+    // didSelect_Row_At
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        switch self.tableViewToggle {
+        case .diary:
+            // 첫번째 셀
+            if indexPath.row == 0 {
+                // 오늘 일기를 적지 않았다면,
+                if self.todayDiaryToggle == false {
+                    // 오늘 일기를 적지 않았다면 빈칸으로 교체
+                    self.diaryVC.diaryTextView.text = ""
+                    // 데이터 create를 위해 nil 넣기
+                    self.diaryVC.diaryData = nil
+                    // fix모드로 diaryVC진입
+                    self.headerView.rightButtonConfig = .fixMode
+                    
+                    
+                // 오늘 일기를 적었다면
+                } else {
+                    // save모드로 diaryVC진입
+                    self.headerView.rightButtonConfig = .saveMode
+                    self.diaryVC.diaryData = self.diaryData[indexPath.row]
+                }
+                
+                
+            // 2번째 셀부터 ~~~ 마지막 셀까지
+            } else if indexPath.row > 0 {
+                // save모드로 diaryVC진입
+                self.headerView.rightButtonConfig = .saveMode
+                // todayDiarytoggle에 따라서 셀 표시가 달라짐
+                self.diaryVC.diaryData = self.todayDiaryToggle == false
+                    ? self.diaryData[indexPath.row - 1]
+                    : self.diaryData[indexPath.row]
+            }
+            
+            
+            self.diaryTableView.reloadData()
+            // 뷰 전환 (일관성을 위해 함수로 만들어 둠)
+            self.tableToDiary()
+            break
+            
+            
+            
+            
+        case .setup:
+            if indexPath.section == 0 {
+                print("setup1")
+                
+            } else if indexPath.section == 1 {
+                print("setup2")
+                
+            } else {
+                print("setup3")
+                
+            }
+            break
+            
+            
+        case .setupAdditional:
+            print(#function)
+            break
+        }
+    }
+    
+    
+    
+    
+    
+    // 테이블 헤더
+    func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        if let headerView = view as? UITableViewHeaderFooterView {
+            // background Color
+            headerView.contentView.backgroundColor = UIColor(white: 1, alpha: 0.2)
+            // section 헤더의 글자색 바꾸기
+            headerView.textLabel?.textColor = .nightFontColor
+        }
     }
 }

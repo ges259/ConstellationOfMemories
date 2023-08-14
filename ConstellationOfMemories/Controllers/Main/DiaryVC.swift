@@ -29,6 +29,12 @@ final class DiaryVC: UIView {
     // 코어데이터 싱글톤
     private let coredata = CoreDataManager.shared
     
+    // delgate
+    var mainDiaryDelegate: MainDiaryDelegate?
+    
+    
+    
+    
     
     // MARK: - View
         // separator_View
@@ -229,12 +235,21 @@ extension DiaryVC: DiaryHeaderDelegate {
             coredata.updateDiaryData(newDiaryData: diaryData)
             print("데이터 업데이트")
             
+            
+            
+            
+            
+            
             // diaryData가 없다면 (전 화면에서 DiaryData를 받아오지 못했다면) -> create
         } else {
             // 빈칸이라면 데이터를 생성(create)하지 않음
             if self.diaryTextView.text == "" {
                 return
             }
+            
+            
+            // 데이터를 생성했다면, toggle바꾸기
+            self.mainDiaryDelegate?.todayDiaryCompleted()
             
             coredata.createDiaryData(diaryText: self.diaryTextView.text)
             print("데이터 생성")
