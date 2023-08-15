@@ -228,6 +228,11 @@ extension HeaderView {
             // 뒤로가기
             self.mainHeaderDelegate?.handleAchievementToMain()
             break
+            
+            
+        case .additionalTableView:
+            self.mainHeaderDelegate?.handleAdditionalToSetup()
+            break
         }
     }
     
@@ -378,6 +383,10 @@ extension HeaderView {
             
             
         case .achievementVCButton:
+            break
+            
+            
+        case .additionalTableView:
             break
         }
     }

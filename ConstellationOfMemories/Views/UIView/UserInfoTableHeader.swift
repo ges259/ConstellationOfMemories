@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class UserInfoHeader: UIView {
+final class UserInfoTableHeader: UIView {
     
     // MARK: - Properties
     

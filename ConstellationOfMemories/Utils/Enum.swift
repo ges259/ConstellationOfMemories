@@ -23,6 +23,7 @@ enum LeftBtnTapImgChange {
     case shopVCButton
     case setupVCButton
     case achievementVCButton
+    case additionalTableView
 }
 
 enum RightBtnTapImgChange {
@@ -34,7 +35,7 @@ enum RightBtnTapImgChange {
 enum TableViewEnum {
     case diary
     case setup
-    case setupAdditional
+    case additional
 }
 enum CollectionViewEnum {
     case myStar
@@ -76,5 +77,10 @@ enum imageString: CustomStringConvertible {
 
 
 
-
+// Addtional_Table_View
+enum AddtionalEnum {
+    case diaryTime
+    case backgroundColor
+    case Font
+}
 

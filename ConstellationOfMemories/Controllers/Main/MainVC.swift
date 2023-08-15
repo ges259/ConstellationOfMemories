@@ -65,7 +65,8 @@ final class MainVC: UIViewController {
     }()
     // seteup_VC
     private var setupTableView = UITableView()
-//    private var setupAdditionalTableview = UITableView()
+    private var additionalTableView = UITableView()
+    private var additionalEnum: AddtionalEnum = .diaryTime
 
     // menuBlackView
     // Menu가 열렸을 때 다른 영역을 터치하면 Menu가 닫히도록하기 위해 blackView 설정
@@ -83,9 +84,9 @@ final class MainVC: UIViewController {
         return view
     }()
     // UIView
-    private lazy var userInfoHeader: UserInfoHeader = {
+    private lazy var userInfoTableHeader: UserInfoTableHeader = {
         let frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: 80)
-        let view = UserInfoHeader(frame: frame)
+        let view = UserInfoTableHeader(frame: frame)
         return view
     }()
     
@@ -154,7 +155,7 @@ final class MainVC: UIViewController {
     
     
     
-    // MARK: - CoreData
+    
     
     
     
@@ -215,9 +216,9 @@ final class MainVC: UIViewController {
         self.diaryTableView.register(DiaryTableViewCell.self,
                                 forCellReuseIdentifier: ReuseIdentifier.diaryTableViewCell)
         self.diaryTableView.frame = CGRect(x: 0,
-                                      y: self.view.frame.height - 300,
-                                      width: self.view.frame.width,
-                                      height: self.view.frame.height - 150)
+                                           y: self.view.frame.height - 300,
+                                           width: self.view.frame.width,
+                                           height: self.view.frame.height - 150)
         
         
         
@@ -234,9 +235,9 @@ final class MainVC: UIViewController {
         // Menu - Setup
         // setupTableView
         let setupTableFrame = CGRect(x: 0,
-                           y: self.view.frame.height - 300,
-                           width: self.view.frame.width,
-                           height: self.view.frame.height - 80)
+                                     y: self.view.frame.height - 300,
+                                     width: self.view.frame.width,
+                                     height: self.view.frame.height - 150)
         self.setupTableView = UITableView(frame: setupTableFrame)
         
         self.setupTableView.delegate = self
@@ -249,14 +250,40 @@ final class MainVC: UIViewController {
         self.setupTableView.register(SetupTableviewCell.self,
                                      forCellReuseIdentifier: ReuseIdentifier.setupTableViewCell)
         // setupTableview - headerView 추가
-        self.setupTableView.tableHeaderView = userInfoHeader
+        self.setupTableView.tableHeaderView = userInfoTableHeader
         self.setupTableView.isScrollEnabled = false
         
         
         
-        
+        // MARK: - CoreData
         // 코어데이터에서 데이터 가져오기
         self.diaryData = coreData.readDiaryDatas()
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        // setupAdditionalTableView
+        let additinalTableFrame = CGRect(x: self.view.frame.width,
+                                         y: 150,
+                                         width: self.view.frame.width,
+                                         height: self.view.frame.height - 150)
+        self.additionalTableView = UITableView.init(frame: additinalTableFrame)
+        
+        self.additionalTableView.delegate = self
+        self.additionalTableView.dataSource = self
+        
+        self.additionalTableView.isScrollEnabled = false
+        self.additionalTableView.separatorStyle = .none
+        self.additionalTableView.backgroundColor = .clear
+        self.additionalTableView.alpha = 0
+        
+        self.additionalTableView.register(AdditionalCell.self, forCellReuseIdentifier: ReuseIdentifier.additionalCell)
+        
     }
 }
 
@@ -347,6 +374,45 @@ extension MainVC {
             }
         }
     }
+    
+    
+    
+    // MARK: - Additional
+    private func additionalTableHideOrShow(show: Bool) {
+        if show == true {
+            
+            self.view.addSubview(self.additionalTableView)
+            
+            UIView.animate(withDuration: 0.5) {
+                // setupTable 숨기기
+                self.setupTableView.alpha = 0
+                self.setupTableView.frame.origin.x = -self.view.frame.width
+                
+                // additaional 테이블 보이게 하기
+                self.additionalTableView.alpha = 1
+                self.additionalTableView.frame.origin.x = 0
+                
+            }
+        } else {
+            UIView.animate(withDuration: 0.5) {
+                
+                // setupTable 보이게 하기
+                self.setupTableView.alpha = 1
+                self.setupTableView.frame.origin.x = 0
+                
+                // additaional 숨기기
+                self.additionalTableView.alpha = 0
+                self.additionalTableView.frame.origin.x = self.view.frame.width
+                
+            } completion: { _ in
+                self.additionalTableView.removeFromSuperview()
+            }
+            
+        }
+    }
+    
+    
+    
     
     
     
@@ -575,6 +641,17 @@ extension MainVC: MainHeaderDelegate {
         // setup_Table_숨기기
         self.setupTableHideOrShow(show: false)
     }
+    // Additonal -> Setup
+    func handleAdditionalToSetup() {
+        // 버튼의 이미지 + 역할을 바꿈
+        self.headerView.buttonConfig = .setupVCButton
+        // 테이블뷰의 토글 변경
+        self.tableViewToggle = .setup
+        // addtionalTableview 숨기기
+        self.additionalTableHideOrShow(show: false)
+    }
+    
+    
     
     
     
@@ -693,30 +770,19 @@ extension MainVC: MainDiaryDelegate {
 
 
 // MARK: - TableView
+
 extension MainVC: UITableViewDelegate, UITableViewDataSource {
-    // 섹션의 개수
+    
+    // MARK: - Section
+    // 섹션의 _개수
     func numberOfSections(in tableView: UITableView) -> Int {
         switch tableViewToggle {
         case .diary: return 1
         case .setup: return 3
-        case .setupAdditional: return 1
+        case .additional: return 1
         }
     }
-    
-    
-    
-    // 높이
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        switch tableViewToggle {
-        case .diary: return 140
-        case .setup: return 60
-        case .setupAdditional: return 60
-        }
-    }
-    
-    
-    
-    // 섹션 타이틀 이름
+    // 섹션 _타이틀 이름
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         switch tableViewToggle {
             
@@ -727,7 +793,26 @@ extension MainVC: UITableViewDelegate, UITableViewDataSource {
             else if section == 1 { return "배경화면 설정" }
             else { return "글자 색상 설정" }
             
-        case .setupAdditional: return nil
+        case .additional: return nil
+        }
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+        
+    
+    // MARK: - Cell
+    // 셀의 높이
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        switch tableViewToggle {
+        case .diary: return 140
+        case .setup: return 60
+        case .additional: return 50
         }
     }
     
@@ -744,14 +829,15 @@ extension MainVC: UITableViewDelegate, UITableViewDataSource {
             
             
         case .setup:
-            if section == 0 { return 1
-            } else if section == 1 { return 1
-            } else { return 1 }
+            if section == 0 { return 1 }
+            else if section == 1 { return 1 }
+            else { return 1 }
             
             
-        case .setupAdditional:
-            // MARK: - Fix
-            return 4
+        case .additional:
+            if self.additionalEnum == .diaryTime { return 12}
+            else if self.additionalEnum == .backgroundColor { return 6 }
+            else { return 3 }
         }
     }
     
@@ -764,10 +850,11 @@ extension MainVC: UITableViewDelegate, UITableViewDataSource {
             let cell = tableView.dequeueReusableCell(withIdentifier: ReuseIdentifier.diaryTableViewCell, for: indexPath) as! DiaryTableViewCell
             
             // 셀의 StringLabel에 Text표시
-            if indexPath.row == 0 { cell.diaryDate = "오늘"
-            } else if indexPath.row == 1 { cell.diaryDate = "어제"
-            } else if indexPath.row == 2 { cell.diaryDate = "그저께"
-            } else {
+            if indexPath.row == 0 { cell.diaryDate = "오늘" }
+            else if indexPath.row == 1 { cell.diaryDate = "어제" }
+            else if indexPath.row == 2 { cell.diaryDate = "그저께" }
+            else {
+                // 일기를 적은 날을 표시 (X월 X일)
                 cell.diaryDate = self.diaryData[indexPath.row - 3].dateString
             }
             return cell
@@ -776,17 +863,16 @@ extension MainVC: UITableViewDelegate, UITableViewDataSource {
         case .setup:
             let cell = tableView.dequeueReusableCell(withIdentifier: ReuseIdentifier.setupTableViewCell, for: indexPath) as! SetupTableviewCell
             
-            if indexPath.section == 0 { cell.titleLabel.text = "일기 작성 시간"
-            } else if indexPath.section == 1 { cell.titleLabel.text = "아침 배경화면 설정"
-            } else { cell.titleLabel.text = "글자 색상 변경" }
+            if indexPath.section == 0 { cell.titleLabel.text = "일기 작성 시간" }
+            else if indexPath.section == 1 { cell.titleLabel.text = "아침 배경화면 설정" }
+            else { cell.titleLabel.text = "글자 색상 변경" }
             return cell
             
             
+        case .additional:
+            let cell = tableView.dequeueReusableCell(withIdentifier: ReuseIdentifier.additionalCell, for: indexPath) as! AdditionalCell
             
-        case .setupAdditional:
-            
-            // MARK: - Fix
-            let cell = tableView.dequeueReusableCell(withIdentifier: ReuseIdentifier.diaryTableViewCell, for: indexPath) as! DiaryTableViewCell
+                cell.textLabel?.text = "11111"
             
             return cell
         }
@@ -835,23 +921,34 @@ extension MainVC: UITableViewDelegate, UITableViewDataSource {
             break
             
             
-            
-            
         case .setup:
+            // enum변경
             if indexPath.section == 0 {
-                print("setup1")
-                
+                self.additionalEnum = .diaryTime
+                print(additionalEnum)
             } else if indexPath.section == 1 {
-                print("setup2")
-                
+                self.additionalEnum = .backgroundColor
+                print(additionalEnum)
             } else {
-                print("setup3")
-                
+                self.additionalEnum = .Font
+                print(additionalEnum)
             }
+            
+            // 테이블뷰 토글 바꾸기
+            self.tableViewToggle = .additional
+            
+            // 헤더의 버튼 이미지 + 설정 바꾸기
+            self.headerView.buttonConfig = .additionalTableView
+            
+            // 셀의 개수가 달라지기 때문에 reloadData를 해줌
+            self.additionalTableView.reloadData()
+            
+            // additional_Table_View 보이게 하기
+            self.additionalTableHideOrShow(show: true)
             break
             
             
-        case .setupAdditional:
+        case .additional:
             print(#function)
             break
         }
@@ -861,7 +958,12 @@ extension MainVC: UITableViewDelegate, UITableViewDataSource {
     
     
     
-    // 테이블 헤더
+    
+    
+    
+    
+    
+    // 헤더 설정
     func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
         if let headerView = view as? UITableViewHeaderFooterView {
             // background Color
