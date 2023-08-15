@@ -161,7 +161,6 @@ final class HeaderView: UIView {
 
 
 
-
 // MARK: - Selectors
 
 extension HeaderView {
@@ -233,6 +232,12 @@ extension HeaderView {
         case .additionalTableView:
             self.mainHeaderDelegate?.handleAdditionalToSetup()
             break
+            
+            
+        case .fixAdditionalView:
+            // 다시 additional로 돌아가기
+            self.mainHeaderDelegate?.handleFixToAdditional()
+            break
         }
     }
     
@@ -295,6 +300,16 @@ extension HeaderView {
             
             
         case .coin:
+            break
+            
+            
+        case .additional:
+            
+            // check 버튼을 누렀다면 뒤로가기
+            self.mainHeaderDelegate?.handleFixToAdditional()
+            
+            // 저장
+            
             break
         }
     }
@@ -387,6 +402,21 @@ extension HeaderView {
             
             
         case .additionalTableView:
+            self.rightButton.isHidden = true
+            break
+            
+            
+            
+        case .fixAdditionalView:
+            // check표시 만들기
+            self.rightButton.setImage(.setImg(.check), for: .normal)
+            
+            // rightbuttonConfig 바꾸기
+            self.rightButtonConfig = .additional
+            
+            // hidden = false
+            self.rightButton.isHidden = false
+            
             break
         }
     }

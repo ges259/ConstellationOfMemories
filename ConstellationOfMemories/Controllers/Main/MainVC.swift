@@ -20,15 +20,22 @@ final class MainVC: UIViewController {
     private var diaryData: [DiaryData] = []
     
     
-    
     // MARK: - Fix
     // 12시가 지나면 false로 자동으로 바꿔지도록.
     // 방법이...
         // 서버에서?
     private var todayDiaryToggle: Bool = false
+    // 테이블뷰 토글
+    private var tableViewToggle: TableViewEnum = .diary
+    
+//    private var additionalFixToggle: Bool = true
+    private var additionalFixToggle: Bool = false
     
     
+    private var fontColor: FontColor = .red
+    private var currentSetup: CurrentSetup?
     
+    private var timeArray: [String] = ["아침", "낮", "저녁", "새벽"]
     
     
     // MARK: - Fix
@@ -41,71 +48,169 @@ final class MainVC: UIViewController {
     
     
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
     // MARK: - Views
-    // 메뉴
-    private let menuVC = MenuVC()
-    // 테이블 뷰 ( 리스트 뷰 )
-    private let diaryTableView = UITableView()
-    // 테이블뷰 토글
-    private var tableViewToggle: TableViewEnum = .diary
-    // 셀을 누르면 오른쪽 옆에서 나올 뷰 ( 수정 뷰 )
-    private var diaryVC = DiaryVC()
-    // MenuVC
-        // 상점 뷰 및 achivementVC
-    private lazy var achievementView: collectionSegementView = {
-        let view = collectionSegementView()
-            view.frame = CGRect(x: 0,
-                                y: self.view.frame.height - 300,
-                                width: self.view.frame.width,
-                                height: self.view.frame.height - 150)
-            view.segementMainDelegate = self
-        view.alpha = 0
-        
+    
+    
+    
+    
+    // MARK: - Menu
+    private lazy var menuVC: MenuVC = {
+        let frame = CGRect(x: 0,
+                           y: 150,
+                           width: 82,
+                           height: self.view.frame.height - 610)
+        let view = MenuVC(frame: frame)
+            view.mainMenuDelegate = self
+            
         return view
     }()
-    // seteup_VC
-    private var setupTableView = UITableView()
-    private var additionalTableView = UITableView()
-    private var additionalEnum: AddtionalEnum = .diaryTime
-
-    // menuBlackView
+    
+    
+    // MARK: - DiaryTable
+    // 테이블 뷰 ( 리스트 뷰 )
+    private lazy var diaryTableView: UITableView = {
+        let frame = CGRect(x: 0,
+                           y: self.view.frame.height - 300,
+                           width: self.view.frame.width,
+                           height: self.view.frame.height - 150)
+        let view = UITableView(frame: frame)
+            view.delegate = self
+            view.dataSource = self
+        
+            view.separatorStyle = .none
+            view.backgroundColor = .clear
+            view.alpha = 0
+        
+            view.register(DiaryTableViewCell.self, forCellReuseIdentifier: ReuseIdentifier.diaryTableViewCell)
+        return view
+    }()
+    
+    
+    // MARK: - DiaryVC
+    // 셀을 누르면 오른쪽 옆에서 나올 뷰 ( 수정 뷰 )
+    private lazy var diaryVC: DiaryVC = {
+        let frame = CGRect(x: self.view.frame.width - 150,
+                            y: 150,
+                            width: self.view.frame.width,
+                            height: self.view.frame.height - 150)
+        let view = DiaryVC(frame: frame)
+            view.mainDiaryDelegate = self
+            view.alpha = 0
+        return view
+    }()
+    
+    
+    // MARK: - BlackView
     // Menu가 열렸을 때 다른 영역을 터치하면 Menu가 닫히도록하기 위해 blackView 설정
     private lazy var menuBlackView : UIView = {
-        let view = UIView()
+        let frame = CGRect(x: -self.view.frame.width,
+                            y: 0,
+                            width: self.view.frame.width,
+                            height: self.view.frame.height)
+        let view = UIView(frame: frame)
             view.backgroundColor = .clear
-            view.frame = CGRect(x: -self.view.frame.width,
-                                y: 0,
-                                width: self.view.frame.width,
-                                height: self.view.frame.height)
+        
         // blackView - add gesture
         let tap = UITapGestureRecognizer(target: self,
                                          action: #selector(self.blackViewTapped))
             view.addGestureRecognizer(tap)
         return view
     }()
+    
+    
+    // MARK: - Achievement
+        // 상점 뷰 및 achivementVC
+    private lazy var achievementView: collectionSegementView = {
+        let frame = CGRect(x: 0,
+                            y: self.view.frame.height - 300,
+                            width: self.view.frame.width,
+                            height: self.view.frame.height - 150)
+        let view = collectionSegementView(frame: frame)
+            view.segementMainDelegate = self
+            view.alpha = 0
+        return view
+    }()
+    
+    
+    // MARK: - SetupTable
     // UIView
-    private lazy var userInfoTableHeader: UserInfoTableHeader = {
-        let frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: 80)
-        let view = UserInfoTableHeader(frame: frame)
+    // seteup_VC
+    private lazy var setupTableView: UITableView = {
+        let setupTableFrame = CGRect(x: 0,
+                                     y: self.view.frame.height - 300,
+                                     width: self.view.frame.width,
+                                     height: self.view.frame.height - 150)
+        let headerFrame = CGRect(x: 0,
+                           y: 0,
+                           width: self.view.frame.width,
+                           height: 80)
+        let view = UITableView(frame: setupTableFrame)
+            view.delegate = self
+            view.dataSource = self
+        
+            view.separatorStyle = .none
+            view.separatorStyle = .none
+            view.backgroundColor = .clear
+            view.alpha = 0
+        
+            view.register(SetupTableviewCell.self,
+                          forCellReuseIdentifier: ReuseIdentifier.setupTableViewCell)
+            // setupTableview - headerView 추가
+            view.tableHeaderView = UserInfoTableHeader(frame: headerFrame)
+            view.isScrollEnabled = false
         return view
     }()
     
     
     
+    // MARK: - AdditionalTable _ Header
+    private lazy var additionalHeader: AdditionTableHeader = {
+        let headerFrame = CGRect(x: self.view.frame.width,
+                           y: 150,
+                           width: self.view.frame.width,
+                           height: 350)
+        return AdditionTableHeader(frame: headerFrame)
+    }()
     
     
     
+    // MARK: - AdditionalTable
+    // setupTable -> [글자 색상 변경] 클릭 -> addtionalTable
+    private lazy var additionalTableView: UITableView = {
+        let additinalTableFrame = CGRect(x: self.view.frame.width,
+                                         y: 500,
+                                         width: self.view.frame.width,
+                                         height: self.view.frame.height - 500)
+        let view = UITableView(frame: additinalTableFrame)
+            view.delegate = self
+            view.dataSource = self
+        
+//            view.isScrollEnabled = false
+            view.separatorStyle = .none
+            view.backgroundColor = .clear
+            view.alpha = 0
+        
+            view.register(AdditionalCell.self, forCellReuseIdentifier: ReuseIdentifier.additionalCell)
+        return view
+    }()
     
     
-    
-    
-    // MARK: - Layout
-    // UIImageView
+    // MARK: - ImageView
     private lazy var backgroundImage: UIImageView = {
         return UIImageView(image: UIImage(named: "blueSky"))
     }()
     
-    // UIButton
+    
+    // MARK: - Button
     private lazy var footerButton: UIButton = {
         // 버튼 시스템 이미지 크기 바꾸기
         let btn = UIButton().buttonSustemImage(btnSize: 37, imageString: .moon)
@@ -117,35 +222,31 @@ final class MainVC: UIViewController {
     
     
     
-
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     // MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // configure
-            // + header
-            // + background Color
-            // + UI - AutoLayout
-            // + tableView
+        // configure UI
         self.configureMainVC()
     }
     
     
     
-    
-    
-    // MARK: - Helper Functions
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    // MARK: - API
     
     
     
@@ -165,127 +266,37 @@ final class MainVC: UIViewController {
     
     // MARK: - Configure UI
     private func configureMainVC() {
+        // background_Image
         self.view.addSubview(self.backgroundImage)
-        // imageView (가장 아래에 깔려야 함)
         self.backgroundImage.anchor(top: self.view.topAnchor,
-                              bottom: self.view.bottomAnchor,
-                              leading: self.view.leadingAnchor,
-                              trailing: self.view.trailingAnchor)
-        
-        
+                                    bottom: self.view.bottomAnchor,
+                                    leading: self.view.leadingAnchor,
+                                    trailing: self.view.trailingAnchor)
         
         // 헤더뷰
+        self.view.addSubview(self.headerView)
+        self.headerView.mainHeaderDelegate = self
+        self.headerView.diaryHeaderDelegate = diaryVC
         self.headerView.frame = CGRect(x: 0,
                                        y: 0,
                                        width: self.view.frame.width,
                                        height: 150)
-        self.headerView.mainHeaderDelegate = self
-        self.headerView.diaryHeaderDelegate = diaryVC
-        self.view.addSubview(self.headerView)
         
-        
-        
-        // UI - AutoLayout
         // footerButton
         self.view.addSubview(self.footerButton)
         self.footerButton.anchor(bottom: self.view.safeAreaLayoutGuide.bottomAnchor, paddingBottom: 10,
-                                   centerX: self.view)
-        
-        
-
-        // MenuVC
-        self.menuVC.mainMenuDelegate = self
-        self.menuVC.frame = CGRect(x: 0,
-                                   y: 150,
-                                   width: 82,
-                                   height: self.view.frame.height - 610)
-        // MenuVC를 blackView에 삽입
-            // blackView를 터치하여 사라지면(gesture) menu도 같이 사라짐
-        self.menuBlackView.addSubview(self.menuVC)
-        
-        
-        
-        // 테이블뷰
-        self.diaryTableView.delegate = self
-        self.diaryTableView.dataSource = self
-        
-        self.diaryTableView.separatorStyle = .none
-        self.diaryTableView.backgroundColor = .clear
-        self.diaryTableView.alpha = 0
-        
-        self.diaryTableView.register(DiaryTableViewCell.self,
-                                forCellReuseIdentifier: ReuseIdentifier.diaryTableViewCell)
-        self.diaryTableView.frame = CGRect(x: 0,
-                                           y: self.view.frame.height - 300,
-                                           width: self.view.frame.width,
-                                           height: self.view.frame.height - 150)
-        
-        
-        
-        // DiaryVC frame
-        self.diaryVC.mainDiaryDelegate = self
-        self.diaryVC.alpha = 0
-        self.diaryVC.frame = CGRect(x: self.view.frame.width - 150,
-                                    y: 150,
-                                    width: self.view.frame.width,
-                                    height: self.view.frame.height - 150)
-        
-        
-        
-        // Menu - Setup
-        // setupTableView
-        let setupTableFrame = CGRect(x: 0,
-                                     y: self.view.frame.height - 300,
-                                     width: self.view.frame.width,
-                                     height: self.view.frame.height - 150)
-        self.setupTableView = UITableView(frame: setupTableFrame)
-        
-        self.setupTableView.delegate = self
-        self.setupTableView.dataSource = self
-        
-        self.setupTableView.separatorStyle = .none
-        self.setupTableView.backgroundColor = .clear
-        self.setupTableView.alpha = 0
-        
-        self.setupTableView.register(SetupTableviewCell.self,
-                                     forCellReuseIdentifier: ReuseIdentifier.setupTableViewCell)
-        // setupTableview - headerView 추가
-        self.setupTableView.tableHeaderView = userInfoTableHeader
-        self.setupTableView.isScrollEnabled = false
-        
-        
+                                 centerX: self.view)
         
         // MARK: - CoreData
         // 코어데이터에서 데이터 가져오기
         self.diaryData = coreData.readDiaryDatas()
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        // setupAdditionalTableView
-        let additinalTableFrame = CGRect(x: self.view.frame.width,
-                                         y: 150,
-                                         width: self.view.frame.width,
-                                         height: self.view.frame.height - 150)
-        self.additionalTableView = UITableView.init(frame: additinalTableFrame)
-        
-        self.additionalTableView.delegate = self
-        self.additionalTableView.dataSource = self
-        
-        self.additionalTableView.isScrollEnabled = false
-        self.additionalTableView.separatorStyle = .none
-        self.additionalTableView.backgroundColor = .clear
-        self.additionalTableView.alpha = 0
-        
-        self.additionalTableView.register(AdditionalCell.self, forCellReuseIdentifier: ReuseIdentifier.additionalCell)
-        
     }
 }
+
+
+
+
+
 
 
 
@@ -351,9 +362,8 @@ extension MainVC {
                 // 메뉴뷰 숨기기
                 self.menuHideOrShow(show: false)
                 // setupTable 보이게 하기
-                self.setupTableView.frame.origin
-                    .y = 150
                 self.setupTableView.alpha = 1
+                self.setupTableView.frame.origin.y = 150
                 // footerButton 숨기기
                 self.footerButton.alpha = 0
             }
@@ -363,8 +373,8 @@ extension MainVC {
         } else {
             UIView.animate(withDuration: 0.5) {
                 // setupTable 숨기기
-                self.setupTableView.frame.origin.y = self.view.frame.height
                 self.setupTableView.alpha = 0
+                self.setupTableView.frame.origin.y = self.view.frame.height
                 // footerButton 보이게 하기
                 self.footerButton.alpha = 1
                 
@@ -377,13 +387,13 @@ extension MainVC {
     
     
     
-    // MARK: - Additional
+    // MARK: - Additional _ Table
     private func additionalTableHideOrShow(show: Bool) {
         if show == true {
-            
             self.view.addSubview(self.additionalTableView)
+            self.view.addSubview(self.additionalHeader)
             
-            UIView.animate(withDuration: 0.5) {
+            UIView.animate(withDuration: 0.3) {
                 // setupTable 숨기기
                 self.setupTableView.alpha = 0
                 self.setupTableView.frame.origin.x = -self.view.frame.width
@@ -392,10 +402,13 @@ extension MainVC {
                 self.additionalTableView.alpha = 1
                 self.additionalTableView.frame.origin.x = 0
                 
+                // additional Header 보이게 하기
+                self.additionalHeader.alpha = 1
+                self.additionalHeader.frame.origin.x = 0
+                
             }
         } else {
-            UIView.animate(withDuration: 0.5) {
-                
+            UIView.animate(withDuration: 0.3) {
                 // setupTable 보이게 하기
                 self.setupTableView.alpha = 1
                 self.setupTableView.frame.origin.x = 0
@@ -404,12 +417,47 @@ extension MainVC {
                 self.additionalTableView.alpha = 0
                 self.additionalTableView.frame.origin.x = self.view.frame.width
                 
+                // additional Header 보이게 하기
+                self.additionalHeader.alpha = 0
+                self.additionalHeader.frame.origin.x = self.view.frame.width
+                
             } completion: { _ in
                 self.additionalTableView.removeFromSuperview()
+                self.additionalHeader.removeFromSuperview()
             }
-            
         }
     }
+    
+    private func additionFixHideOrShow(show: Bool) {
+        if show == true {
+            // 테이블뷰 바꾸기 (공통사항) - 토글 바꾸기
+            self.additionalFixToggle = true
+            UIView.animate(withDuration: 0.3) {
+                self.additionalTableView.alpha = 0
+                
+            } completion: { _ in
+                self.additionalTableView.reloadData()
+                UIView.animate(withDuration: 0.3) {
+                    self.additionalTableView.alpha = 1
+                }
+            }
+            
+            
+        } else {
+            self.additionalFixToggle = false
+            UIView.animate(withDuration: 0.3) {
+                self.additionalTableView.alpha = 0
+                
+            } completion: { _ in
+                self.additionalTableView.reloadData()
+                UIView.animate(withDuration: 0.3) {
+                    self.additionalTableView.alpha = 1
+                }
+            }
+        }
+    }
+    
+    
     
     
     
@@ -502,16 +550,6 @@ extension MainVC {
     private func DiaryViewHideOrShow(show: Bool) {
         // DiaryVC 보이게 하기
         if show == true {
-            // MARK: - Fix
-            // tableView - didSelect_Row_At에서 해야할 듯
-            // 넘어갈 때 '오늘의 추억'이라면
-                // -> fix모드로 진입
-
-            
-            // 다른 날의 추억이라면
-                // -> save모드로 진입
-            
-            
             // diaryVC
             self.view.addSubview(self.diaryVC)
             
@@ -550,8 +588,11 @@ extension MainVC {
         if show == true {
             // menuBlack_View
             self.view.addSubview(self.menuBlackView)
+            // MenuVC를 blackView에 삽입
+                // blackView를 터치하여 사라지면(gesture) menu도 같이 사라짐
+            self.menuBlackView.addSubview(self.menuVC)
             
-            UIView.animate(withDuration: 0.5) {
+            UIView.animate(withDuration: 0.3) {
                 // menuBlackView 보이게 하기
                 self.menuBlackView.frame.origin.x = 0
             }
@@ -585,13 +626,16 @@ extension MainVC {
 
 
 
+
+
+
+
 // MARK: - View Transition
 // 뷰가 바뀌는 상황 (버튼을 누르는 상황 등)
     // 뷰 전환
     // 왼쪽 버튼의 역할 및 이미지를 바꿈
     // 상황에 따라 필요한 토글 설정
 extension MainVC: MainHeaderDelegate {
-    
     // MARK: - MainHeaderDelegate
         // Header의 Left_Button을 누르면 호출 됨
     // MainVC -> MenuVC
@@ -601,6 +645,7 @@ extension MainVC: MainHeaderDelegate {
         // menu_View_보이게 하기
         self.menuHideOrShow(show: true)
     }
+    
     // tableView -> MainVC
     func handleTableToMain() {
         // 버튼의 이미지 + 역할을 바꿈
@@ -608,18 +653,19 @@ extension MainVC: MainHeaderDelegate {
         // diary_Table_View_숨기기
         self.diaryTableHideOrShow(show: false)
     }
+    
     // DiaryVC -> TableView
     func handleDiaryToTable() {
         // 버튼의 이미지 + 역할을 바꿈
         self.headerView.buttonConfig = .tableViewButton
-        
+        // 일기를 작성 후 Diary_Table로 왔을 때 업데이트를 위한 코드
         self.diaryData = self.coreData.readDiaryDatas()
         self.diaryTableView.reloadData()
-        
         // diary_View_숨기기
             // didSelect_Row_At()에서 열림
         self.DiaryViewHideOrShow(show: false)
     }
+    
     // AchieveView -> MainVC
     func handleAchievementToMain() {
         // 버튼의 이미지 + 역할을 바꿈
@@ -627,6 +673,7 @@ extension MainVC: MainHeaderDelegate {
         // achievement_View_숨기기
         self.achievementViewHideOrShow(show: false)
     }
+    
     // ShopVC -> MainVC
     func handleShopToMain() {
         // 버튼의 이미지 + 역할을 바꿈
@@ -634,6 +681,7 @@ extension MainVC: MainHeaderDelegate {
         // shop_View_숨기기
         self.shopViewHideOrShow(show: false)
     }
+    
     // SetupVC -> MainVC
     func handleSetupToMain() {
         // 버튼의 이미지 + 역할을 바꿈
@@ -641,6 +689,7 @@ extension MainVC: MainHeaderDelegate {
         // setup_Table_숨기기
         self.setupTableHideOrShow(show: false)
     }
+    
     // Additonal -> Setup
     func handleAdditionalToSetup() {
         // 버튼의 이미지 + 역할을 바꿈
@@ -649,6 +698,12 @@ extension MainVC: MainHeaderDelegate {
         self.tableViewToggle = .setup
         // addtionalTableview 숨기기
         self.additionalTableHideOrShow(show: false)
+    }
+    // FixMode -> Additional_Table
+    func handleFixToAdditional() {
+        self.headerView.buttonConfig = .additionalTableView
+        
+        self.additionFixHideOrShow(show: false)
     }
     
     
@@ -675,11 +730,15 @@ extension MainVC: MainHeaderDelegate {
     }
     
     
-    // MARK: - Helper Functions
+    
+    
+    
+    // MARK: - Table -> ViewTransition
         // 원래는 tableView-didSelectRowAt에 있지만 (.diary)
-            // 일관성을 위한 함수 설정
+            // 일관성 + 너무 길어지는 것을 막기 위한 함수 설정
     // Diary_Table -> DiaryVC
     private func tableToDiary() {
+        self.diaryTableView.reloadData()
         // 버튼의 이미지 + 역할을 바꿈 (위에서 바꾼 Toggle을 통해 right버튼도 바뀜)
         self.headerView.buttonConfig = .diaryViewButton
         // diary_View_보이게 하기
@@ -687,6 +746,35 @@ extension MainVC: MainHeaderDelegate {
         self.DiaryViewHideOrShow(show: true)
     }
     
+    private func setupToAddition() {
+        // 테이블뷰 토글 바꾸기
+        self.tableViewToggle = .additional
+        // 헤더의 버튼 이미지 + 설정 바꾸기
+        self.headerView.buttonConfig = .additionalTableView
+        // 셀의 개수가 달라지기 때문에 reloadData를 해줌
+        self.additionalTableView.reloadData()
+        // additional_Table_View 보이게 하기
+        self.additionalTableHideOrShow(show: true)
+    }
+    
+    // additional -> FixMode
+    private func additionalToFix() {
+        // 어떤 셀을 클릭했는 지 넣어둠
+        guard let currentSetup = self.currentSetup else { return }
+        print(currentSetup)
+        
+        
+//        self.additionalFixToggle = true
+        
+        // RightButton 추가
+//        self.headerView.rightButtonConfig = .additional
+        self.headerView.buttonConfig = .fixAdditionalView
+        
+        
+        // 뷰 전환
+            // 테이블뷰 리로드
+        self.additionFixHideOrShow(show: true)
+    }
 }
 
 
@@ -729,6 +817,21 @@ extension MainVC: MainMenuDelegate {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // MARK: - AchieveMainDelegate
 // segement_Control
 extension MainVC: SegementMainDelegate {
@@ -743,13 +846,13 @@ extension MainVC: SegementMainDelegate {
 
 
 
-
-
+// MARK: - MainDiaryDelegate
 extension MainVC: MainDiaryDelegate {
     func todayDiaryCompleted() {
         self.todayDiaryToggle = true
     }
 }
+
 
 
 
@@ -782,6 +885,7 @@ extension MainVC: UITableViewDelegate, UITableViewDataSource {
         case .additional: return 1
         }
     }
+    
     // 섹션 _타이틀 이름
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         switch tableViewToggle {
@@ -797,6 +901,15 @@ extension MainVC: UITableViewDelegate, UITableViewDataSource {
         }
     }
     
+    // 섹션 헤더 설정
+    func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        if let headerView = view as? UITableViewHeaderFooterView {
+            // background Color
+            headerView.contentView.backgroundColor = UIColor(white: 1, alpha: 0.2)
+            // section 헤더의 글자색 바꾸기
+            headerView.textLabel?.textColor = .nightFontColor
+        }
+    }
     
     
     
@@ -804,7 +917,8 @@ extension MainVC: UITableViewDelegate, UITableViewDataSource {
     
     
     
-        
+    
+    
     
     // MARK: - Cell
     // 셀의 높이
@@ -812,7 +926,7 @@ extension MainVC: UITableViewDelegate, UITableViewDataSource {
         switch tableViewToggle {
         case .diary: return 140
         case .setup: return 60
-        case .additional: return 50
+        case .additional: return 60
         }
     }
     
@@ -821,7 +935,6 @@ extension MainVC: UITableViewDelegate, UITableViewDataSource {
     // 셀의 개수
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch tableViewToggle {
-            
         case .diary:
             return self.todayDiaryToggle == false
                 ? self.diaryData.count + 1
@@ -835,15 +948,15 @@ extension MainVC: UITableViewDelegate, UITableViewDataSource {
             
             
         case .additional:
-            if self.additionalEnum == .diaryTime { return 12}
-            else if self.additionalEnum == .backgroundColor { return 6 }
-            else { return 3 }
+            return additionalFixToggle
+                ? 7
+                : 4
         }
     }
     
     
     
-    // cell_For_Row_At
+    // MARK: - cellForRowAt
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch tableViewToggle {
         case .diary:
@@ -860,6 +973,9 @@ extension MainVC: UITableViewDelegate, UITableViewDataSource {
             return cell
             
             
+            
+            
+            
         case .setup:
             let cell = tableView.dequeueReusableCell(withIdentifier: ReuseIdentifier.setupTableViewCell, for: indexPath) as! SetupTableviewCell
             
@@ -869,18 +985,36 @@ extension MainVC: UITableViewDelegate, UITableViewDataSource {
             return cell
             
             
+            
+            
+            
         case .additional:
             let cell = tableView.dequeueReusableCell(withIdentifier: ReuseIdentifier.additionalCell, for: indexPath) as! AdditionalCell
             
-                cell.textLabel?.text = "11111"
+            // 셀의 이름 정하기
+            // fixMode
+            if self.additionalFixToggle {
+                cell.additionalLabel.text = fontColor.returnString(rawValue: indexPath.row)
+                
+                
+                
+            // save
+            } else {
+                cell.additionalLabel.text = self.timeArray[indexPath.row]
+            }
             
+                
             return cell
         }
     }
     
     
     
-    // didSelect_Row_At
+    
+    
+    // MARK: - didSelectRowAt
+    // 오늘의 일기를 적지 않았다면 -> DiaryVC('오늘' 셀)를 FixMode로 진입
+    // 적었다면, -> SaveMode로 진입
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch self.tableViewToggle {
         case .diary:
@@ -914,62 +1048,83 @@ extension MainVC: UITableViewDelegate, UITableViewDataSource {
                     : self.diaryData[indexPath.row]
             }
             
-            
-            self.diaryTableView.reloadData()
             // 뷰 전환 (일관성을 위해 함수로 만들어 둠)
+            // dairy_Table -> DiaryVC
             self.tableToDiary()
             break
+            
+            
+            
             
             
         case .setup:
             // enum변경
             if indexPath.section == 0 {
-                self.additionalEnum = .diaryTime
-                print(additionalEnum)
+                print("0")
             } else if indexPath.section == 1 {
-                self.additionalEnum = .backgroundColor
-                print(additionalEnum)
+               print("1")
             } else {
-                self.additionalEnum = .Font
-                print(additionalEnum)
+                // setupTable -> AdditionalTable
+                self.setupToAddition()
             }
-            
-            // 테이블뷰 토글 바꾸기
-            self.tableViewToggle = .additional
-            
-            // 헤더의 버튼 이미지 + 설정 바꾸기
-            self.headerView.buttonConfig = .additionalTableView
-            
-            // 셀의 개수가 달라지기 때문에 reloadData를 해줌
-            self.additionalTableView.reloadData()
-            
-            // additional_Table_View 보이게 하기
-            self.additionalTableHideOrShow(show: true)
             break
+            
+            
+            
             
             
         case .additional:
-            print(#function)
+            // fix모드일 때
+            if self.additionalFixToggle {
+                // 셀을 누르면 헤더의 색(레이블 버튼)이 변경
+                
+                
+                guard let currentSetup = currentSetup else { return }
+                // FontColor.selectedInt에 저장
+                switch currentSetup {
+                case .morning:
+                    
+                    
+                    break
+                    
+                    
+                case .daytime:
+                    
+                    
+                    break
+                    
+                    
+                case .night:
+                    break
+                    
+                    
+                case .dawn:
+                    break
+                }
+                
+                
+                
+                
+                // 맨 위로???? (Animate 사용)
+                
+                print(indexPath.row)
+                
+            // save모드일 때
+            } else {
+                // 아침
+                if indexPath.row == 0 { self.currentSetup = .morning
+                // 낮
+                } else if indexPath.row == 1 { self.currentSetup = .daytime
+                // 저녁
+                } else if indexPath.row == 2 { self.currentSetup = .night
+                // 새벽
+                } else { self.currentSetup = .dawn }
+                
+                
+                // additional -> FixMode
+                self.additionalToFix()
+            }
             break
-        }
-    }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    // 헤더 설정
-    func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
-        if let headerView = view as? UITableViewHeaderFooterView {
-            // background Color
-            headerView.contentView.backgroundColor = UIColor(white: 1, alpha: 0.2)
-            // section 헤더의 글자색 바꾸기
-            headerView.textLabel?.textColor = .nightFontColor
         }
     }
 }

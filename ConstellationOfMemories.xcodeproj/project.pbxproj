@@ -25,6 +25,7 @@
 		5F15D1DF2A815C0E005A00E1 /* DiaryVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F15D1DE2A815C0E005A00E1 /* DiaryVC.swift */; };
 		5F15D1E12A815C75005A00E1 /* DiaryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F15D1E02A815C75005A00E1 /* DiaryTableViewCell.swift */; };
 		5F15D1E32A817765005A00E1 /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F15D1E22A817765005A00E1 /* HeaderView.swift */; };
+		5F4C2F1A2A8BE186008FD984 /* AdditionTableHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F4C2F192A8BE186008FD984 /* AdditionTableHeader.swift */; };
 		5F82C9252A852CDC00AAB0FA /* ShopCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F82C9242A852CDC00AAB0FA /* ShopCollectionViewCell.swift */; };
 		5F917AC72A8B930E00F8FC53 /* AdditionalCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F917AC62A8B930E00F8FC53 /* AdditionalCell.swift */; };
 		5FBF97DE2A8906860097FD1B /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FBF97DD2A8906860097FD1B /* CoreDataManager.swift */; };
@@ -53,6 +54,7 @@
 		5F15D1DE2A815C0E005A00E1 /* DiaryVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiaryVC.swift; sourceTree = "<group>"; };
 		5F15D1E02A815C75005A00E1 /* DiaryTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiaryTableViewCell.swift; sourceTree = "<group>"; };
 		5F15D1E22A817765005A00E1 /* HeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderView.swift; sourceTree = "<group>"; };
+		5F4C2F192A8BE186008FD984 /* AdditionTableHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdditionTableHeader.swift; sourceTree = "<group>"; };
 		5F82C9242A852CDC00AAB0FA /* ShopCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopCollectionViewCell.swift; sourceTree = "<group>"; };
 		5F917AC62A8B930E00F8FC53 /* AdditionalCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdditionalCell.swift; sourceTree = "<group>"; };
 		5FBF97DD2A8906860097FD1B /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
@@ -77,6 +79,7 @@
 				5F15D1E22A817765005A00E1 /* HeaderView.swift */,
 				5F0BE8192A86ABD90090AC1F /* collectionSegementView.swift */,
 				5F0BE8132A86508D0090AC1F /* UserInfoTableHeader.swift */,
+				5F4C2F192A8BE186008FD984 /* AdditionTableHeader.swift */,
 			);
 			path = UIView;
 			sourceTree = "<group>";
@@ -269,6 +272,7 @@
 				5F0BE8182A8664D40090AC1F /* SetupTableViewCell.swift in Sources */,
 				5F82C9252A852CDC00AAB0FA /* ShopCollectionViewCell.swift in Sources */,
 				5F15D1CE2A813746005A00E1 /* Enum.swift in Sources */,
+				5F4C2F1A2A8BE186008FD984 /* AdditionTableHeader.swift in Sources */,
 				5F15D1CA2A81330D005A00E1 /* MainVC.swift in Sources */,
 				5F15D1B12A812768005A00E1 /* SceneDelegate.swift in Sources */,
 				5F15D1E12A815C75005A00E1 /* DiaryTableViewCell.swift in Sources */,

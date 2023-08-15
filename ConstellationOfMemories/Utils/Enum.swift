@@ -24,12 +24,14 @@ enum LeftBtnTapImgChange {
     case setupVCButton
     case achievementVCButton
     case additionalTableView
+    case fixAdditionalView
 }
 
 enum RightBtnTapImgChange {
     case fixMode
     case saveMode
     case coin
+    case additional
 }
 
 enum TableViewEnum {
@@ -75,12 +77,41 @@ enum imageString: CustomStringConvertible {
     }
 }
 
+enum FontColor: String {
+    case red = "0"
+    case orange = "1"
+    case yellow = "2"
+    case green = "3"
+    case blue = "4"
+    case indigo = "5"
+    case violet = "6"
+    
+    func returnString(rawValue: Int) -> String {
+        switch rawValue {
+        case 0: return "빨간색"
+        case 1: return "주황색"
+        case 2: return "노란색"
+        case 3: return "초록색"
+        case 4: return "파란색"
+        case 5: return "남색"
+        case 6: return "보라색"
+            
+        default: return "빨간색"
+        }
+    }
 
-
-// Addtional_Table_View
-enum AddtionalEnum {
-    case diaryTime
-    case backgroundColor
-    case Font
+    static var selectedInt: Int?
 }
 
+
+enum CurrentSetup: Int {
+    case morning
+    case daytime
+    case night
+    case dawn
+    
+//    static var morningString: String = "aaa"
+//    static var daytimeString: String = "bbb"
+//    static var nightString: String = "ccc"
+//    static var dawnString: String = "ddd"
+}

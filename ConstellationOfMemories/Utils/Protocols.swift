@@ -25,6 +25,8 @@ protocol MainHeaderDelegate {
     func handleAchievementToMain()
     
     func handleAdditionalToSetup()
+    
+    func handleFixToAdditional()
 }
 
 

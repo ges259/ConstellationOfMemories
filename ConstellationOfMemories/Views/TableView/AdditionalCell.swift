@@ -12,6 +12,22 @@ final class AdditionalCell: UITableViewCell {
     // MARK: - Properties
     
     
+    var selectedTime: String? {
+        didSet {
+            
+        }
+    }
+    
+    
+    
+    
+    // MARK: - Layout
+    lazy var additionalLabel: UILabel = {
+        return UILabel().labelConfig(labelText: "11",
+                                     LabelTextColor: UIColor.nightFontColor,
+                                     fontName: .system,
+                                     fontSize: 20)
+    }()
     
     
     // MARK: - LifeCycle
@@ -19,8 +35,7 @@ final class AdditionalCell: UITableViewCell {
         super.init(style: .default, reuseIdentifier: reuseIdentifier)
         
         
-        self.backgroundColor = .clear
-        
+        self.configureUI()
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -29,7 +44,16 @@ final class AdditionalCell: UITableViewCell {
     
     
     // MARK: - Helper Functions
-    
+    private func configureUI() {
+        
+        self.selectionStyle = .none
+        self.backgroundColor = .clear
+        
+        // configure UI
+        self.addSubview(self.additionalLabel)
+        self.additionalLabel.anchor(leading: self.leadingAnchor, paddingLeading: 20,
+                                    centerY: self)
+    }
     
     
     
