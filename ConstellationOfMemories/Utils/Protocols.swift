@@ -24,9 +24,11 @@ protocol MainHeaderDelegate {
     
     func handleAchievementToMain()
     
-    func handleAdditionalToSetup()
+    func handleAdditionToSetup()
     
-    func handleFixToAdditional()
+    func handleFontToAddition()
+    
+//    func handleFontToAdditional()
 }
 
 

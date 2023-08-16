@@ -14,8 +14,12 @@ struct ReuseIdentifier {
     static let additionCell: String = "additionCell"
     static let fontChangeCell: String = "fontChangeCell"
     
+    
+    
     static let shopCell: String = "ShopCell"
     static let collectionHeader: String = "CollectionHeader"
+    static let firstCollectionCell: String = "firstCell"
+    
 }
 
 

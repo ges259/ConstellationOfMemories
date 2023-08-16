@@ -23,8 +23,8 @@ enum LeftBtnTapImgChange {
     case shopVCButton
     case setupVCButton
     case achievementVCButton
-    case additionalTableView
-    case AdditionalSelectMode
+    case additionTableView
+    case fontchangeTableView
 }
 
 enum RightBtnTapImgChange {
@@ -38,7 +38,6 @@ enum TableViewEnum {
     case diary
     case setup
     case addition
-    case fontChangeTable
 }
 enum CollectionViewEnum {
     case myStar
@@ -117,7 +116,7 @@ enum CurrentSetup: Int {
 //    static var dawnString: String = "ddd"
 }
 
-enum AdditionalMode {
-    case saveMode
-    case SelectMode
+enum SegementCollection {
+    case first
+    case second
 }

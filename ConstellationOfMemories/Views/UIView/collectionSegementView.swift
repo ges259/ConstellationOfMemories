@@ -10,21 +10,34 @@ import UIKit
 final class collectionSegementView: UIView {
     
     // MARK: - Properties
-    // CollectionView
-    private var reuseCollectionView: UICollectionView!
+
+    
     // item
     private var item = [Int]()
+    
+    var collectionToggle: SegementCollection = .first
     
     
     var segementMainDelegate: SegementMainDelegate?
     
-    // 콜렉션뷰 토글
-    var collectionViewToggle: CollectionViewEnum = .shop {
-        didSet {
-            self.reuseCollectionView.reloadData()
-        }
-    }
     
+    private lazy var firstCollection: FirstCollectionView = {
+        
+        let frame = CGRect(x: 0,
+                           y: 50,
+                           width: self.frame.width,
+                           height: self.frame.height - 50)
+        return FirstCollectionView(frame: frame)
+    }()
+    
+    private lazy var secondCollection: SecondCollectionView = {
+        let frame = CGRect(x: self.frame.width,
+                           y: 50,
+                           width: self.frame.width,
+                           height: self.frame.height - 50)
+        return SecondCollectionView(frame: frame)
+    }()
+
     
     
     
@@ -37,7 +50,6 @@ final class collectionSegementView: UIView {
             control.backgroundColor = .clear
             // segement 선택창 배경 색
             
-        
             control.setTitleTextAttributes([NSAttributedString.Key.font : UIFont.systemFont(ofSize: 14), NSAttributedString.Key.foregroundColor : UIColor.white], for: .normal)
         
             control.selectedSegmentTintColor = UIColor(white: 1, alpha: 0.3)
@@ -49,9 +61,9 @@ final class collectionSegementView: UIView {
     }()
     
     
-    private let redView: UIView = {
-        return UIView().viewConfig(backgroundColor: .white)
-    }()
+    
+    
+    
     
     
     
@@ -86,54 +98,9 @@ final class collectionSegementView: UIView {
                                      height: 40)
         
         
-        
-        
-        // Menu - Shop
-        // collectionView
-        let collectionViewFrame = CGRect(x: 0,
-                                         y: 50,
-                                         width: self.frame.width,
-                                         height: self.frame.height - 200)
-        let layout = UICollectionViewFlowLayout()
-            layout.scrollDirection = .vertical
-        
-        let interval:CGFloat = 30
-            layout.sectionInset = UIEdgeInsets.init(top: interval,
-                                                    left: interval,
-                                                    bottom: 0,
-                                                    right: interval)
-        self.reuseCollectionView = UICollectionView(frame: collectionViewFrame,
-                                               collectionViewLayout: layout)
-        self.reuseCollectionView.delegate = self
-        self.reuseCollectionView.dataSource = self
-
-        self.reuseCollectionView.register(ShopCollectionViewCell.self,
-                                     forCellWithReuseIdentifier: ReuseIdentifier.shopCell)
-
-        self.reuseCollectionView.alwaysBounceVertical = true
-        self.reuseCollectionView.backgroundColor = .clear
-
-        
-        self.addSubview(self.reuseCollectionView)
-        self.reuseCollectionView.anchor(top: self.segmentedControl.bottomAnchor,
-                                        bottom: self.bottomAnchor,
-                                        leading: self.leadingAnchor,
-                                        trailing: self.trailingAnchor)
-        
-        
-        
-        
-        
-        
-        
-        // redView
-        self.addSubview(self.redView)
-        self.redView.anchor(top: self.segmentedControl.bottomAnchor, paddingTop: 30,
-                            bottom: self.bottomAnchor, paddingBottom: 30,
-                            leading: self.leadingAnchor, paddingLeading: 30,
-                            trailing: self.trailingAnchor, paddingTrailing: 30)
-                            self.redView.alpha = 0
-        
+        self.addSubview(self.firstCollection)
+        self.addSubview(self.secondCollection)
+        self.secondCollection.alpha = 0
     }
     
     
@@ -146,29 +113,11 @@ final class collectionSegementView: UIView {
     @objc private func segmentedValueChanged(segment: UISegmentedControl) {
         // 추억 모음
         if segment.selectedSegmentIndex == 0 {
-            switch self.collectionViewToggle {
-            case .myStar:
-                self.achieveSegementHideOrShow(show: true)
-                break
-                
-                
-            case .shop:
-                self.shopSegementHideOrShow(show: true)
-                break
-            }
+            self.achieveSegementHideOrShow(show: true)
             
             // 달성률
         } else {
-            switch self.collectionViewToggle {
-            case .myStar:
-                self.achieveSegementHideOrShow(show: false)
-                break
-                
-                
-            case .shop:
-                self.shopSegementHideOrShow(show: false)
-                break
-            }
+            self.achieveSegementHideOrShow(show: false)
         }
     }
     
@@ -176,55 +125,69 @@ final class collectionSegementView: UIView {
     
     func achieveSegementHideOrShow(show: Bool) {
         if show == true {
-            self.reuseCollectionView.reloadData()
-            
             UIView.animate(withDuration: 0.5) {
-                // mystarSegment 보이게 하기
-                self.reuseCollectionView.alpha = 1
-                self.reuseCollectionView.frame.origin.x = 0
+                // achivementSegment 보이게 하기
+                self.firstCollection.alpha = 1
+                self.firstCollection.frame.origin.x = 0
                 
-                // achivementSegment 숨기기
-                self.redView.alpha = 0
-                self.redView.frame.origin.x = self.frame.width
+                // mystarSegment 숨기기
+                self.secondCollection.alpha = 0
+                self.secondCollection.frame.origin.x = self.frame.width
             }
+            
             
         } else {
             UIView.animate(withDuration: 0.5) {
-                // mystarSegment 숨기기
-                self.reuseCollectionView.alpha = 0
-                self.reuseCollectionView.frame.origin.x = -self.frame.width
+                // achivementSegment 숨기기
+                self.firstCollection.alpha = 0
+                self.firstCollection.frame.origin.x = -self.frame.width * 2
                 
-                // achivementSegment 보이게 하기
-                self.redView.alpha = 1
-                self.redView.frame.origin.x = 30
+                
+                // mystarSegment 보이게 하기
+                self.secondCollection.alpha = 1
+                self.secondCollection.frame.origin.x = 0
             }
         }
     }
     
+    
+    
     func shopSegementHideOrShow(show: Bool) {
         if show == true {
-            self.reuseCollectionView.reloadData()
-            
-            UIView.animate(withDuration: 0.5) {
-                // mystarSegment 보이게 하기
-                self.reuseCollectionView.alpha = 1
-                self.reuseCollectionView.frame.origin.x = 0
-                
-                // achivementSegment 숨기기
-                self.redView.alpha = 0
-                self.redView.frame.origin.x = self.frame.width
-            }
-            
+
+
+//            UIView.animate(withDuration: 0.5) {
+//                // mystarSegment 숨기기
+//                self.secondCollection.alpha = 0
+//                self.secondCollection.frame.origin.x = self.frame.width
+//
+//                // achivementSegment 보이게 하기
+//                self.firstCollection.alpha = 1
+//                self.firstCollection.frame.origin.x = 0
+//
+//                self.redView.alpha = 1
+//                self.redView.frame.origin.x = 30
+//            }
+
+
+
         } else {
-            UIView.animate(withDuration: 0.5) {
-                // mystarSegment 숨기기
-                self.reuseCollectionView.alpha = 0
-                self.reuseCollectionView.frame.origin.x = -self.frame.width
-                
-                // achivementSegment 보이게 하기
-                self.redView.alpha = 1
-                self.redView.frame.origin.x = 30
-            }
+
+//            self.secondCollection.reloadData()
+
+//            UIView.animate(withDuration: 0.5) {
+//                // mystarSegment 보이게 하기
+//                self.secondCollection.alpha = 1
+//                self.secondCollection.frame.origin.x = 0
+//
+//                // achivementSegment 숨기기
+//                self.firstCollection.alpha = 0
+//                self.firstCollection.frame.origin.x = self.frame.width
+
+//                self.redView.alpha = 0
+//                self.redView.frame.origin.x = self.frame.width
+//            }
+
         }
     }
     
@@ -232,10 +195,10 @@ final class collectionSegementView: UIView {
     
     func upCollectionView() {
         // item이 항상 맨위로 가도록 설정
-        let indexPath = IndexPath(item: self.item.count - 1, section: 0)
-        self.reuseCollectionView.scrollToItem(at: indexPath, at: .top, animated: true)
+//        let indexPath = IndexPath(item: self.item.count - 1, section: 0)
+//        self.secondCollection.scrollToItem(at: indexPath, at: .top, animated: true)
     }
-    
+
     
     
     
@@ -269,46 +232,3 @@ final class collectionSegementView: UIView {
 
 
 
-// MARK: - CollectionView_Delegate
-extension collectionSegementView: UICollectionViewDelegate, UICollectionViewDataSource,
-                  UICollectionViewDelegateFlowLayout {
-    // dataSource
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        
-        return self.collectionViewToggle == .shop ? 5 : 10
-        
-//        return 10
-    }
-
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ReuseIdentifier.shopCell, for: indexPath)
-        
-        
-        return cell
-    }
-    
-    // delegate
-    // didSelect_Item_At
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        self.segementMainDelegate?.imageTapped()
-    }
-    // 아이템의 크기 설정
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        // 좌우 패딩 30 = 60
-        // spacing = 30
-        let width = (self.frame.width - 60 - 30) / 2
-        let height = width / 10 * 16
-        
-        return CGSize(width: width, height: height)
-    }
-    
-    // 상하 spacing
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return 50
-    }
-    
-    // 좌우 spacing
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 30
-    }
-}

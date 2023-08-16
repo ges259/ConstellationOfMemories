@@ -24,6 +24,10 @@ final class AdditionCell: UITableViewCell {
         
         
         
+        self.backgroundColor = .clear
+        self.selectionStyle = .none
+        
+        
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

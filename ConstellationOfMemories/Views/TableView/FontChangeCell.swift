@@ -46,7 +46,7 @@ final class FontChangeCell: UITableViewCell {
     // MARK: - Helper Functions
     private func configureUI() {
         
-        self.selectionStyle = .none
+        self.selectionStyle = .default
         self.backgroundColor = .clear
         
         // configure UI

@@ -231,19 +231,29 @@ extension HeaderView {
             break
             
             
-        case .additionalTableView:
-            self.mainHeaderDelegate?.handleAdditionalToSetup()
+            
+            
+        case .additionTableView:
+            self.mainHeaderDelegate?.handleAdditionToSetup()
             break
+        
             
             
-        case .AdditionalSelectMode:
-            // left버튼을 연타했을 때 crash가 발생하여 막아 둠
-            self.leftButtonAlpha()
-            // right버튼 숨기기
+            
+        case .fontchangeTableView:
             self.rightButtonHide()
-            // 다시 additional로 돌아가기 + rightbutton 숨기기
-            self.mainHeaderDelegate?.handleFixToAdditional()
+            self.mainHeaderDelegate?.handleFontToAddition()
             break
+            
+            
+//        case .AdditionalSelectMode:
+//            // left버튼을 연타했을 때 crash가 발생하여 막아 둠
+//            self.leftButtonAlpha()
+//            // right버튼 숨기기
+//            self.rightButtonHide()
+//            // 다시 additional로 돌아가기 + rightbutton 숨기기
+//            self.mainHeaderDelegate?.handleFixToAdditional()
+//            break
         }
     }
     
@@ -309,8 +319,8 @@ extension HeaderView {
         case .fontChange:
             // rightButton 숨기기
             self.rightButtonHide()
-            // check 버튼을 누렀다면 뒤로가기
-            self.mainHeaderDelegate?.handleFixToAdditional()
+            // check 버튼을 누렀다면 뒤로가기 (additional 로 )
+            self.mainHeaderDelegate?.handleFontToAddition()
             // MARK: - Fix
             // 변경사항 저장
             
@@ -399,20 +409,17 @@ extension HeaderView {
             break
             
             
-        case .additionalTableView:
+            
+        case .additionTableView:
             break
             
             
-        case .AdditionalSelectMode:
-            // check표시 만들기 + 애니메이션
-            self.rightButtonShow(.check)
             
-            // titleLabel 바꾸기
-            self.titleLabel.text = "글자 색 바꾸기"
-            
-            // rightbuttonConfig 바꾸기
+        case .fontchangeTableView:
             self.rightButtonConfig = .fontChange
+            self.rightButtonShow(.check)
             break
+        
         }
     }
     

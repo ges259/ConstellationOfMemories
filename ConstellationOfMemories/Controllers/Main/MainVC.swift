@@ -32,9 +32,9 @@ final class MainVC: UIViewController {
     // 테이블뷰 토글
     private var tableViewToggle: TableViewEnum = .diary
     
-    private var additionalFixToggle: AdditionalMode = .saveMode
-    
     private var fontColor: FontColor = .red
+    
+    
     private var currentSetup: CurrentSetup?
     
     private var timeArray: [String] = ["아침", "낮", "저녁", "새벽"]
@@ -134,6 +134,7 @@ final class MainVC: UIViewController {
         let view = collectionSegementView(frame: frame)
             view.segementMainDelegate = self
             view.alpha = 0
+        
         return view
     }()
     
@@ -166,11 +167,13 @@ final class MainVC: UIViewController {
         return view
     }()
     
+    
+    // MARK: - additionTableView
     private lazy var additionTableView: UITableView = {
         let frame = CGRect(x: self.view.frame.width,
-                           y: 500,
+                           y: 150,
                            width: self.view.frame.width,
-                           height: self.view.frame.height - 500)
+                           height: self.view.frame.height - 150)
         let view = UITableView(frame: frame)
         
             view.delegate = self
@@ -194,35 +197,40 @@ final class MainVC: UIViewController {
     
     
     
-    // MARK: - FontChange _ Header
+    // MARK: - FontChange _ View
     private lazy var fontChangeHeader: FontChangeTableHeader = {
         let headerFrame = CGRect(x: self.view.frame.width,
-                           y: 150,
-                           width: self.view.frame.width,
-                           height: 350)
-        return FontChangeTableHeader(frame: headerFrame)
-    }()
-    
-    // MARK: - FontChangeTable
-    // setupTable -> [글자 색상 변경] 클릭 -> addtionalTable
-    private lazy var fontChangeTableView: UITableView = {
-        let additinalTableFrame = CGRect(x: self.view.frame.width,
-                                         y: 500,
-                                         width: self.view.frame.width,
-                                         height: self.view.frame.height - 500)
-        let view = UITableView(frame: additinalTableFrame)
-            view.delegate = self
-            view.dataSource = self
+                                 y: 150,
+                                 width: self.view.frame.width,
+                                 height: 250)
+        let view = FontChangeTableHeader(frame: headerFrame)
         
-//            view.isScrollEnabled = false
-            view.separatorStyle = .none
-            view.backgroundColor = .clear
-            view.alpha = 0
         
-            view.register(FontChangeCell.self,
-                          forCellReuseIdentifier: ReuseIdentifier.fontChangeCell)
+        
         return view
     }()
+    
+    private lazy var collectionSegement: collectionSegementView = {
+        let frame = CGRect(x: self.view.frame.width,
+                           y: 400,
+                           width: self.view.frame.width,
+                           height: self.view.frame.height - 400)
+        
+        let view = collectionSegementView(frame: frame)
+            
+            view.backgroundColor = .clear
+            view.segementMainDelegate = self
+            view.alpha = 0
+        
+        return view
+    }()
+    
+    
+    
+    
+    
+    
+    
     
     
     // MARK: - ImageView
@@ -311,6 +319,12 @@ final class MainVC: UIViewController {
         // MARK: - CoreData
         // 코어데이터에서 데이터 가져오기
         self.diaryData = coreData.readDiaryDatas()
+        
+        
+        
+        
+        
+
     }
 }
 
@@ -411,15 +425,34 @@ extension MainVC {
     
     // MARK: - Addition _ Table
     private func additionTableHideOrShow(show: Bool) {
-        
-        
-        
-        
-        
-        
-        
-        
-        
+        if show == true  {
+            self.view.addSubview(self.additionTableView)
+            
+            UIView.animate(withDuration: 0.5) {
+                // setupTable 숨기기
+                self.setupTableView.alpha = 0
+                self.setupTableView.frame.origin.x = -self.view.frame.width
+                
+                // additaional 테이블 보이게 하기
+                self.additionTableView.alpha = 1
+                self.additionTableView.frame.origin.x = 0
+            }
+            
+            
+        } else {
+            UIView.animate(withDuration: 0.5) {
+                // setupTable 보이게 하기
+                self.setupTableView.alpha = 1
+                self.setupTableView.frame.origin.x = 0
+                
+                // additaional 숨기기
+                self.additionTableView.alpha = 0
+                self.additionTableView.frame.origin.x = self.view.frame.width
+                
+            } completion: { _ in
+                self.additionTableView.removeFromSuperview()
+            }
+        }
     }
     
     
@@ -435,85 +468,46 @@ extension MainVC {
     // MARK: - FontChange _ Table
     private func fontChangeTableHideOrShow(show: Bool) {
         if show == true {
-            self.view.addSubview(self.fontChangeTableView)
             self.view.addSubview(self.fontChangeHeader)
+            self.view.addSubview(self.collectionSegement)
             
+
             UIView.animate(withDuration: 0.5) {
-                // setupTable 숨기기
-                self.setupTableView.alpha = 0
-                self.setupTableView.frame.origin.x = -self.view.frame.width
-                
-                // additaional 테이블 보이게 하기
-                self.fontChangeTableView.alpha = 1
-                self.fontChangeTableView.frame.origin.x = 0
-                
-                // additional Header 보이게 하기
+                // additionTableView 숨기기
+                self.additionTableView.alpha = 0
+                self.additionTableView.frame.origin.x = -self.view.frame.width
+
+                // fontChangeHeader 테이블 보이게 하기
                 self.fontChangeHeader.alpha = 1
                 self.fontChangeHeader.frame.origin.x = 0
+                
+                // collectionSegement 테이블 보이게 하기
+                self.collectionSegement.alpha = 1
+                self.collectionSegement.frame.origin.x = 0
             }
-            
+
         } else {
             UIView.animate(withDuration: 0.5) {
-                // setupTable 보이게 하기
-                self.setupTableView.alpha = 1
-                self.setupTableView.frame.origin.x = 0
-                
-                // additaional 숨기기
-                self.fontChangeTableView.alpha = 0
-                self.fontChangeTableView.frame.origin.x = self.view.frame.width
-                
-                // additional Header 보이게 하기
+                // additionTableView 보이게 하기
+                self.additionTableView.alpha = 1
+                self.additionTableView.frame.origin.x = 0
+
+                // fontChangeHeader 숨기기
                 self.fontChangeHeader.alpha = 0
                 self.fontChangeHeader.frame.origin.x = self.view.frame.width
                 
+                // collectionSegement 숨기기
+                self.collectionSegement.alpha = 0
+                self.collectionSegement.frame.origin.x = self.view.frame.width
+                
+
             } completion: { _ in
-                self.fontChangeTableView.removeFromSuperview()
                 self.fontChangeHeader.removeFromSuperview()
+                self.collectionSegement.removeFromSuperview()
             }
         }
     }
     
-    
-    
-    // MARK: - FontChange _ SelectMode
-    private func additionSelectHideOrShow(show: Bool) {
-        if show == true {
-            UIView.animate(withDuration: 0.5) {
-                self.fontChangeTableView.alpha = 0
-                
-            } completion: { _ in
-                self.fontChangeTableView.reloadData()
-                
-                UIView.animate(withDuration: 0.3) {
-                    self.fontChangeTableView.alpha = 1
-                }
-            }
-            
-            
-        } else {
-            UIView.animate(withDuration: 0.5) {
-                self.fontChangeTableView.alpha = 0
-                
-            } completion: { _ in
-                self.fontChangeTableView.reloadData()
-                
-                UIView.animate(withDuration: 0.5) {
-                    self.fontChangeTableView.alpha = 1
-                }
-            }
-        }
-    }
-    
-    
-//    private func background
-    
-    
-    
-    
-    
-    
-    
-    // private func
     
     
     
@@ -749,22 +743,24 @@ extension MainVC: MainHeaderDelegate {
     }
     
     // Additonal -> Setup
-    func handleAdditionalToSetup() {
-        // 버튼의 이미지 + 역할을 바꿈
+    func handleAdditionToSetup() {
         self.headerView.buttonConfig = .setupVCButton
-        // 테이블뷰의 토글 변경
+        
         self.tableViewToggle = .setup
+        
+        self.additionTableHideOrShow(show: false)
+    }
+    
+    // Font -> Addition
+    func handleFontToAddition() {
+        // 버튼의 이미지 + 역할을 바꿈
+        self.headerView.buttonConfig = .additionTableView
+        // 테이블뷰의 토글 변경
+        self.tableViewToggle = .addition
         // addtionalTableview 숨기기
         self.fontChangeTableHideOrShow(show: false)
     }
-    // SelectMode -> Additional_Table
-    func handleFixToAdditional() {
-        self.additionalFixToggle = .saveMode
-        
-        self.headerView.buttonConfig = .additionalTableView
-        
-        self.additionSelectHideOrShow(show: false)
-    }
+    
     
     
     
@@ -808,29 +804,31 @@ extension MainVC: MainHeaderDelegate {
         self.DiaryViewHideOrShow(show: true)
     }
     
+    
     // Setup -> Additional
     private func setupToAddition() {
         // 테이블뷰 토글 바꾸기
-        self.tableViewToggle = .fontChangeTable
-        // 헤더의 버튼 이미지 + 설정 바꾸기
-        self.headerView.buttonConfig = .additionalTableView
-        // additional_Table_View 보이게 하기
-        self.fontChangeTableHideOrShow(show: true)
+        self.tableViewToggle = .addition
+        
+        self.headerView.buttonConfig = .additionTableView
+        
+        
+        self.additionTableHideOrShow(show: true)
     }
     
-    // additional -> SelectMode
-    private func additionalToFix() {
+    
+    // addition -> Font
+    private func additionToFont() {
         // 어떤 셀을 클릭했는 지 넣어둠 ( 업데이트를 하기 위해 )
+            // 지금 옵셔널바인딩은 그냥 한 번 보려고
         guard let currentSetup = self.currentSetup else { return }
         print(currentSetup)
         
-        // 테이블뷰 바꾸기 (공통사항) - 토글 바꾸기
-        self.additionalFixToggle = .SelectMode
-        // header 버튼의 config바꾸기 (RightButton 추가)
-        self.headerView.buttonConfig = .AdditionalSelectMode
-        // 뷰 전환
-            // 테이블뷰 리로드
-        self.additionSelectHideOrShow(show: true)
+        
+        // 헤더의 버튼 이미지 + 설정 바꾸기
+        self.headerView.buttonConfig = .fontchangeTableView
+        // additional_Table_View 보이게 하기
+        self.fontChangeTableHideOrShow(show: true)
     }
 }
 
@@ -844,7 +842,7 @@ extension MainVC: MainMenuDelegate {
         // 버튼의 이미지 + 역할을 바꿈
         self.headerView.buttonConfig = .achievementVCButton
         // collectionView의 토글을 바꿈
-        self.achievementView.collectionViewToggle = .myStar
+        self.achievementView.collectionToggle = .first
         // achievement_View_보이게 하기
         self.achievementViewHideOrShow(show: true)
     }
@@ -854,7 +852,7 @@ extension MainVC: MainMenuDelegate {
         // 버튼의 이미지 + 역할을 바꿈
         self.headerView.buttonConfig = .shopVCButton
         // collectionView의 토글을 바꿈
-        self.achievementView.collectionViewToggle = .shop
+        self.achievementView.collectionToggle = .first
         // shop_View_보이게 하기
         self.shopViewHideOrShow(show: true)
     }
@@ -938,29 +936,19 @@ extension MainVC: UITableViewDelegate, UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
         switch tableViewToggle {
         case .diary: return 1
-        case .setup: return 3
+        case .setup: return 2
         case .addition: return 1
-        case .fontChangeTable: return 1
         }
     }
     
     // 섹션 _타이틀 이름
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        switch tableViewToggle {
-            
-        case .diary: return nil
-            
-        case .setup:
+        
+        if self.tableViewToggle == .setup {
             if section == 0 { return "일기 작성 시간 설정" }
-            else if section == 1 { return "배경화면 설정" }
-            else { return "글자 색상 설정" }
-            
-            
-            
-        case .addition: return nil
-            
-            
-        case .fontChangeTable: return nil
+            else { return "글자 색상 및 배경화면 설정" }
+        } else {
+            return nil
         }
     }
     
@@ -989,8 +977,7 @@ extension MainVC: UITableViewDelegate, UITableViewDataSource {
         switch tableViewToggle {
         case .diary: return 140
         case .setup: return 60
-        case .addition: return 200
-        case .fontChangeTable: return 60
+        case .addition: return (self.view.frame.height - 150 - 50) / 4
         }
     }
     
@@ -1007,16 +994,10 @@ extension MainVC: UITableViewDelegate, UITableViewDataSource {
             
         case .setup:
             if section == 0 { return 1 }
-            else if section == 1 { return 1 }
             else { return 1 }
             
             
         case .addition: return 4
-            
-        case .fontChangeTable:
-            return self.additionalFixToggle == .saveMode
-                ? 4
-                : 7
         }
     }
     
@@ -1046,8 +1027,7 @@ extension MainVC: UITableViewDelegate, UITableViewDataSource {
             let cell = tableView.dequeueReusableCell(withIdentifier: ReuseIdentifier.setupTableViewCell, for: indexPath) as! SetupTableviewCell
             
             if indexPath.section == 0 { cell.titleLabel.text = "일기 작성 시간" }
-            else if indexPath.section == 1 { cell.titleLabel.text = "아침 배경화면 설정" }
-            else { cell.titleLabel.text = "글자 색상 변경" }
+            else { cell.titleLabel.text = "글자 색상 및 배경화면 변경" }
             return cell
             
             
@@ -1057,28 +1037,9 @@ extension MainVC: UITableViewDelegate, UITableViewDataSource {
             let cell = tableView.dequeueReusableCell(withIdentifier: ReuseIdentifier.additionCell, for: indexPath) as! AdditionCell
             
             
+            cell.textLabel?.text = timeArray[indexPath.row]
             
             
-            
-            
-            return cell
-            
-            
-            
-            
-        case .fontChangeTable:
-            let cell = tableView.dequeueReusableCell(withIdentifier: ReuseIdentifier.fontChangeCell, for: indexPath) as! FontChangeCell
-            
-            // 셀의 이름 정하기
-            // saveMode
-            if self.additionalFixToggle == .saveMode {
-                cell.additionalLabel.text = self.timeArray[indexPath.row]
-            
-            
-            // selectMode
-            } else {
-                    cell.additionalLabel.text = fontColor.returnString(rawValue: indexPath.row)
-            }
             return cell
         }
     }
@@ -1110,10 +1071,7 @@ extension MainVC: UITableViewDelegate, UITableViewDataSource {
                     // save모드로 diaryVC진입
                     self.headerView.rightButtonConfig = .saveMode
                     self.diaryVC.diaryData = self.diaryData[indexPath.row]
-                    
-                    
                 }
-                
                 
             // 2번째 셀부터 ~~~ 마지막 셀까지
             } else if indexPath.row > 0 {
@@ -1141,11 +1099,6 @@ extension MainVC: UITableViewDelegate, UITableViewDataSource {
                 
                 
                 
-            } else if indexPath.section == 1 {
-               print("1")
-                
-                
-                
             } else {
                 // setupTable -> AdditionalTable
                 self.setupToAddition()
@@ -1156,67 +1109,19 @@ extension MainVC: UITableViewDelegate, UITableViewDataSource {
             
             
             
-            
-            
-            
-            
         case .addition:
+            // 아침
+            if indexPath.row == 0 { self.currentSetup = .morning
+            // 낮
+            } else if indexPath.row == 1 { self.currentSetup = .daytime
+            // 저녁
+            } else if indexPath.row == 2 { self.currentSetup = .night
+            // 새벽
+            } else { self.currentSetup = .dawn }
             
             
             
-            
-            break
-            
-            
-            
-        case .fontChangeTable:
-            // saveMode일 때
-            if self.additionalFixToggle == .saveMode{
-                // 아침
-                if indexPath.row == 0 { self.currentSetup = .morning
-                // 낮
-                } else if indexPath.row == 1 { self.currentSetup = .daytime
-                // 저녁
-                } else if indexPath.row == 2 { self.currentSetup = .night
-                // 새벽
-                } else { self.currentSetup = .dawn }
-                
-                
-                // additional -> FixMode
-                self.additionalToFix()
-                
-                
-                
-            // SelectMode일 때
-            } else {
-                // 셀을 누르면 헤더의 색(레이블 버튼)이 변경
-                guard let currentSetup = currentSetup else { return }
-                // FontColor.selectedInt에 저장
-                switch currentSetup {
-                case .morning:
-                    
-                    
-                    break
-                    
-                    
-                case .daytime:
-                    
-                    
-                    break
-                    
-                    
-                case .night:
-                    break
-                    
-                    
-                case .dawn:
-                    break
-                }
-                
-                // 맨 위로???? (Animate 사용)
-                
-                print(indexPath.row)
-            }
+            self.additionToFont()
             break
         }
     }
