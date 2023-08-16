@@ -18,26 +18,27 @@ enum FontStyle {
 enum LeftBtnTapImgChange {
     case menuViewButton
     case mainViewButton
-    case tableViewButton
+    case diaryTableViewButton
     case diaryViewButton
     case shopVCButton
     case setupVCButton
     case achievementVCButton
     case additionalTableView
-    case fixAdditionalView
+    case AdditionalSelectMode
 }
 
 enum RightBtnTapImgChange {
     case fixMode
     case saveMode
     case coin
-    case additional
+    case fontChange
 }
 
 enum TableViewEnum {
     case diary
     case setup
-    case additional
+    case addition
+    case fontChangeTable
 }
 enum CollectionViewEnum {
     case myStar
@@ -114,4 +115,9 @@ enum CurrentSetup: Int {
 //    static var daytimeString: String = "bbb"
 //    static var nightString: String = "ccc"
 //    static var dawnString: String = "ddd"
+}
+
+enum AdditionalMode {
+    case saveMode
+    case SelectMode
 }

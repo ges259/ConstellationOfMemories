@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class AdditionalCell: UITableViewCell {
+final class FontChangeCell: UITableViewCell {
     
     // MARK: - Properties
     

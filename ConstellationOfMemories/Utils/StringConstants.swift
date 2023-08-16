@@ -11,7 +11,8 @@ struct ReuseIdentifier {
     static let diaryTableViewCell: String = "DiaryTableCell"
     static let setupTableViewCell: String = "SetupTableCell"
     static let setupTableHeader: String = "setupHeader"
-    static let additionalCell: String = "AdditionalCell"
+    static let additionCell: String = "additionCell"
+    static let fontChangeCell: String = "fontChangeCell"
     
     static let shopCell: String = "ShopCell"
     static let collectionHeader: String = "CollectionHeader"

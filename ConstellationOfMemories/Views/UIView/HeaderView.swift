@@ -89,7 +89,7 @@ final class HeaderView: UIView {
         // fix image
         let btn = UIButton().buttonSustemImage(btnSize: 31, imageString: .fix)
             btn.addTarget(self, action: #selector(self.headerRightButtonTapped), for: .touchUpInside)
-            btn.isHidden = true
+        btn.alpha = 0
         return btn
     }()
     
@@ -191,7 +191,7 @@ extension HeaderView {
             
         // TableView_LeftButton_Tapped
             // TableView -> MainVC
-        case .tableViewButton:
+        case .diaryTableViewButton:
             // MainVC 로 dismiss(테이블뷰 내리기) - Delegate
             self.mainHeaderDelegate?.handleTableToMain()
             break
@@ -208,6 +208,8 @@ extension HeaderView {
             self.rightButtonConfig = .saveMode
             // check표시를 클릭하지 않고 왼쪽버튼을 통해 나가도 저장이 될 수 있도록 함
             self.headerRightButtonTapped()
+            // right 버튼 숨기기
+            self.rightButtonHide()
             break
             
             
@@ -234,8 +236,12 @@ extension HeaderView {
             break
             
             
-        case .fixAdditionalView:
-            // 다시 additional로 돌아가기
+        case .AdditionalSelectMode:
+            // left버튼을 연타했을 때 crash가 발생하여 막아 둠
+            self.leftButtonAlpha()
+            // right버튼 숨기기
+            self.rightButtonHide()
+            // 다시 additional로 돌아가기 + rightbutton 숨기기
             self.mainHeaderDelegate?.handleFixToAdditional()
             break
         }
@@ -269,14 +275,12 @@ extension HeaderView {
     @objc private func headerRightButtonTapped() {
         switch rightButtonConfig {
         // 현재: fixMode
-            // fixMode로 진입
+            // rightButton을 누르면 SaveMode로 진입
         case .fixMode:
-            // rightButton 이미지 변경 ( .check )
-            self.rightButton.setImage(.setImg(.check), for: .normal)
-            
+            // rightButton 이미지 변경 + 애니메이션
+            self.rightButtonShow(.check)
             // fix모드 진입
             self.diaryHeaderDelegate?.diaryFixMode(true)
-            
             // save모드로 변경
                 // fix모드에서 rightButton 누르면 save모드로 들어갈 수 있게
             self.rightButtonConfig = .saveMode
@@ -285,14 +289,12 @@ extension HeaderView {
             
             
         // 현재: saveMode
-            // saveMode로 진입
+            // rightButton을 누르면 FixMode로 진입
         case .saveMode:
-            // rightButton 이미지 변경 ( .fix )
-            self.rightButton.setImage(.setImg(.fix), for: .normal)
-            
+            // rightButton 이미지 변경 + 애니메이션
+            self.rightButtonShow(.fix)
             // save모드 진입
             self.diaryHeaderDelegate?.diaryFixMode(false)
-            
             // fix모드로 변경
                 // save모드에서 rightButton 누르면 fix모드로 들어갈 수 있게
             self.rightButtonConfig = .fixMode
@@ -300,15 +302,17 @@ extension HeaderView {
             
             
         case .coin:
+            self.rightButtonShow(.coin)
             break
             
             
-        case .additional:
-            
+        case .fontChange:
+            // rightButton 숨기기
+            self.rightButtonHide()
             // check 버튼을 누렀다면 뒤로가기
             self.mainHeaderDelegate?.handleFixToAdditional()
-            
-            // 저장
+            // MARK: - Fix
+            // 변경사항 저장
             
             break
         }
@@ -349,33 +353,30 @@ extension HeaderView {
         switch buttonConfig {
         // MenuVC 화면들어오면 -> 버튼 이미지
         case .menuViewButton:
-            // back Image
-            self.leftButton.setImage(.setImg(.back), for: .normal)
+            // 이미지 변경 + 애니메이션
+            self.leftButtonAlpha(.back)
             break
             
             
         // MainVC 화면들어오면 -> 버튼 이미지
         case .mainViewButton:
-            // menu Image
-            self.leftButton.setImage(.setImg(.menu), for: .normal)
-            self.rightButton.isHidden = true
+            // left버튼 이미지 바꾸기 + 애니메이션
+            self.leftButtonAlpha(.menu)
+            // titleLabel 변경
             self.titleLabel.text = "추억 일기"
             break
             
             
         // TableView 화면들어오면 -> 버튼 이미지 및 설정
-        case .tableViewButton:
-            // back Image
-            self.leftButton.setImage(.setImg(.back), for: .normal)
+        case .diaryTableViewButton:
             // right Button 숨기기
-            self.rightButton.isHidden = true
+            self.rightButtonHide()
+            
             break
             
             
         // DiaryVC 화면들어오면 -> 버튼 설정
         case .diaryViewButton:
-            // rightButton 보이게 하기
-            self.rightButton.isHidden = false
             // MainVC - tableToDiary()를 통해
                 // -> rightbuttonConfig를 설정
                 // -> 설정값에 따라 headerRightButtonTapped()를 하여 뷰를 바꿈
@@ -385,9 +386,6 @@ extension HeaderView {
             
         // shopVC 화면들어오면 -> 버튼 이미지 및 텍스트 설정
         case .shopVCButton:
-            // rightButton보이게 하기 + 이미지 바꾸기
-            self.rightButton.isHidden = false
-            self.rightButton.setImage(.setImg(.coin), for: .normal)
             // titleLabel 바꾸기
             self.titleLabel.text = "상점"
             break
@@ -402,22 +400,75 @@ extension HeaderView {
             
             
         case .additionalTableView:
-            self.rightButton.isHidden = true
             break
             
             
+        case .AdditionalSelectMode:
+            // check표시 만들기 + 애니메이션
+            self.rightButtonShow(.check)
             
-        case .fixAdditionalView:
-            // check표시 만들기
-            self.rightButton.setImage(.setImg(.check), for: .normal)
+            // titleLabel 바꾸기
+            self.titleLabel.text = "글자 색 바꾸기"
             
             // rightbuttonConfig 바꾸기
-            self.rightButtonConfig = .additional
-            
-            // hidden = false
-            self.rightButton.isHidden = false
-            
+            self.rightButtonConfig = .fontChange
             break
+        }
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    // MARK: - Animated
+    // left버튼의 이미지가 바뀔 때 자연스럽게 바뀔 수 있도록 하는 메서드
+    func leftButtonAlpha(_ imageString: imageString? = .back) {
+        
+        UIView.animate(withDuration: 0.15) {
+            self.leftButton.alpha = 0
+            
+        } completion: { _ in
+            self.leftButton.setImage(.setImg(imageString!), for: .normal)
+            
+            UIView.animate(withDuration: 0.15) {
+                self.leftButton.alpha = 1
+            }
+        }
+    }
+    
+    
+    
+    
+    
+    
+    // rightButton
+    func rightButtonShow(_ imageString: imageString = .back) {
+        self.rightButton.alpha = 0
+        self.rightButton.setImage(.setImg(imageString), for: .normal)
+        
+        UIView.animate(withDuration: 0.3) {
+            self.rightButton.alpha = 1
+        }
+    }
+    
+    
+    private func rightButtonHide() {
+        UIView.animate(withDuration: 0.3) {
+            self.rightButton.alpha = 0
         }
     }
 }

@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class AdditionTableHeader: UIView {
+final class FontChangeTableHeader: UIView {
     
     // MARK: - Properties
     
