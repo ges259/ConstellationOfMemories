@@ -25,28 +25,29 @@ enum LeftBtnTapImgChange {
     case detailViewButton
     case setupVCButton
     case achievementVCButton
-    case additionTableView
-    case fontchangeTableView
 }
 
 enum RightBtnTapImgChange {
     case fixMode
     case saveMode
     case coin
-    case fontChange
     case shopDetail
 }
-
+// Table_View
 enum TableViewEnum {
     case diary
     case setup
-    case addition
-}
-enum CollectionViewEnum {
-    case myStar
-    case shop
 }
 
+//enum CollectionViewEnum {
+//    case myStar
+//    case shop
+//}
+// Collection_View
+enum SegementToggle {
+    case home
+    case shop
+}
 
 enum imageString: CustomStringConvertible {
     case back
@@ -82,31 +83,31 @@ enum imageString: CustomStringConvertible {
     }
 }
 
-enum FontColor: String {
-    case red = "0"
-    case orange = "1"
-    case yellow = "2"
-    case green = "3"
-    case blue = "4"
-    case indigo = "5"
-    case violet = "6"
-    
-    func returnString(rawValue: Int) -> String {
-        switch rawValue {
-        case 0: return "빨간색"
-        case 1: return "주황색"
-        case 2: return "노란색"
-        case 3: return "초록색"
-        case 4: return "파란색"
-        case 5: return "남색"
-        case 6: return "보라색"
-            
-        default: return "빨간색"
-        }
-    }
-
-    static var selectedInt: Int?
-}
+//enum FontColor: String {
+//    case red = "0"
+//    case orange = "1"
+//    case yellow = "2"
+//    case green = "3"
+//    case blue = "4"
+//    case indigo = "5"
+//    case violet = "6"
+//
+//    func returnString(rawValue: Int) -> String {
+//        switch rawValue {
+//        case 0: return "빨간색"
+//        case 1: return "주황색"
+//        case 2: return "노란색"
+//        case 3: return "초록색"
+//        case 4: return "파란색"
+//        case 5: return "남색"
+//        case 6: return "보라색"
+//
+//        default: return "빨간색"
+//        }
+//    }
+//
+//    static var selectedInt: Int?
+//}
 
 
 enum CurrentSetup: Int {
@@ -114,14 +115,14 @@ enum CurrentSetup: Int {
     case daytime
     case night
     case dawn
-    
-//    static var morningString: String = "aaa"
-//    static var daytimeString: String = "bbb"
-//    static var nightString: String = "ccc"
-//    static var dawnString: String = "ddd"
 }
 
 enum SegementCollection {
     case first
     case second
+    
+    /*
+     case shop
+     case home
+     */
 }

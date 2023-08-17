@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class collectionSegementView: UIView {
+final class CollectionSegementView: UIView {
     
     // MARK: - Properties
 
@@ -15,10 +15,10 @@ final class collectionSegementView: UIView {
     // item
     private var item = [Int]()
     
-    var collectionToggle: SegementCollection = .first
+    var collectionToggle: SegementToggle = .home
     
     
-    var segementMainDelegate: SegementMainDelegate?
+
     
     
     lazy var firstCollection: FirstCollectionView = {
@@ -87,9 +87,6 @@ final class collectionSegementView: UIView {
         // background Color
         self.backgroundColor = .clear
         
-        
-        
-        
         // segmentedControl
         self.addSubview(self.segmentedControl)
         self.segmentedControl.anchor(top: self.topAnchor,
@@ -113,17 +110,27 @@ final class collectionSegementView: UIView {
     @objc private func segmentedValueChanged(segment: UISegmentedControl) {
         // 추억 모음
         if segment.selectedSegmentIndex == 0 {
-            self.achieveSegementHideOrShow(show: true)
-            
-            // 달성률
+
+            if self.collectionToggle == .home {
+                self.homeViewHideOrShow(show: true)
+                
+            } else {
+                self.shopViewHideOrShow(show: true)
+            }
+        // 달성률
         } else {
-            self.achieveSegementHideOrShow(show: false)
+            if self.collectionToggle == .home {
+                self.homeViewHideOrShow(show: false)
+                
+            } else {
+                self.shopViewHideOrShow(show: false)
+            }
         }
     }
     
     
     
-    func achieveSegementHideOrShow(show: Bool) {
+    func homeViewHideOrShow(show: Bool) {
         if show == true {
             UIView.animate(withDuration: 0.5) {
                 // achivementSegment 보이게 하기
@@ -152,42 +159,30 @@ final class collectionSegementView: UIView {
     
     
     
-    func shopSegementHideOrShow(show: Bool) {
+    func shopViewHideOrShow(show: Bool) {
         if show == true {
-
-
-//            UIView.animate(withDuration: 0.5) {
-//                // mystarSegment 숨기기
-//                self.secondCollection.alpha = 0
-//                self.secondCollection.frame.origin.x = self.frame.width
-//
-//                // achivementSegment 보이게 하기
-//                self.firstCollection.alpha = 1
-//                self.firstCollection.frame.origin.x = 0
-//
-//                self.redView.alpha = 1
-//                self.redView.frame.origin.x = 30
-//            }
-
-
-
+            UIView.animate(withDuration: 0.5) {
+                // achivementSegment 보이게 하기
+                self.firstCollection.alpha = 1
+                self.firstCollection.frame.origin.x = 0
+                
+                // mystarSegment 숨기기
+                self.secondCollection.alpha = 0
+                self.secondCollection.frame.origin.x = self.frame.width
+            }
+            
+            
         } else {
-
-//            self.secondCollection.reloadData()
-
-//            UIView.animate(withDuration: 0.5) {
-//                // mystarSegment 보이게 하기
-//                self.secondCollection.alpha = 1
-//                self.secondCollection.frame.origin.x = 0
-//
-//                // achivementSegment 숨기기
-//                self.firstCollection.alpha = 0
-//                self.firstCollection.frame.origin.x = self.frame.width
-
-//                self.redView.alpha = 0
-//                self.redView.frame.origin.x = self.frame.width
-//            }
-
+            UIView.animate(withDuration: 0.5) {
+                // achivementSegment 숨기기
+                self.firstCollection.alpha = 0
+                self.firstCollection.frame.origin.x = -self.frame.width * 2
+                
+                
+                // mystarSegment 보이게 하기
+                self.secondCollection.alpha = 1
+                self.secondCollection.frame.origin.x = 0
+            }
         }
     }
     

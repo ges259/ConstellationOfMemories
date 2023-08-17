@@ -27,7 +27,6 @@ final class SetupTableviewCell: UITableViewCell {
                                      fontSize: 20)
     }()
     
-    
     private lazy var inforButton: UIButton = {
         let btn = UIButton()
         
@@ -55,28 +54,13 @@ final class SetupTableviewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    
-    
-    
-    // MARK: - Selectors
-    @objc private func toggleButtonTapped() {
-        print(#function)
-        self.inforToggle.toggle()
-    }
-    
-    
-    
     // MARK: - Helper Functions
     private func configureCell() {
-//         background Color
+        // background Color
         self.backgroundColor = .clear
-//        self.backgroundColor = .red
-        
-        
-        
+
         // Selection Style
         self.selectionStyle = .none
-        
         
         // configure UI
         self.addSubview(self.titleLabel)
@@ -89,12 +73,7 @@ final class SetupTableviewCell: UITableViewCell {
                                  width: 50, height: 35,
                                  centerY: self,
                                  cornerRadius: 10)
-        
-        
     }
-    
-    
-    
     
     private func toggleAnimate() {
         
@@ -117,14 +96,20 @@ final class SetupTableviewCell: UITableViewCell {
             UIView.animate(withDuration: 0.3) {
                 self.inforButton.alpha = 1
             }
-            
-            
-            
         }
-        
-        
-        
     }
+    
+    
+    
+    
+    // MARK: - Selectors
+    @objc private func toggleButtonTapped() {
+        self.inforToggle.toggle()
+    }
+    
+    
+    
+
     
     
     

@@ -240,33 +240,6 @@ extension HeaderView {
             // 뒤로가기
             self.mainHeaderDelegate?.handleAchievementToMain()
             break
-            
-            
-            
-            
-        case .additionTableView:
-            self.mainHeaderDelegate?.handleAdditionToSetup()
-            break
-        
-            
-            
-            
-        case .fontchangeTableView:
-            self.rightButtonHide()
-            self.mainHeaderDelegate?.handleFontToAddition()
-            break
-            
-            
-//        case .AdditionalSelectMode:
-//            // left버튼을 연타했을 때 crash가 발생하여 막아 둠
-//            self.leftButtonAlpha()
-//            // right버튼 숨기기
-//            self.rightButtonHide()
-//            // 다시 additional로 돌아가기 + rightbutton 숨기기
-//            self.mainHeaderDelegate?.handleFixToAdditional()
-//            break
-        
-        
         }
     }
     
@@ -329,17 +302,9 @@ extension HeaderView {
             break
             
             
-        case .fontChange:
-            // rightButton 숨기기
-            self.rightButtonHide()
-            // check 버튼을 누렀다면 뒤로가기 (additional 로 )
-            self.mainHeaderDelegate?.handleFontToAddition()
-            // MARK: - Fix
-            // 변경사항 저장
-            
-            break
         case .shopDetail:
-            print(#function)
+            self.mainHeaderDelegate?.handleDetailToShop()
+            break
         }
     }
     
@@ -433,18 +398,6 @@ extension HeaderView {
             
         case .achievementVCButton:
             break
-            
-            
-            
-        case .additionTableView:
-            break
-            
-            
-            
-        case .fontchangeTableView:
-            self.rightButtonConfig = .fontChange
-            self.rightButtonShow(.check)
-            break
         }
     }
     
@@ -466,7 +419,7 @@ extension HeaderView {
     
     
     
-    // MARK: - Animated
+    // MARK: - Animate
     // left버튼의 이미지가 바뀔 때 자연스럽게 바뀔 수 있도록 하는 메서드
     func leftButtonAlpha(_ imageString: imageString? = .back) {
         
@@ -483,11 +436,7 @@ extension HeaderView {
     }
     
     
-    
-    
-    
-    
-    // rightButton
+    // right 버튼 보이게 하기 + 이미지 바꾸기
     func rightButtonShow(_ imageString: imageString = .back) {
         self.rightButton.alpha = 0
         self.rightButton.setImage(.setImg(imageString), for: .normal)
@@ -496,8 +445,7 @@ extension HeaderView {
             self.rightButton.alpha = 1
         }
     }
-    
-    
+    // right 버튼 숨기기
     private func rightButtonHide() {
         UIView.animate(withDuration: 0.3) {
             self.rightButton.alpha = 0

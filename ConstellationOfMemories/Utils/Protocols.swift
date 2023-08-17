@@ -27,12 +27,6 @@ protocol MainHeaderDelegate {
     func handleHomeToMain()
     
     func handleAchievementToMain()
-    
-    func handleAdditionToSetup()
-    
-    func handleFontToAddition()
-    
-//    func handleFontToAdditional()
 }
 
 
@@ -45,12 +39,6 @@ protocol MainMenuDelegate {
     func handleHome()
     func handleShop()
     func handleSetup()
-}
-
-
-protocol SegementMainDelegate {
-    func imageTapped()
-    func shop2Tapped()
 }
 
 protocol MainDiaryDelegate {

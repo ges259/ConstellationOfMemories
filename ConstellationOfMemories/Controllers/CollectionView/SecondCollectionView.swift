@@ -100,6 +100,7 @@ extension SecondCollectionView: UICollectionViewDelegate, UICollectionViewDataSo
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         // shop(second) -> detailView로 진입
+        print("Second")
         self.secondMainDelegate?.secondTapped()
     }
     

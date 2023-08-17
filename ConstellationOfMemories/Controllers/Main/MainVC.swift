@@ -32,16 +32,11 @@ final class MainVC: UIViewController {
     // 테이블뷰 토글
     private var tableViewToggle: TableViewEnum = .diary
     
-    private var fontColor: FontColor = .red
     
+//    private var fontColor: FontColor = .red
     
-    private var currentSetup: CurrentSetup?
+//    private var timeArray: [String] = ["아침", "낮", "저녁", "새벽"]
     
-    private var timeArray: [String] = ["아침", "낮", "저녁", "새벽"]
-    
-    
-    
-
     
     
     
@@ -67,9 +62,9 @@ final class MainVC: UIViewController {
                            height: self.view.frame.height - 500)
         let view = MenuVC(frame: frame)
             view.mainMenuDelegate = self
-            
         return view
     }()
+    
     
     
     // MARK: - DiaryTable
@@ -92,6 +87,7 @@ final class MainVC: UIViewController {
     }()
     
     
+    
     // MARK: - DiaryVC
     // 셀을 누르면 오른쪽 옆에서 나올 뷰 ( 수정 뷰 )
     private lazy var diaryVC: DiaryVC = {
@@ -104,6 +100,7 @@ final class MainVC: UIViewController {
             view.alpha = 0
         return view
     }()
+    
     
     
     // MARK: - BlackView
@@ -124,25 +121,20 @@ final class MainVC: UIViewController {
     }()
     
     
+    
     // MARK: - Achievement
         // 상점 뷰 및 achivementVC
-    private lazy var achievementView: collectionSegementView = {
+    private lazy var collectionSegementView: CollectionSegementView = {
         let frame = CGRect(x: 0,
                             y: self.view.frame.height - 300,
                             width: self.view.frame.width,
                             height: self.view.frame.height - 150)
-        let view = collectionSegementView(frame: frame)
-            view.segementMainDelegate = self
+        let view = CollectionSegementView(frame: frame)
             view.alpha = 0
-        
-        
 //        view.firstCollection.firstMainDelegate = self
-        view.secondCollection.secondMainDelegate = self
-        
-        
+            view.secondCollection.secondMainDelegate = self
         return view
     }()
-    
     
     
     
@@ -161,6 +153,9 @@ final class MainVC: UIViewController {
         return view
     }()
     
+    
+    
+    // MARK: - Detail_Black_View
     private lazy var detailBlackView: UIView = {
         let frame = CGRect(x: 0,
                             y: 150,
@@ -168,7 +163,7 @@ final class MainVC: UIViewController {
                             height: self.view.frame.height)
         let view = UIView(frame: frame)
             view.backgroundColor = UIColor(white: 1, alpha: 0.2)
-        view.alpha = 0
+            view.alpha = 0
         // blackView - add gesture
         let tap = UITapGestureRecognizer(target: self,
                                          action: #selector(self.detailBlackViewTapped))
@@ -178,11 +173,7 @@ final class MainVC: UIViewController {
     
     
     
-    
-    
-    // MARK: - SetupTable
-    // UIView
-    // seteup_VC
+    // MARK: - Setup_Table
     private lazy var setupTableView: UITableView = {
         let setupTableFrame = CGRect(x: 0,
                                      y: self.view.frame.height - 300,
@@ -209,64 +200,29 @@ final class MainVC: UIViewController {
     }()
     
     
-    // MARK: - additionTableView
-    private lazy var additionTableView: UITableView = {
-        let frame = CGRect(x: self.view.frame.width,
-                           y: 150,
-                           width: self.view.frame.width,
-                           height: self.view.frame.height - 150)
-        let view = UITableView(frame: frame)
-        
-            view.delegate = self
-            view.dataSource = self
-        
-            view.isScrollEnabled = false
-            view.separatorStyle = .none
-            view.backgroundColor = .clear
-            view.alpha = 0
-        
-            view.register(AdditionCell.self,
-                          forCellReuseIdentifier: ReuseIdentifier.additionCell)
-        
-        return view
-    }()
     
-    
-    
-    
-    
-    
-    
-    
-    // MARK: - FontChange _ View
+    // MARK: - Home _ View
     private lazy var homeHeader: HomeHeader = {
         let headerFrame = CGRect(x: 0,
                                  y: self.view.frame.height,
                                  width: self.view.frame.width,
-                                 height: 250)
+                                 height: 225)
         return HomeHeader(frame: headerFrame)
     }()
     
-    private lazy var collectionSegement: collectionSegementView = {
+    
+    
+    // MARK: - CollectionSegement
+    private lazy var collectionSegement: CollectionSegementView = {
         let frame = CGRect(x: 0,
-                           y: self.view.frame.height + 400,
+                           y: self.view.frame.height + 375,
                            width: self.view.frame.width,
-                           height: self.view.frame.height - 400)
-        
-        let view = collectionSegementView(frame: frame)
-            
+                           height: self.view.frame.height - 375)
+        let view = CollectionSegementView(frame: frame)
             view.backgroundColor = .clear
-            view.segementMainDelegate = self
             view.alpha = 0
-        
         return view
     }()
-    
-    
-    
-    
-    
-    
     
     
     
@@ -274,6 +230,7 @@ final class MainVC: UIViewController {
     private lazy var backgroundImage: UIImageView = {
         return UIImageView(image: UIImage(named: "blueSky"))
     }()
+    
     
     
     // MARK: - Button
@@ -310,26 +267,6 @@ final class MainVC: UIViewController {
         // configure UI
         self.configureMainVC()
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     // MARK: - Configure UI
     private func configureMainVC() {
         // background_Image
@@ -427,7 +364,6 @@ extension MainVC {
     private func setupTableHideOrShow(show: Bool) {
         // setup테이블 보이게 하기
         if show == true {
-            print(#function)
             // setupTableView
             self.view.addSubview(self.setupTableView)
             
@@ -460,54 +396,11 @@ extension MainVC {
     
     
     
-    // MARK: - Addition _ Table
-    private func additionTableHideOrShow(show: Bool) {
-        if show == true  {
-            self.view.addSubview(self.additionTableView)
-            
-            UIView.animate(withDuration: 0.5) {
-                // setupTable 숨기기
-                self.setupTableView.alpha = 0
-                self.setupTableView.frame.origin.x = -self.view.frame.width
-                
-                // additaional 테이블 보이게 하기
-                self.additionTableView.alpha = 1
-                self.additionTableView.frame.origin.x = 0
-            }
-            
-            
-        } else {
-            UIView.animate(withDuration: 0.5) {
-                // setupTable 보이게 하기
-                self.setupTableView.alpha = 1
-                self.setupTableView.frame.origin.x = 0
-                
-                // additaional 숨기기
-                self.additionTableView.alpha = 0
-                self.additionTableView.frame.origin.x = self.view.frame.width
-                
-            } completion: { _ in
-                self.additionTableView.removeFromSuperview()
-            }
-        }
-    }
-    
-    
-    
-    
-    
-    // MARK: - Fix
-    // 원래 addition으로 가는 메서드를 바꾸기
-    // 새로 만들기 (right _ let _ 전부 다 )
-    // fontChanggTable도 다 바꿔야 함 -> tableView reload가 필요 없어짐
-    
-    
-    // MARK: - FontChange _ Table
+    // MARK: - Home _ Collection
     private func HomeViewHideOrShow(show: Bool) {
         if show == true {
             self.view.addSubview(self.homeHeader)
             self.view.addSubview(self.collectionSegement)
-            
 
             UIView.animate(withDuration: 0.5) {
                 // 메뉴바 숨기기
@@ -519,8 +412,9 @@ extension MainVC {
                 
                 // collectionSegement 테이블 보이게 하기
                 self.collectionSegement.alpha = 1
-                self.collectionSegement.frame.origin.y = 400
+                self.collectionSegement.frame.origin.y = 383
             }
+            
 
         } else {
             UIView.animate(withDuration: 0.5) {
@@ -530,14 +424,12 @@ extension MainVC {
                 
                 // collectionSegement 숨기기
                 self.collectionSegement.alpha = 0
-                self.collectionSegement.frame.origin.y = self.view.frame.height + 400
+                self.collectionSegement.frame.origin.y = self.view.frame.height + 383
 
             } completion: { _ in
                 // 뷰에서 나가면 세그먼트를 0으로 되돌려 놓기
-//                self.collectionSegement.segmentedControl.selectedSegmentIndex = 0
-                // 세그먼트뿐만 아니라 애니메이션도 원상복구
-                
-                
+                self.collectionSegement.segmentedControl.selectedSegmentIndex = 0
+                self.collectionSegement.shopViewHideOrShow(show: true)
                 
                 self.homeHeader.removeFromSuperview()
                 self.collectionSegement.removeFromSuperview()
@@ -548,13 +440,12 @@ extension MainVC {
     
     
     
-    
     // MARK: - Shop _ Collection
     private func shopViewHideOrShow(show: Bool) {
         // achievementView 보이게 하기 - CollectionView
         if show == true {
             // achievement_View
-            self.view.addSubview(self.achievementView)
+            self.view.addSubview(self.collectionSegementView)
             self.view.addSubview(self.detailView)
             self.view.addSubview(self.detailBlackView)
             
@@ -562,8 +453,8 @@ extension MainVC {
                 // footerButton 숨기기
                 self.footerButton.alpha = 0
                 // achievementView 보이게 하기
-                self.achievementView.alpha = 1
-                self.achievementView.frame.origin.y = 150
+                self.collectionSegementView.alpha = 1
+                self.collectionSegementView.frame.origin.y = 150
                 // menuView 숨기기
                 self.menuHideOrShow(show: false)
             }
@@ -575,17 +466,17 @@ extension MainVC {
                 // footerButton 보이게 하기
                 self.footerButton.alpha = 1
                 // achievementView 숨기기
-                self.achievementView.alpha = 0
-                self.achievementView.frame.origin.y = self.view.frame.height
+                self.collectionSegementView.alpha = 0
+                self.collectionSegementView.frame.origin.y = self.view.frame.height
                 
             } completion: { _ in
                 // 뷰에서 나가면 세그먼트를 0으로 되돌려 놓기
-                self.achievementView.segmentedControl.selectedSegmentIndex = 0
-                self.achievementView.shopSegementHideOrShow(show: true)
+                self.collectionSegementView.segmentedControl.selectedSegmentIndex = 0
+                self.collectionSegementView.shopViewHideOrShow(show: true)
                 // item이 항상 맨위로 가도록 설정
-                self.achievementView.upCollectionView()
+                self.collectionSegementView.upCollectionView()
                 // remove View
-                self.achievementView.removeFromSuperview()
+                self.collectionSegementView.removeFromSuperview()
                 self.detailView.removeFromSuperview()
                 self.detailBlackView.removeFromSuperview()
             }
@@ -598,15 +489,14 @@ extension MainVC {
     private func achievementViewHideOrShow(show: Bool) {
         // achievementView 보이게 하기 - CollectionView
         if show == true {
-            // achievement_View
-            self.view.addSubview(self.achievementView)
+            self.view.addSubview(self.collectionSegementView)
             
             UIView.animate(withDuration: 0.5) {
                 // footerButton 숨기기
                 self.footerButton.alpha = 0
                 // achievementView 보이게 하기
-                self.achievementView.alpha = 1
-                self.achievementView.frame.origin.y = 150
+                self.collectionSegementView.alpha = 1
+                self.collectionSegementView.frame.origin.y = 150
                 // menuView 숨기기
                 self.menuHideOrShow(show: false)
             }
@@ -618,22 +508,24 @@ extension MainVC {
                 // footerButton 보이게 하기
                 self.footerButton.alpha = 1
                 // achievementView 숨기기
-                self.achievementView.alpha = 0
-                self.achievementView.frame.origin.y = self.view.frame.height
+                self.collectionSegementView.alpha = 0
+                self.collectionSegementView.frame.origin.y = self.view.frame.height
                 
             } completion: { _ in
                 // 뷰에서 나가면 세그먼트를 0으로 되돌려 놓기
-                self.achievementView.segmentedControl.selectedSegmentIndex = 0
-                self.achievementView.achieveSegementHideOrShow(show: true)
+                self.collectionSegementView.segmentedControl.selectedSegmentIndex = 0
+                self.collectionSegementView.shopViewHideOrShow(show: true)
                 // item이 항상 맨위로 가도록 설정
-                self.achievementView.upCollectionView()
+                self.collectionSegementView.upCollectionView()
                 // remove View
-                self.achievementView.removeFromSuperview()
+                self.collectionSegementView.removeFromSuperview()
             }
         }
     }
     
     
+    
+    // MARK: - Detail_View
     func detailViewHideOrShow(show: Bool) {
         if show == true {
             UIView.animate(withDuration: 0.5) {
@@ -652,14 +544,6 @@ extension MainVC {
             }
         }
     }
-    
-    
-    
-    
-    
-    
-    
-    
     
     
     
@@ -773,7 +657,7 @@ extension MainVC: MainHeaderDelegate {
         self.diaryTableHideOrShow(show: false)
     }
     
-    // DiaryVC -> TableView
+    // DiaryVC -> Diary_Table
     func handleDiaryToTable() {
         // 버튼의 이미지 + 역할을 바꿈
         self.headerView.buttonConfig = .diaryTableViewButton
@@ -821,28 +705,6 @@ extension MainVC: MainHeaderDelegate {
         self.setupTableHideOrShow(show: false)
     }
     
-    // Additonal -> Setup
-    func handleAdditionToSetup() {
-        self.headerView.buttonConfig = .setupVCButton
-        
-        self.tableViewToggle = .setup
-        
-        self.additionTableHideOrShow(show: false)
-    }
-    
-    // Font -> Addition
-    func handleFontToAddition() {
-        // 버튼의 이미지 + 역할을 바꿈
-        self.headerView.buttonConfig = .additionTableView
-        // 테이블뷰의 토글 변경
-        self.tableViewToggle = .addition
-        // addtionalTableview 숨기기
-        self.HomeViewHideOrShow(show: false)
-    }
-    
-    
-    
-    
     
     
     // MARK: - Selectors
@@ -860,11 +722,12 @@ extension MainVC: MainHeaderDelegate {
         self.detailViewHideOrShow(show: false)
     }
     
-    // MainVC -> TableView
+    // MainVC -> Diary_Table
     @objc private func starButtonTapped() {
-        //
+        // 버튼의 이미지 바꾸기
+            // header에서 바꾸면 diaryVC -> Diary_Table로 이동할 때도 애니메이션이 작동하므로 여기서 설정
         self.headerView.leftButtonAlpha(.back)
-        // 버튼의 이미지 + 역할을 바꿈
+        // 버튼의 역할을 바꿈
         self.headerView.buttonConfig = .diaryTableViewButton
         // tableView를 여러군데서 사용하다보니 enum으로 구분.
         self.tableViewToggle = .diary
@@ -874,9 +737,7 @@ extension MainVC: MainHeaderDelegate {
     
     
     
-    
-    
-    // MARK: - Table -> ViewTransition
+    // MARK: - Cell -> View_Transition
         // 원래는 tableView-didSelectRowAt에 있지만 (.diary)
             // 일관성 + 너무 길어지는 것을 막기 위한 함수 설정
     // Diary_Table -> DiaryVC
@@ -887,33 +748,6 @@ extension MainVC: MainHeaderDelegate {
         // diary_View_보이게 하기
             // handleBackToTableView() 에서 닫힘
         self.DiaryViewHideOrShow(show: true)
-    }
-    
-    
-    // Setup -> Additional
-    private func setupToAddition() {
-        // 테이블뷰 토글 바꾸기
-        self.tableViewToggle = .addition
-        
-        self.headerView.buttonConfig = .additionTableView
-        
-        
-        self.additionTableHideOrShow(show: true)
-    }
-    
-    
-    // addition -> Font
-    private func additionToFont() {
-        // 어떤 셀을 클릭했는 지 넣어둠 ( 업데이트를 하기 위해 )
-            // 지금 옵셔널바인딩은 그냥 한 번 보려고
-        guard let currentSetup = self.currentSetup else { return }
-        print(currentSetup)
-        
-        
-        // 헤더의 버튼 이미지 + 설정 바꾸기
-        self.headerView.buttonConfig = .fontchangeTableView
-        // additional_Table_View 보이게 하기
-        self.HomeViewHideOrShow(show: true)
     }
 }
 
@@ -927,14 +761,20 @@ extension MainVC: MainMenuDelegate {
         // 버튼의 이미지 + 역할을 바꿈
         self.headerView.buttonConfig = .achievementVCButton
         // collectionView의 토글을 바꿈
-        self.achievementView.collectionToggle = .first
+        
+        // MARK: - Fix
+        self.collectionSegementView.collectionToggle = .home
         // achievement_View_보이게 하기
         self.achievementViewHideOrShow(show: true)
     }
 
     // menu -> HomeView
     func handleHome() {
+        // 버튼의 이미지 + 역할을 바꿈
         self.headerView.buttonConfig = .homeViewButton
+        // collectionView의 토글을 바꿈
+        self.collectionSegementView.collectionToggle = .home
+        // Home_View_보이게 하기
         self.HomeViewHideOrShow(show: true)
     }
     
@@ -943,7 +783,7 @@ extension MainVC: MainMenuDelegate {
         // 버튼의 이미지 + 역할을 바꿈
         self.headerView.buttonConfig = .shopVCButton
         // collectionView의 토글을 바꿈
-        self.achievementView.collectionToggle = .first
+        self.collectionSegementView.collectionToggle = .shop
         // shop_View_보이게 하기
         self.shopViewHideOrShow(show: true)
     }
@@ -960,6 +800,23 @@ extension MainVC: MainMenuDelegate {
 }
 
 
+
+
+// MARK: - SecondMainDelegate
+extension MainVC: SecondMainDelegate {
+    // shop -> Detail
+        // second segement를 누르면 detail로 진입
+    func secondTapped() {
+        // right 버튼 보이게 하기 + 이미지 바꾸기
+        self.headerView.rightButtonConfig = .shopDetail
+        // left 버튼의 용도 바꾸기
+        self.headerView.buttonConfig = .detailViewButton
+        // detail_View + detail_Black_View 보이게 하기
+        self.detailViewHideOrShow(show: true)
+    }
+}
+
+
 //extension MainVC: FirstMainDelegate {
 //    func firstTapped() {
 //        print("First")
@@ -967,17 +824,6 @@ extension MainVC: MainMenuDelegate {
 //}
 
 
-// shop -> Detail
-    // second segement를 누르면 detail로 진입
-extension MainVC: SecondMainDelegate {
-    func secondTapped() {
-        self.headerView.rightButtonConfig = .shopDetail
-        
-        self.headerView.buttonConfig = .detailViewButton
-        
-        self.detailViewHideOrShow(show: true)
-    }
-}
 
 
 
@@ -992,22 +838,6 @@ extension MainVC: SecondMainDelegate {
 
 
 
-
-
-
-
-
-// MARK: - AchieveMainDelegate
-// segement_Control
-extension MainVC: SegementMainDelegate {
-    func imageTapped() {
-        print(#function)
-    }
-    
-    func shop2Tapped() {
-        print(#function)
-    }
-}
 
 
 
@@ -1046,8 +876,7 @@ extension MainVC: UITableViewDelegate, UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
         switch tableViewToggle {
         case .diary: return 1
-        case .setup: return 1 // 수정 필요
-        case .addition: return 1
+        case .setup: return 1
         }
     }
     
@@ -1055,9 +884,6 @@ extension MainVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         
         if self.tableViewToggle == .setup {
-//            if section == 0 { return "일기 작성 시간 설정" }
-//            else { return "글자 색상 및 배경화면 설정" }
-            
             return "알림 설정"
         } else {
             return nil
@@ -1089,7 +915,6 @@ extension MainVC: UITableViewDelegate, UITableViewDataSource {
         switch tableViewToggle {
         case .diary: return 140
         case .setup: return 60
-        case .addition: return (self.view.frame.height - 150 - 50) / 4
         }
     }
     
@@ -1103,13 +928,7 @@ extension MainVC: UITableViewDelegate, UITableViewDataSource {
                 ? self.diaryData.count + 1
                 : self.diaryData.count
             
-            
         case .setup: return 1
-//            if section == 0 { return 1 }
-//            else { return 1 }
-            
-            
-        case .addition: return 4
         }
     }
     
@@ -1138,23 +957,6 @@ extension MainVC: UITableViewDelegate, UITableViewDataSource {
         case .setup:
             let cell = tableView.dequeueReusableCell(withIdentifier: ReuseIdentifier.setupTableViewCell, for: indexPath) as! SetupTableviewCell
                 cell.titleLabel.text = "알림"
-            
-//            cell.textLabel?.text = "알림"
-            
-//            if indexPath.section == 0 { cell.titleLabel.text = "일기 작성 시간" }
-//            else { cell.titleLabel.text = "글자 색상 및 배경화면 변경" }
-            return cell
-            
-            
-            
-            
-        case .addition:
-            let cell = tableView.dequeueReusableCell(withIdentifier: ReuseIdentifier.additionCell, for: indexPath) as! AdditionCell
-            
-            
-            cell.textLabel?.text = timeArray[indexPath.row]
-            
-            
             return cell
         }
     }
@@ -1198,6 +1000,7 @@ extension MainVC: UITableViewDelegate, UITableViewDataSource {
                     : self.diaryData[indexPath.row]
             }
             
+            
             // 뷰 전환 (일관성을 위해 함수로 만들어 둠)
             // dairy_Table -> DiaryVC
             self.tableToDiary()
@@ -1205,36 +1008,7 @@ extension MainVC: UITableViewDelegate, UITableViewDataSource {
             
             
             
-            
-            
         case .setup:
-            // enum변경
-//            if indexPath.section == 0 {
-                print("0")
-                
-                
-                
-//            } else {
-//                // setupTable -> AdditionalTable
-//                self.setupToAddition()
-//            }
-            break
-            
-            
-            
-            
-            
-        case .addition:
-            // 아침
-            if indexPath.row == 0 { self.currentSetup = .morning
-            // 낮
-            } else if indexPath.row == 1 { self.currentSetup = .daytime
-            // 저녁
-            } else if indexPath.row == 2 { self.currentSetup = .night
-            // 새벽
-            } else { self.currentSetup = .dawn }
-            
-            self.additionToFont()
             break
         }
     }

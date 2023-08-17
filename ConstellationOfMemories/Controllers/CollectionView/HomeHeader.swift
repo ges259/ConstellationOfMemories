@@ -124,7 +124,7 @@ extension HomeHeader: UICollectionViewDelegate, UICollectionViewDataSource, UICo
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
-        print("First")
+        print("Home_Header")
     }
     
     
