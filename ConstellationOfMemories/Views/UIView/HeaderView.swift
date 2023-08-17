@@ -213,9 +213,20 @@ extension HeaderView {
             break
             
             
+        case .homeViewButton:
+            
+            self.mainHeaderDelegate?.handleHomeToMain()
+            break
+            
+            
         case .shopVCButton:
             // 뒤로가기
             self.mainHeaderDelegate?.handleShopToMain()
+            break
+            
+        case .detailViewButton:
+            
+            self.mainHeaderDelegate?.handleDetailToShop()
             break
             
             
@@ -254,6 +265,8 @@ extension HeaderView {
 //            // 다시 additional로 돌아가기 + rightbutton 숨기기
 //            self.mainHeaderDelegate?.handleFixToAdditional()
 //            break
+        
+        
         }
     }
     
@@ -325,6 +338,8 @@ extension HeaderView {
             // 변경사항 저장
             
             break
+        case .shopDetail:
+            print(#function)
         }
     }
     
@@ -392,13 +407,24 @@ extension HeaderView {
                 // -> 설정값에 따라 headerRightButtonTapped()를 하여 뷰를 바꿈
             self.headerRightButtonTapped()
             break
+        
+        case .homeViewButton:
+//            self.rightButtonShow(.check)
+            break
             
             
         // shopVC 화면들어오면 -> 버튼 이미지 및 텍스트 설정
         case .shopVCButton:
             // titleLabel 바꾸기
             self.titleLabel.text = "상점"
+            self.rightButtonHide()
             break
+            
+            
+        case .detailViewButton:
+            self.rightButtonShow(.check)
+            break
+            
             
             
         case .setupVCButton:
@@ -419,7 +445,6 @@ extension HeaderView {
             self.rightButtonConfig = .fontChange
             self.rightButtonShow(.check)
             break
-        
         }
     }
     

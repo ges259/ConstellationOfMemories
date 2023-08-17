@@ -13,7 +13,7 @@ final class SecondCollectionView: UIView {
     
     
     
-    
+    var secondMainDelegate: SecondMainDelegate?
 
     
     // MARK: - Layout
@@ -37,7 +37,7 @@ final class SecondCollectionView: UIView {
             view.delegate = self
             view.dataSource = self
         
-            view.register(ShopCollectionViewCell.self,
+            view.register(SecondCollectionCell.self,
                       forCellWithReuseIdentifier: ReuseIdentifier.shopCell)
 
             view.alwaysBounceVertical = true
@@ -91,7 +91,7 @@ extension SecondCollectionView: UICollectionViewDelegate, UICollectionViewDataSo
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ReuseIdentifier.shopCell, for: indexPath) as! ShopCollectionViewCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ReuseIdentifier.shopCell, for: indexPath) as! SecondCollectionCell
 
         
         return cell
@@ -99,8 +99,8 @@ extension SecondCollectionView: UICollectionViewDelegate, UICollectionViewDataSo
 
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
-        print("second")
+        // shop(second) -> detailView로 진입
+        self.secondMainDelegate?.secondTapped()
     }
     
     

@@ -26,6 +26,14 @@ final class MenuVC: UIView {
         return btn
     }()
     
+    // home
+    private lazy var homeButton: UIButton = {
+        // 나중에 다크모드 / 화이트모드에 따라 바뀌도록 이미지 바꾸기 (시스템????)
+        // menu image
+        let btn = UIButton().buttonSustemImage(btnSize: 32, imageString: .home)
+            btn.addTarget(self, action: #selector(self.homeButtonTapped), for: .touchUpInside)
+        return btn
+    }()
     
     // 상점
     private lazy var shopButton: UIButton = {
@@ -75,9 +83,15 @@ final class MenuVC: UIView {
                                       trailing: self.trailingAnchor,
                                       height: 75)
         
+        self.addSubview(self.homeButton)
+        self.homeButton.anchor(top: self.achievementButton.bottomAnchor,
+                               leading: self.leadingAnchor,
+                               trailing: self.trailingAnchor,
+                               height: 75)
+        
         
         self.addSubview(self.shopButton)
-        self.shopButton.anchor(top: self.achievementButton.bottomAnchor,
+        self.shopButton.anchor(top: self.homeButton.bottomAnchor,
                                leading: self.leadingAnchor,
                                trailing: self.trailingAnchor,
                                height: 75)
@@ -95,6 +109,9 @@ final class MenuVC: UIView {
     // MARK: - Selectors
     @objc private func achievementButtonTapped() {
         self.mainMenuDelegate?.handleAchievement()
+    }
+    @objc private func homeButtonTapped() {
+        self.mainMenuDelegate?.handleHome()
     }
     @objc private func shopButtonTapped() {
         self.mainMenuDelegate?.handleShop()

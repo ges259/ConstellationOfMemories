@@ -21,7 +21,7 @@ final class collectionSegementView: UIView {
     var segementMainDelegate: SegementMainDelegate?
     
     
-    private lazy var firstCollection: FirstCollectionView = {
+    lazy var firstCollection: FirstCollectionView = {
         
         let frame = CGRect(x: 0,
                            y: 50,
@@ -30,7 +30,7 @@ final class collectionSegementView: UIView {
         return FirstCollectionView(frame: frame)
     }()
     
-    private lazy var secondCollection: SecondCollectionView = {
+    lazy var secondCollection: SecondCollectionView = {
         let frame = CGRect(x: self.frame.width,
                            y: 50,
                            width: self.frame.width,

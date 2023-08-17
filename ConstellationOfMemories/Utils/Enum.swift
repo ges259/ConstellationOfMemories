@@ -20,7 +20,9 @@ enum LeftBtnTapImgChange {
     case mainViewButton
     case diaryTableViewButton
     case diaryViewButton
+    case homeViewButton
     case shopVCButton
+    case detailViewButton
     case setupVCButton
     case achievementVCButton
     case additionTableView
@@ -32,6 +34,7 @@ enum RightBtnTapImgChange {
     case saveMode
     case coin
     case fontChange
+    case shopDetail
 }
 
 enum TableViewEnum {
@@ -56,6 +59,7 @@ enum imageString: CustomStringConvertible {
     case person
     case star // Main - Footer
     case achievement // 달성률
+    case home
     case shop // 상점
     case coin // 코인 - rightButton
     
@@ -71,7 +75,8 @@ enum imageString: CustomStringConvertible {
         case .person: return "person"
         case .star: return "star"
         case .achievement: return "star.circle"
-        case .shop: return "homekit"
+        case .home: return "house"
+        case .shop: return "bag"
         case .coin :return "stop.circle.fill"
         }
     }

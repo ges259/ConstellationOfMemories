@@ -20,7 +20,11 @@ protocol MainHeaderDelegate {
     
     func handleShopToMain()
     
+    func handleDetailToShop()
+    
     func handleSetupToMain()
+    
+    func handleHomeToMain()
     
     func handleAchievementToMain()
     
@@ -38,6 +42,7 @@ protocol DiaryHeaderDelegate {
 
 protocol MainMenuDelegate {
     func handleAchievement()
+    func handleHome()
     func handleShop()
     func handleSetup()
 }
@@ -52,3 +57,10 @@ protocol MainDiaryDelegate {
     func todayDiaryCompleted()
 }
 
+//protocol FirstMainDelegate {
+//    func firstTapped()
+//}
+
+protocol SecondMainDelegate {
+    func secondTapped()
+}

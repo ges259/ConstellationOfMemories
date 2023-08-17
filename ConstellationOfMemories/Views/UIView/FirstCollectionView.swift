@@ -12,7 +12,7 @@ final class FirstCollectionView: UIView {
     // MARK: - Properties
     
     
-    
+//    var firstMainDelegate: FirstMainDelegate?
     
     
     // MARK: - Layout
@@ -104,6 +104,8 @@ extension FirstCollectionView: UICollectionViewDelegate, UICollectionViewDataSou
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
         print("First")
+//        self.firstMainDelegate?.firstTapped()
+        
     }
     
     
