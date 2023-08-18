@@ -22,7 +22,8 @@ enum LeftBtnTapImgChange {
     case diaryViewButton
     case homeViewButton
     case shopVCButton
-    case detailViewButton
+    case achieveDetailViewButton
+    case shopDetailViewButton
     case setupVCButton
     case achievementVCButton
 }
@@ -31,6 +32,7 @@ enum RightBtnTapImgChange {
     case fixMode
     case saveMode
     case coin
+    case achieveDetail
     case shopDetail
 }
 // Table_View
@@ -47,7 +49,6 @@ enum TableViewEnum {
 // Collection_View
 enum SegementToggle {
     case home
-//    case shop
     case achieve
 }
 
@@ -127,4 +128,10 @@ enum SegementCollection {
      case shop
      case home
      */
+}
+
+enum BlackViewToggle {
+    case menu
+    case shop
+    case achieve
 }

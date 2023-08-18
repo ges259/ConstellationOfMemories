@@ -20,6 +20,8 @@ protocol MainHeaderDelegate {
     
     func handleShopToMain()
     
+    func handleDetailToAchieve()
+    
     func handleDetailToShop()
     
     func handleSetupToMain()
@@ -41,9 +43,9 @@ protocol MainMenuDelegate {
     func handleSetup()
 }
 
-protocol MainDiaryDelegate {
-    func todayDiaryCompleted()
-}
+//protocol MainDiaryDelegate {
+//    func todayDiaryCompleted()
+//}
 
 //protocol FirstMainDelegate {
 //    func firstTapped()
@@ -51,4 +53,20 @@ protocol MainDiaryDelegate {
 
 protocol SecondMainDelegate {
     func secondTapped()
+}
+
+
+protocol MainDiaryTableDelegate {
+    func handleTableToDiaryVC()
+}
+
+protocol DiaryVCTableDelegate {
+    func todayDiaryTrue(diaryData: DiaryData)
+    func todayDiaryFalse()
+}
+
+
+
+protocol MainShopDelegate {
+    func shopCellTapped()
 }

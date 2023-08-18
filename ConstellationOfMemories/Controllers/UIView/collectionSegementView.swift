@@ -17,6 +17,9 @@ final class CollectionSegementView: UIView {
     
     var collectionToggle: SegementToggle? {
         didSet {
+            
+            print(collectionToggle)
+            
             // item값을 first / second에 전달
                 // 만약 Toggle과 item 모두 first / second 로 전달이 필욯다면
                     // func(메서드도 고려)
@@ -29,7 +32,7 @@ final class CollectionSegementView: UIView {
             // segementControl을 첫번째 페이지로 바꾸기 ( segement_index )
             self.segmentedControl.selectedSegmentIndex = 0
             // frame도 바구기
-            self.noAnimateion()
+            self.noAnimation()
         }
     }
     
@@ -136,7 +139,7 @@ final class CollectionSegementView: UIView {
     }
     
     
-    private func noAnimateion() {
+    private func noAnimation() {
         // achivementSegment 보이게 하기
         self.firstCollection.alpha = 1
         self.firstCollection.frame.origin.x = 0

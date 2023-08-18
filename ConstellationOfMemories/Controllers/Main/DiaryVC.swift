@@ -25,13 +25,8 @@ final class DiaryVC: UIView {
     // fixToggle이 true이면 -> Save Or Update
     private var fixToggle: Bool = false
     
-    
     // 코어데이터 싱글톤
     private let coredata = CoreDataManager.shared
-    
-    // delgate
-    var mainDiaryDelegate: MainDiaryDelegate?
-    
     
     
     
@@ -232,11 +227,8 @@ extension DiaryVC: DiaryHeaderDelegate {
             // diaryData가 있다면 (전 화면에서 DiaryData를 받아왔다면) -> update
         if let diaryData = self.diaryData {
             diaryData.diaryText = self.diaryTextView.text
-            coredata.updateDiaryData(newDiaryData: diaryData)
+            self.coredata.updateDiaryData(newDiaryData: diaryData)
             print("데이터 업데이트")
-            
-            
-            
             
             
             
@@ -249,9 +241,10 @@ extension DiaryVC: DiaryHeaderDelegate {
             
             
             // 데이터를 생성했다면, toggle바꾸기
-            self.mainDiaryDelegate?.todayDiaryCompleted()
+            DiaryTableView.todayDiaryToggle = true
+
             
-            coredata.createDiaryData(diaryText: self.diaryTextView.text)
+            self.coredata.createDiaryData(diaryText: self.diaryTextView.text)
             print("데이터 생성")
         }
     }
@@ -298,5 +291,18 @@ extension DiaryVC: UITextViewDelegate {
             self.diaryTextView.text = "텍스트를 여기에 입력하세요."
             self.diaryTextView.textColor = .white
         }
+    }
+}
+
+
+
+extension DiaryVC: DiaryVCTableDelegate {
+    func todayDiaryTrue(diaryData: DiaryData) {
+        self.diaryData = diaryData
+    }
+    
+    func todayDiaryFalse() {
+        self.diaryTextView.text = ""
+        self.diaryData = nil
     }
 }

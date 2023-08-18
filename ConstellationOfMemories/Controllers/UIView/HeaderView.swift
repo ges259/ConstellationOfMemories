@@ -224,8 +224,12 @@ extension HeaderView {
             self.mainHeaderDelegate?.handleShopToMain()
             break
             
-        case .detailViewButton:
+        case .achieveDetailViewButton:
+            self.mainHeaderDelegate?.handleDetailToAchieve()
+            break
             
+            
+        case .shopDetailViewButton:
             self.mainHeaderDelegate?.handleDetailToShop()
             break
             
@@ -302,9 +306,13 @@ extension HeaderView {
             break
             
             
+        case .achieveDetail:
+//            self.mainHeaderDelegate?.handleDetailToAchieve()
+            break
+            
+            
         case .shopDetail:
             self.mainHeaderDelegate?.handleDetailToShop()
-            break
         }
     }
     
@@ -386,10 +394,16 @@ extension HeaderView {
             break
             
             
-        case .detailViewButton:
-            self.rightButtonShow(.check)
+        case .achieveDetailViewButton:
+            self.rightButtonConfig = .achieveDetail
+//            self.rightButtonShow(.check)
             break
             
+            
+        case .shopDetailViewButton:
+            self.rightButtonConfig = .shopDetail
+            self.rightButtonShow(.coin)
+            break
             
             
         case .setupVCButton:
@@ -397,6 +411,7 @@ extension HeaderView {
             
             
         case .achievementVCButton:
+            self.rightButtonHide()
             break
         }
     }

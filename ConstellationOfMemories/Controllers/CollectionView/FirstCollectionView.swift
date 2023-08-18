@@ -21,9 +21,12 @@ final class FirstCollectionView: UIView {
     
     var firstCollectionToggle: SegementToggle? {
         didSet {
-            self.firstCollection.reloadData()
+            print("fjdslkfjsda;ljfdslkjasdl;fjsd;lfjds;ljfsdl;kjfsd;ljfasd;ljfsd;l")
+            
             // item이 항상 맨위로 가도록 설정
             self.upCollectionView()
+            
+            self.firstCollection.reloadData()
         }
     }
     
@@ -40,8 +43,8 @@ final class FirstCollectionView: UIView {
         let Layout = UICollectionViewFlowLayout()
             Layout.scrollDirection = .vertical
         
-        let interval : CGFloat = 0
-            Layout.sectionInset = UIEdgeInsets.init(top: interval,
+        let interval : CGFloat = 20
+            Layout.sectionInset = UIEdgeInsets.init(top: interval / 2,
                                                     left: interval,
                                                     bottom: 0,
                                                     right: interval)
@@ -132,19 +135,18 @@ extension FirstCollectionView: UICollectionViewDelegate, UICollectionViewDataSou
     
     // 아이템의 크기 설정
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        
-        let width = (self.frame.width - 2) / 3
+        let width = (self.frame.width - 40) / 3
         return CGSize(width: width, height: width)
     }
 
     
     // 상하 spacing
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return 1
+        return 0
     }
     
     // 좌우 spacing
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 1
+        return 0
     }
 }
