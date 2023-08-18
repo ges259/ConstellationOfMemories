@@ -43,10 +43,12 @@ enum TableViewEnum {
 //    case myStar
 //    case shop
 //}
+
 // Collection_View
 enum SegementToggle {
     case home
-    case shop
+//    case shop
+    case achieve
 }
 
 enum imageString: CustomStringConvertible {

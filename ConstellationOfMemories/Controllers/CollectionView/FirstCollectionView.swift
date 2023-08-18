@@ -15,8 +15,24 @@ final class FirstCollectionView: UIView {
 //    var firstMainDelegate: FirstMainDelegate?
     
     
+    
+    private var item = [Int]()
+    
+    
+    var firstCollectionToggle: SegementToggle? {
+        didSet {
+            self.firstCollection.reloadData()
+            // item이 항상 맨위로 가도록 설정
+            self.upCollectionView()
+        }
+    }
+    
+    
+    
+    
+    
     // MARK: - Layout
-    private lazy var firstCollection: UICollectionView = {
+    lazy var firstCollection: UICollectionView = {
         let firstFrame = CGRect(x: 0,
                                 y: 0,
                                 width: self.frame.width,
@@ -69,6 +85,11 @@ final class FirstCollectionView: UIView {
         self.addSubview(self.firstCollection)
     }
     
+    private func upCollectionView() {
+        // item이 항상 맨위로 가도록 설정
+        let indexPath = IndexPath(item: self.item.count - 1, section: 0)
+        self.firstCollection.scrollToItem(at: indexPath, at: .top, animated: true)
+    }
     
     
     // MARK: - API
@@ -89,7 +110,7 @@ final class FirstCollectionView: UIView {
 // MARK: - CollectionView
 extension FirstCollectionView: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 5
+        return 30
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {

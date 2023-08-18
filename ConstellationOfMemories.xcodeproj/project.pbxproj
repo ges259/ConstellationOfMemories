@@ -86,6 +86,7 @@
 		5F0BE8152A8664AF0090AC1F /* UIView */ = {
 			isa = PBXGroup;
 			children = (
+				5F0BE8192A86ABD90090AC1F /* collectionSegementView.swift */,
 				5F15D1E22A817765005A00E1 /* HeaderView.swift */,
 				5FB75C3F2A8E73C900F74E12 /* DetailView.swift */,
 				5F0BE8132A86508D0090AC1F /* UserInfoTableHeader.swift */,
@@ -190,10 +191,9 @@
 		5F726B932A8E9AA50039A20F /* CollectionView */ = {
 			isa = PBXGroup;
 			children = (
+				5FE61C052A8D6755008446A9 /* HomeHeader.swift */,
 				5F8200BF2A8D5CBB0068345B /* FirstCollectionView.swift */,
 				5F8200BD2A8D5B380068345B /* SecondCollectionView.swift */,
-				5F0BE8192A86ABD90090AC1F /* collectionSegementView.swift */,
-				5FE61C052A8D6755008446A9 /* HomeHeader.swift */,
 			);
 			path = CollectionView;
 			sourceTree = "<group>";

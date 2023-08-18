@@ -428,8 +428,8 @@ extension MainVC {
 
             } completion: { _ in
                 // 뷰에서 나가면 세그먼트를 0으로 되돌려 놓기
-                self.collectionSegement.segmentedControl.selectedSegmentIndex = 0
-                self.collectionSegement.shopViewHideOrShow(show: true)
+//                self.collectionSegement.segmentedControl.selectedSegmentIndex = 0
+//                self.collectionSegement.shopViewHideOrShow(show: true)
                 
                 self.homeHeader.removeFromSuperview()
                 self.collectionSegement.removeFromSuperview()
@@ -471,10 +471,10 @@ extension MainVC {
                 
             } completion: { _ in
                 // 뷰에서 나가면 세그먼트를 0으로 되돌려 놓기
-                self.collectionSegementView.segmentedControl.selectedSegmentIndex = 0
-                self.collectionSegementView.shopViewHideOrShow(show: true)
+//                self.collectionSegementView.segmentedControl.selectedSegmentIndex = 0
+//                self.collectionSegementView.shopViewHideOrShow(show: true)
                 // item이 항상 맨위로 가도록 설정
-                self.collectionSegementView.upCollectionView()
+//                self.collectionSegementView.upCollectinView()
                 // remove View
                 self.collectionSegementView.removeFromSuperview()
                 self.detailView.removeFromSuperview()
@@ -491,7 +491,7 @@ extension MainVC {
         if show == true {
             self.view.addSubview(self.collectionSegementView)
             
-            UIView.animate(withDuration: 0.5) {
+            UIView.animate(withDuration: 0.6) {
                 // footerButton 숨기기
                 self.footerButton.alpha = 0
                 // achievementView 보이게 하기
@@ -504,7 +504,7 @@ extension MainVC {
             
         // achievementView 숨기기 - CollectionView
         } else {
-            UIView.animate(withDuration: 0.5) {
+            UIView.animate(withDuration: 0.6) {
                 // footerButton 보이게 하기
                 self.footerButton.alpha = 1
                 // achievementView 숨기기
@@ -513,10 +513,10 @@ extension MainVC {
                 
             } completion: { _ in
                 // 뷰에서 나가면 세그먼트를 0으로 되돌려 놓기
-                self.collectionSegementView.segmentedControl.selectedSegmentIndex = 0
-                self.collectionSegementView.shopViewHideOrShow(show: true)
+//                self.collectionSegementView.segmentedControl.selectedSegmentIndex = 0
+//                self.collectionSegementView.shopViewHideOrShow(show: true)
                 // item이 항상 맨위로 가도록 설정
-                self.collectionSegementView.upCollectionView()
+//                self.collectionSegementView.upCollectionView()
                 // remove View
                 self.collectionSegementView.removeFromSuperview()
             }
@@ -761,9 +761,7 @@ extension MainVC: MainMenuDelegate {
         // 버튼의 이미지 + 역할을 바꿈
         self.headerView.buttonConfig = .achievementVCButton
         // collectionView의 토글을 바꿈
-        
-        // MARK: - Fix
-        self.collectionSegementView.collectionToggle = .home
+        self.collectionSegementView.collectionToggle = .achieve
         // achievement_View_보이게 하기
         self.achievementViewHideOrShow(show: true)
     }
@@ -778,12 +776,14 @@ extension MainVC: MainMenuDelegate {
         self.HomeViewHideOrShow(show: true)
     }
     
+    
+    // MARK: - Fix
     // menu -> ShopView
     func handleShop() {
         // 버튼의 이미지 + 역할을 바꿈
         self.headerView.buttonConfig = .shopVCButton
         // collectionView의 토글을 바꿈
-        self.collectionSegementView.collectionToggle = .shop
+        self.collectionSegementView.collectionToggle = .home
         // shop_View_보이게 하기
         self.shopViewHideOrShow(show: true)
     }
@@ -904,11 +904,6 @@ extension MainVC: UITableViewDelegate, UITableViewDataSource {
     
     
     
-    
-    
-    
-    
-    
     // MARK: - Cell
     // 셀의 높이
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -931,6 +926,8 @@ extension MainVC: UITableViewDelegate, UITableViewDataSource {
         case .setup: return 1
         }
     }
+    
+    
     
     
     
@@ -966,10 +963,11 @@ extension MainVC: UITableViewDelegate, UITableViewDataSource {
     
     
     // MARK: - didSelectRowAt
-    // 오늘의 일기를 적지 않았다면 -> DiaryVC('오늘' 셀)를 FixMode로 진입
-    // 적었다면, -> SaveMode로 진입
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch self.tableViewToggle {
+        // 오늘의 일기를 적지 않았다면 -> DiaryVC('오늘' 셀)를 FixMode로 진입
+            // 적었다면, -> SaveMode로 진입
         case .diary:
             // 첫번째 셀
             if indexPath.row == 0 {

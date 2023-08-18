@@ -13,15 +13,33 @@ final class CollectionSegementView: UIView {
 
     
     // item
-    private var item = [Int]()
     
-    var collectionToggle: SegementToggle = .home
+    
+    var collectionToggle: SegementToggle? {
+        didSet {
+            // item값을 first / second에 전달
+                // 만약 Toggle과 item 모두 first / second 로 전달이 필욯다면
+                    // func(메서드도 고려)
+            
+            // 토글을 전달
+                // 맨 위로 설정
+            self.firstCollection.firstCollectionToggle = collectionToggle
+            self.secondCollection.secondCollectionToggle = collectionToggle
+            
+            // segementControl을 첫번째 페이지로 바꾸기 ( segement_index )
+            self.segmentedControl.selectedSegmentIndex = 0
+            // frame도 바구기
+            self.noAnimateion()
+        }
+    }
+    
+    
     
     
 
     
     
-    lazy var firstCollection: FirstCollectionView = {
+    private lazy var firstCollection: FirstCollectionView = {
         
         let frame = CGRect(x: 0,
                            y: 50,
@@ -110,27 +128,25 @@ final class CollectionSegementView: UIView {
     @objc private func segmentedValueChanged(segment: UISegmentedControl) {
         // 추억 모음
         if segment.selectedSegmentIndex == 0 {
-
-            if self.collectionToggle == .home {
-                self.homeViewHideOrShow(show: true)
-                
-            } else {
-                self.shopViewHideOrShow(show: true)
-            }
+            self.shopViewHideOrShow(show: true)
         // 달성률
         } else {
-            if self.collectionToggle == .home {
-                self.homeViewHideOrShow(show: false)
-                
-            } else {
-                self.shopViewHideOrShow(show: false)
-            }
+            self.shopViewHideOrShow(show: false)
         }
     }
     
     
+    private func noAnimateion() {
+        // achivementSegment 보이게 하기
+        self.firstCollection.alpha = 1
+        self.firstCollection.frame.origin.x = 0
+        
+        // mystarSegment 숨기기
+        self.secondCollection.alpha = 0
+        self.secondCollection.frame.origin.x = self.frame.width
+    }
     
-    func homeViewHideOrShow(show: Bool) {
+    private func shopViewHideOrShow(show: Bool) {
         if show == true {
             UIView.animate(withDuration: 0.5) {
                 // achivementSegment 보이게 하기
@@ -159,40 +175,7 @@ final class CollectionSegementView: UIView {
     
     
     
-    func shopViewHideOrShow(show: Bool) {
-        if show == true {
-            UIView.animate(withDuration: 0.5) {
-                // achivementSegment 보이게 하기
-                self.firstCollection.alpha = 1
-                self.firstCollection.frame.origin.x = 0
-                
-                // mystarSegment 숨기기
-                self.secondCollection.alpha = 0
-                self.secondCollection.frame.origin.x = self.frame.width
-            }
-            
-            
-        } else {
-            UIView.animate(withDuration: 0.5) {
-                // achivementSegment 숨기기
-                self.firstCollection.alpha = 0
-                self.firstCollection.frame.origin.x = -self.frame.width * 2
-                
-                
-                // mystarSegment 보이게 하기
-                self.secondCollection.alpha = 1
-                self.secondCollection.frame.origin.x = 0
-            }
-        }
-    }
     
-    
-    
-    func upCollectionView() {
-        // item이 항상 맨위로 가도록 설정
-//        let indexPath = IndexPath(item: self.item.count - 1, section: 0)
-//        self.secondCollection.scrollToItem(at: indexPath, at: .top, animated: true)
-    }
 
     
     

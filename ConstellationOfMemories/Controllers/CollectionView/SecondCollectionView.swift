@@ -10,14 +10,27 @@ import UIKit
 final class SecondCollectionView: UIView {
     
     // MARK: - Properties
-    
-    
-    
     var secondMainDelegate: SecondMainDelegate?
 
+    private var item = [Int]()
+    
+    
+    // 맨 위로 정렬
+    var secondCollectionToggle: SegementToggle? {
+        didSet {
+            self.secondCollection.reloadData()
+            // item이 항상 맨위로 가도록 설정
+            self.upCollectionView()
+        }
+    }
+    
+    
+    
+    
+    
     
     // MARK: - Layout
-    private lazy var secondCollection: UICollectionView = {
+    lazy var secondCollection: UICollectionView = {
         let secondFrame = CGRect(x: 0,
                                  y: 0,
                                  width: self.frame.width,
@@ -68,6 +81,11 @@ final class SecondCollectionView: UIView {
         self.addSubview(self.secondCollection)
     }
     
+    private func upCollectionView() {
+        // item이 항상 맨위로 가도록 설정
+        let indexPath = IndexPath(item: self.item.count - 1, section: 0)
+        self.secondCollection.scrollToItem(at: indexPath, at: .top, animated: true)
+    }
     
     
     
