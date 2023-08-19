@@ -224,6 +224,7 @@ extension HeaderView {
             self.mainHeaderDelegate?.handleShopToMain()
             break
             
+            
         case .achieveDetailViewButton:
             self.mainHeaderDelegate?.handleDetailToAchieve()
             break

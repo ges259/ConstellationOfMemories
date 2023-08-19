@@ -18,9 +18,10 @@ final class SecondCollectionView: UIView {
     // 맨 위로 정렬
     var secondCollectionToggle: SegementToggle? {
         didSet {
-            self.secondCollection.reloadData()
             // item이 항상 맨위로 가도록 설정
             self.upCollectionView()
+            
+            self.secondCollection.reloadData()
         }
     }
     
@@ -44,18 +45,16 @@ final class SecondCollectionView: UIView {
                                                     left: interval,
                                                     bottom: 0,
                                                     right: interval)
-        
         var view = UICollectionView(frame: secondFrame,
                                     collectionViewLayout: layout)
             view.delegate = self
             view.dataSource = self
         
-            view.register(SecondCollectionCell.self,
-                      forCellWithReuseIdentifier: ReuseIdentifier.secondCollectionCell)
-
             view.alwaysBounceVertical = true
             view.backgroundColor = .clear
         
+            view.register(SecondCollectionCell.self,
+                      forCellWithReuseIdentifier: ReuseIdentifier.secondCollectionCell)
         return view
     }()
     
@@ -82,6 +81,7 @@ final class SecondCollectionView: UIView {
     }
     
     private func upCollectionView() {
+        print("2222222222222222")
         // item이 항상 맨위로 가도록 설정
         let indexPath = IndexPath(item: self.item.count - 1, section: 0)
         self.secondCollection.scrollToItem(at: indexPath, at: .top, animated: true)

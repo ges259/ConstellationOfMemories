@@ -21,7 +21,6 @@ final class FirstCollectionView: UIView {
     
     var firstCollectionToggle: SegementToggle? {
         didSet {
-            print("fjdslkfjsda;ljfdslkjasdl;fjsd;lfjds;ljfsdl;kjfsd;ljfasd;ljfsd;l")
             
             // item이 항상 맨위로 가도록 설정
             self.upCollectionView()
@@ -54,11 +53,10 @@ final class FirstCollectionView: UIView {
             view.delegate = self
             view.dataSource = self
         
-            view.register(FirstCollectionCell.self, forCellWithReuseIdentifier: ReuseIdentifier.firstCollectionCell)
-        
             view.alwaysBounceVertical = true
             view.backgroundColor = .clear
         
+            view.register(FirstCollectionCell.self, forCellWithReuseIdentifier: ReuseIdentifier.firstCollectionCell)
         return view
     }()
     
@@ -89,6 +87,7 @@ final class FirstCollectionView: UIView {
     }
     
     private func upCollectionView() {
+        print("111111111")
         // item이 항상 맨위로 가도록 설정
         let indexPath = IndexPath(item: self.item.count - 1, section: 0)
         self.firstCollection.scrollToItem(at: indexPath, at: .top, animated: true)

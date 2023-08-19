@@ -10,38 +10,17 @@ import UIKit
 final class CollectionSegementView: UIView {
     
     // MARK: - Properties
-
-    
-    // item
-    
-    
     var collectionToggle: SegementToggle? {
         didSet {
-            
-            print(collectionToggle)
-            
-            // item값을 first / second에 전달
-                // 만약 Toggle과 item 모두 first / second 로 전달이 필욯다면
-                    // func(메서드도 고려)
-            
-            // 토글을 전달
-                // 맨 위로 설정
-            self.firstCollection.firstCollectionToggle = collectionToggle
-            self.secondCollection.secondCollectionToggle = collectionToggle
-            
-            // segementControl을 첫번째 페이지로 바꾸기 ( segement_index )
-            self.segmentedControl.selectedSegmentIndex = 0
             // frame도 바구기
-            self.noAnimation()
+            self.resetView()
         }
     }
     
     
     
     
-
-    
-    
+    // MARK: - Layout
     private lazy var firstCollection: FirstCollectionView = {
         
         let frame = CGRect(x: 0,
@@ -61,9 +40,6 @@ final class CollectionSegementView: UIView {
 
     
     
-    
-    
-    // MARK: - Layout
     // UISegmentedControl
     lazy var segmentedControl: UISegmentedControl = {
         let control = UISegmentedControl(items: ["별자리 컬렉션", "일기 컬렉션"])
@@ -102,6 +78,7 @@ final class CollectionSegementView: UIView {
     
     
     
+    
     // MARK: - Helper Functions
     
     private func configureView() {
@@ -123,40 +100,54 @@ final class CollectionSegementView: UIView {
     
     
     
+    private func resetView() {
+        // item값을 first / second에 전달
+            // 만약 Toggle과 item 모두 first / second 로 전달이 필욯다면
+                // func(메서드도 고려)
+        
+        
+        
+        // 토글을 전달
+            // 맨 위로 설정
+        self.firstCollection.firstCollectionToggle = collectionToggle
+        self.secondCollection.secondCollectionToggle = collectionToggle
+        
+        
+        // firstViewHideOrShow를 사용하지 않는 이유:
+                // 애니메이션을 사용하면 뷰에 들어왔을 때 first로 가는 애니메이션이 보이기 때문.
+        // segementControl을 첫번째 페이지로 바꾸기 ( segement_index )
+        self.segmentedControl.selectedSegmentIndex = 0
+
+        // achivementSegment 보이게 하기
+        self.firstCollection.alpha = 1
+        self.firstCollection.frame.origin.x = 0
+        // mystarSegment 숨기기
+        self.secondCollection.alpha = 0
+        self.secondCollection.frame.origin.x = self.frame.width
+    }
+    
+    
+    
     
     
     
     
     // MARK: - Selectors
     @objc private func segmentedValueChanged(segment: UISegmentedControl) {
-        // 추억 모음
-        if segment.selectedSegmentIndex == 0 {
-            self.shopViewHideOrShow(show: true)
-        // 달성률
-        } else {
-            self.shopViewHideOrShow(show: false)
-        }
+        segment.selectedSegmentIndex == 0
+            ? self.firstViewHideOrShow(show: true) // first
+            : self.firstViewHideOrShow(show: false) // second
     }
     
     
-    private func noAnimation() {
-        // achivementSegment 보이게 하기
-        self.firstCollection.alpha = 1
-        self.firstCollection.frame.origin.x = 0
-        
-        // mystarSegment 숨기기
-        self.secondCollection.alpha = 0
-        self.secondCollection.frame.origin.x = self.frame.width
-    }
     
-    private func shopViewHideOrShow(show: Bool) {
+    private func firstViewHideOrShow(show: Bool) {
         if show == true {
             UIView.animate(withDuration: 0.5) {
-                // achivementSegment 보이게 하기
+                // first 보이게 하기
                 self.firstCollection.alpha = 1
                 self.firstCollection.frame.origin.x = 0
-                
-                // mystarSegment 숨기기
+                // second 숨기기
                 self.secondCollection.alpha = 0
                 self.secondCollection.frame.origin.x = self.frame.width
             }
@@ -164,29 +155,15 @@ final class CollectionSegementView: UIView {
             
         } else {
             UIView.animate(withDuration: 0.5) {
-                // achivementSegment 숨기기
+                // first 숨기기
                 self.firstCollection.alpha = 0
                 self.firstCollection.frame.origin.x = -self.frame.width * 2
-                
-                
-                // mystarSegment 보이게 하기
+                // second 보이게 하기
                 self.secondCollection.alpha = 1
                 self.secondCollection.frame.origin.x = 0
             }
         }
     }
-    
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
     
     
     
