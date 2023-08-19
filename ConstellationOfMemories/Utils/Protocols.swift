@@ -12,6 +12,8 @@ protocol MainHeaderDelegate {
     // MenuVC -> MainVC는 MainVC의 BlackView로 대체
     // MainVC -> MenuVC
     func handleMainToMenu()
+    // Menu -> MainVC
+    func handleMenuToMain()
     // tableView -> MainVC
     func handleTableToMain()
     // TableView -> DiaryVC -> TableView Cell을 통해

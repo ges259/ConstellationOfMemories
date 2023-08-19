@@ -178,6 +178,8 @@ extension HeaderView {
         case .menuViewButton:
             // blackViewTapped()를 통해 MainVC로 돌아가므로 따로 코드 X
                 // 또한 blackViewTapped()에서 .mainButton으로 바뀜
+            
+            self.mainHeaderDelegate?.handleMenuToMain()
             break
             
             
@@ -439,14 +441,19 @@ extension HeaderView {
     // left버튼의 이미지가 바뀔 때 자연스럽게 바뀔 수 있도록 하는 메서드
     func leftButtonAlpha(_ imageString: imageString? = .back) {
         
-        UIView.animate(withDuration: 0.15) {
+        UIView.animate(withDuration: 0.25) {
             self.leftButton.alpha = 0
+            self.leftButton.isEnabled = false
             
         } completion: { _ in
+            
             self.leftButton.setImage(.setImg(imageString!), for: .normal)
             
-            UIView.animate(withDuration: 0.15) {
+            UIView.animate(withDuration: 0.25) {
+                
                 self.leftButton.alpha = 1
+            } completion: { _ in
+                self.leftButton.isEnabled = true
             }
         }
     }

@@ -22,7 +22,11 @@ final class MainVC: UIViewController {
     }
     
     
-    var blackViewToggle: BlackViewToggle?
+    var blackViewToggle: BlackViewToggle = .menu {
+        didSet {
+            print(blackViewToggle)
+        }
+    }
     
     
     
@@ -52,7 +56,7 @@ final class MainVC: UIViewController {
     
     // MARK: - Menu
     private lazy var menuVC: MenuVC = {
-        let frame = CGRect(x: 0,
+        let frame = CGRect(x: -82,
                            y: 150,
                            width: 82,
                            height: self.view.frame.height - 500)
@@ -160,36 +164,15 @@ final class MainVC: UIViewController {
     
     
     
-    // MARK: - BlackView
-    // Menu가 열렸을 때 다른 영역을 터치하면 Menu가 닫히도록하기 위해 blackView 설정
-    private lazy var menuBlackView : UIView = {
-        let frame = CGRect(x: -self.view.frame.width,
-                            y: 0,
-                            width: self.view.frame.width,
-                            height: self.view.frame.height)
-        let view = UIView(frame: frame)
-            view.backgroundColor = .clear
-        
-        // blackView - add gesture
-        let tap = UITapGestureRecognizer(target: self,
-                                         action: #selector(self.blackViewTapped))
-            view.addGestureRecognizer(tap)
-        return view
-    }()
-    
-    
-    
     // MARK: - Detail_View
     private lazy var detailView: DetailView = {
         let width: CGFloat = (self.view.frame.width - 150) / 4 * 5
-        
         let frame = CGRect(x: (self.view.frame.width - width) / 2,
                            y: 200,
                            width: width,
                            height: width / 9 * 16)
         
         let view = DetailView(frame: frame)
-            view.backgroundColor = .blue
             view.alpha = 0
         return view
     }()
@@ -278,6 +261,12 @@ final class MainVC: UIViewController {
         self.footerButton.anchor(bottom: self.view.safeAreaLayoutGuide.bottomAnchor, paddingBottom: 10,
                                  centerX: self.view)
         
+        
+        
+//        self.view.addSubview(self.detailBlackView)
+//        self.view.addSubview(self.menuVC)
+        
+        
         // MARK: - CoreData
         // 코어데이터에서 데이터 가져오기
         self.diaryData = coreData.readDiaryDatas()
@@ -338,33 +327,47 @@ final class MainVC: UIViewController {
 extension MainVC {
     
     // MARK: - MenuVC _ View
-    private func menuHideOrShow(show: Bool) {
+    private func menuHideOrShow(show: Bool, itemTapped: Bool, footerHide: Bool) {
         // 메뉴 보이게 하기
         if show == true {
-            // menuBlack_View
-            self.view.addSubview(self.menuBlackView)
-            // MenuVC를 blackView에 삽입
-                // blackView를 터치하여 사라지면(gesture) menu도 같이 사라짐
-            self.menuBlackView.addSubview(self.menuVC)
+            self.view.addSubview(self.detailBlackView)
+            self.view.addSubview(self.menuVC)
             
             UIView.animate(withDuration: 0.5) {
                 // menuBlackView 보이게 하기
-                self.menuBlackView.frame.origin.x = 0
+                self.detailBlackView.alpha = 1
+                self.menuVC.frame.origin.x = 0
             }
             
             
         // 메뉴 숨기기
         } else {
-            UIView.animate(withDuration: 0.3) {
+            if itemTapped == false {
+                print("Detail_Black_View ------ Delete")
+                self.detailBlackView.removeFromSuperview()
+            }
+            
+            UIView.animate(withDuration: 0.5) {
                 // menuBlackView 숨기기
-                self.menuBlackView.frame.origin.x = -self.view.frame.width
+                self.detailBlackView.alpha = 0
+                self.menuVC.frame.origin.x = -82
+                
+                if footerHide == true {
+                    // footer 버튼 숨기기
+                    self.footerButton.alpha = 0
+                }
                 
             } completion: { _ in
-                // remove View
-                self.menuBlackView.removeFromSuperview()
+                self.menuVC.removeFromSuperview()
+                // 메뉴의 item을 클릭하여 다음 뷰로 넘어가지 않았다면
+                    // detail_Black_View 를 삭제
+                // 이렇게 한 이유는: 다음 화면(ahieve/shop)에서 detail_Black_View를 사용.
+                    // 하지만 여기서 뷰를 삭제해버린다면 다음 화면에서 안 뜸.
+                
             }
         }
     }
+    
     
     
     // MARK: - Achievement _ Collection
@@ -373,13 +376,11 @@ extension MainVC {
         if show == true {
             self.view.addSubview(self.collectionSegementView)
             self.view.addSubview(self.detailView)
-            self.view.addSubview(self.detailBlackView)
-//            self.collectionSegement.anchor(height: self.view.frame.height - 150)
+            self.view.bringSubviewToFront(self.detailBlackView)
+            
             UIView.animate(withDuration: 0.6) {
                 // menuView 숨기기
-                self.menuHideOrShow(show: false)
-                // footerButton 숨기기
-                self.footerButton.alpha = 0
+                self.menuHideOrShow(show: false, itemTapped: true, footerHide: true)
                 // achievementView 보이게 하기
                 self.collectionSegementView.alpha = 1
                 self.collectionSegementView.frame.origin.y = 150
@@ -397,9 +398,9 @@ extension MainVC {
                 
             } completion: { _ in
                 // remove View
-                self.collectionSegement.removeFromSuperview()
-                self.detailView.removeFromSuperview()
+                self.detailBlackView.removeFromSuperview()
                 self.collectionSegementView.removeFromSuperview()
+                self.detailView.removeFromSuperview()
             }
         }
     }
@@ -414,9 +415,7 @@ extension MainVC {
             
             UIView.animate(withDuration: 0.5) {
                 // 메뉴바 숨기기
-                self.menuHideOrShow(show: false)
-                // footerButton 숨기기
-                self.footerButton.alpha = 0
+                self.menuHideOrShow(show: false, itemTapped: true, footerHide: true)
 
                 // fontChangeHeader 테이블 보이게 하기
                 self.homeHeader.alpha = 1
@@ -458,13 +457,11 @@ extension MainVC {
             // achievement_View
             self.view.addSubview(self.shopCollection)
             self.view.addSubview(self.detailView)
-            self.view.addSubview(self.detailBlackView)
+            self.view.bringSubviewToFront(self.detailBlackView)
             
             UIView.animate(withDuration: 0.5) {
-                // footerButton 숨기기
-                self.footerButton.alpha = 0
                 // menuView 숨기기
-                self.menuHideOrShow(show: false)
+                self.menuHideOrShow(show: false, itemTapped: true, footerHide: true)
                 // shopCollection 보이게 하기
                 self.shopCollection.alpha = 1
                 self.shopCollection.frame.origin.y = 150
@@ -483,8 +480,8 @@ extension MainVC {
             } completion: { _ in
                 // remove View
                 self.shopCollection.removeFromSuperview()
-                self.detailView.removeFromSuperview()
                 self.detailBlackView.removeFromSuperview()
+                self.detailView.removeFromSuperview()
             }
         }
     }
@@ -500,12 +497,10 @@ extension MainVC {
             
             UIView.animate(withDuration: 0.5) {
                 // 메뉴뷰 숨기기
-                self.menuHideOrShow(show: false)
+                self.menuHideOrShow(show: false, itemTapped: true, footerHide: true)
                 // setupTable 보이게 하기
                 self.setupTableView.alpha = 1
                 self.setupTableView.frame.origin.y = 150
-                // footerButton 숨기기
-                self.footerButton.alpha = 0
             }
             
             
@@ -677,16 +672,18 @@ extension MainVC: MainHeaderDelegate, MainMenuDelegate, SecondMainDelegate, Main
     // MARK: - Menu
     // MainVC -> MenuVC
     func handleMainToMenu() {
+        self.blackViewToggle = .menu
         // 버튼의 이미지 + 역할을 바꿈
         self.headerView.buttonConfig = .menuViewButton
         // menu_View_보이게 하기
-        self.menuHideOrShow(show: true)
+        self.menuHideOrShow(show: true, itemTapped: true, footerHide: false)
     }
-    // MenuVC -> MainVC
-    @objc private func blackViewTapped() {
+    // Menu -> MainVC
+    func handleMenuToMain() {
+        // 버튼의 이미지 + 역할을 바꿈
         self.headerView.buttonConfig = .mainViewButton
-        // menu_View_숨기기
-        self.menuHideOrShow(show: false)
+        // Menu_View 숨기기
+        self.menuHideOrShow(show: false, itemTapped: false, footerHide: false)
     }
     
     
@@ -869,12 +866,25 @@ extension MainVC: MainHeaderDelegate, MainMenuDelegate, SecondMainDelegate, Main
 // [Shop / Achieve]
     // detail_View -> Shop
     // detail_View -> Achieve
+    // detail_View -> Main
     @objc private func detailBlackViewTapped() {
-        if self.blackViewToggle == .achieve {
-            self.headerView.buttonConfig = .achievementVCButton
-        } else {
+        switch self.blackViewToggle {
+        case .menu:
+            // menu 숨기기
+            self.menuHideOrShow(show: false, itemTapped: false, footerHide: false)
+            // 버튼의 이미지 + 역할 바꾸기
+            self.headerView.buttonConfig = .mainViewButton
+            
+            
+        case .shop:
             self.headerView.buttonConfig = .shopVCButton
+            
+            
+        case .achieve:
+            self.headerView.buttonConfig = .achievementVCButton
         }
+        
+        
         self.detailViewHideOrShow(show: false)
     }
 }
