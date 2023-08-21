@@ -7,6 +7,17 @@
 
 import Foundation
 
+protocol SignUpLoginDelegate {
+    func handleSignUpToLogin()
+    func handleLogin()
+}
+
+
+protocol LoginMainDelegate {
+    func handleLoginToMain()
+}
+
+
 
 protocol HeaderMainDelegate {
     // MenuVC -> MainVC는 MainVC의 BlackView로 대체
@@ -59,7 +70,7 @@ protocol DiaryTableMainDelegate {
 }
 
 protocol DiaryTableDiaryDelegate {
-    func todayDiaryTrue(diaryData: DiaryData)
+//    func todayDiaryTrue(diaryData: DiaryData)
     func todayDiaryFalse()
 }
 

@@ -13,22 +13,20 @@ final class DiaryVC: UIView {
     // 헤더뷰 싱글톤
     private let headerView = HeaderView.shared
     
-    var diaryData: DiaryData? {
-        didSet {
-            // diaryTextView에 텍스트 넣기
-            if let diaryData = diaryData {
-                self.diaryTextView.text = diaryData.diaryText
-            }
-            
-            
-        }
-    }
+//    var diaryData: DiaryData? {
+//        didSet {
+//            // diaryTextView에 텍스트 넣기
+//            if let diaryData = diaryData {
+//                self.diaryTextView.text = diaryData.diaryText
+//            }
+//        }
+//    }
     
     // fixToggle이 true이면 -> Save Or Update
     private var fixToggle: Bool = false
     
     // 코어데이터 싱글톤
-    private let coredata = CoreDataManager.shared
+//    private let coredata = CoreDataManager.shared
     
     
     
@@ -228,30 +226,30 @@ extension DiaryVC: HeaderDiaryVCDelegate {
             return
         }
         
-        // 코어데이터에 저장
-            // diaryData가 있다면 (전 화면에서 DiaryData를 받아왔다면) -> update
-        if let diaryData = self.diaryData {
-            diaryData.diaryText = self.diaryTextView.text
-            self.coredata.updateDiaryData(newDiaryData: diaryData)
-            print("데이터 업데이트")
-            
-            
-            
-            // diaryData가 없다면 (전 화면에서 DiaryData를 받아오지 못했다면) -> create
-        } else {
-            // 빈칸이라면 데이터를 생성(create)하지 않음
-            if self.diaryTextView.text == "" {
-                return
-            }
-            
-            
-            // 데이터를 생성했다면, toggle바꾸기
-            DiaryTableView.todayDiaryToggle = true
-
-            
-            self.coredata.createDiaryData(diaryText: self.diaryTextView.text)
-            print("데이터 생성")
-        }
+//        // 코어데이터에 저장
+//            // diaryData가 있다면 (전 화면에서 DiaryData를 받아왔다면) -> update
+//        if let diaryData = self.diaryData {
+//            diaryData.diaryText = self.diaryTextView.text
+////            self.coredata.updateDiaryData(newDiaryData: diaryData)
+//            print("데이터 업데이트")
+//
+//
+//
+//            // diaryData가 없다면 (전 화면에서 DiaryData를 받아오지 못했다면) -> create
+//        } else {
+//            // 빈칸이라면 데이터를 생성(create)하지 않음
+//            if self.diaryTextView.text == "" {
+//                return
+//            }
+//
+//
+//            // 데이터를 생성했다면, toggle바꾸기
+//            DiaryTableView.todayDiaryToggle = true
+//
+//
+////            self.coredata.createDiaryData(diaryText: self.diaryTextView.text)
+//            print("데이터 생성")
+//        }
     }
 }
 
@@ -305,12 +303,12 @@ extension DiaryVC: UITextViewDelegate {
 
 // MARK: - DiaryVCTableDelegate
 extension DiaryVC: DiaryTableDiaryDelegate {
-    func todayDiaryTrue(diaryData: DiaryData) {
-        self.diaryData = diaryData
-    }
+//    func todayDiaryTrue(diaryData: DiaryData) {
+//        self.diaryData = diaryData
+//    }
     
     func todayDiaryFalse() {
         self.diaryTextView.text = ""
-        self.diaryData = nil
+//        self.diaryData = nil
     }
 }

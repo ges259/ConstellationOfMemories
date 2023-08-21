@@ -22,11 +22,11 @@ final class DiaryTableView: UIView {
     
     
     // coreData를 담을 배열 생성
-    var diaryData: [DiaryData] = [] {
-        didSet {
-            self.diaryTableView.reloadData()
-        }
-    }
+//    var diaryData: [DiaryData] = [] {
+//        didSet {
+//            self.diaryTableView.reloadData()
+//        }
+//    }
     // header View 싱글톤
     private let headerView: HeaderView = HeaderView.shared
     
@@ -91,9 +91,11 @@ extension DiaryTableView: UITableViewDelegate, UITableViewDataSource {
     // MARK: - Cell
     // 셀의 개수
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return DiaryTableView.todayDiaryToggle == false
-        ? self.diaryData.count + 1
-        : self.diaryData.count
+//        return DiaryTableView.todayDiaryToggle == false
+//        ? self.diaryData.count + 1
+//        : self.diaryData.count
+        
+        return 4
     }
     
     
@@ -124,10 +126,12 @@ extension DiaryTableView: UITableViewDelegate, UITableViewDataSource {
         } else if indexPath.row == 2 { cell.diaryDate = "그저께 떠올린 추억"
         } else {
             // dateString 옵셔널 바인딩
-            if let diaryData = self.diaryData[indexPath.row - 3].dateString {
+//            if let diaryData = self.diaryData[indexPath.row - 3].dateString {
                 // 일기를 적은 날을 표시 (X월 X일 떠올리 추억)
-                cell.diaryDate = "\(diaryData) 떠올린 추억"
-            }
+//                cell.diaryDate = "\(diaryData) 떠올린 추억"
+                cell.diaryDate = "떠올린 추억"
+            
+//            }
         }
         return cell
     }
@@ -154,7 +158,7 @@ extension DiaryTableView: UITableViewDelegate, UITableViewDataSource {
                 // save모드로 diaryVC진입
                 self.headerView.rightButtonConfig = .saveMode
 
-                self.diaryVCTableDelegate?.todayDiaryTrue(diaryData: self.diaryData[indexPath.row])
+//                self.diaryVCTableDelegate?.todayDiaryTrue(diaryData: self.diaryData[indexPath.row])
             }
 
         // 2번째 셀부터 ~~~ 마지막 셀까지
@@ -164,9 +168,9 @@ extension DiaryTableView: UITableViewDelegate, UITableViewDataSource {
 
 
             if DiaryTableView.todayDiaryToggle == false {
-                self.diaryVCTableDelegate?.todayDiaryTrue(diaryData: self.diaryData[indexPath.row - 1])
+//                self.diaryVCTableDelegate?.todayDiaryTrue(diaryData: self.diaryData[indexPath.row - 1])
             } else {
-                self.diaryVCTableDelegate?.todayDiaryTrue(diaryData: self.diaryData[indexPath.row])
+//                self.diaryVCTableDelegate?.todayDiaryTrue(diaryData: self.diaryData[indexPath.row])
             }
         }
         

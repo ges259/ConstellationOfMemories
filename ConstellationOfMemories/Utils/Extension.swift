@@ -233,7 +233,65 @@ extension UIButton {
             btn.tintColor = .white
         return btn
     }
+    
+    func authButton(title: String) -> UIButton{
+        let btn = UIButton(type: .system)
+        
+        btn.setTitle(title, for: .normal)
+        btn.setTitleColor(.lightGray, for: .normal)
+        btn.titleLabel?.font = UIFont.boldSystemFont(ofSize: 18)
+        btn.backgroundColor = UIColor(white: 1, alpha: 0.3)
+//        btn.isEnabled = false
+        
+        btn.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        btn.clipsToBounds = true
+        btn.layer.cornerRadius = 10
+        
+        return btn
+    }
+    
+    
+    
+    
+    
+    // mutableAttributedString
+    func mutableAttributedString(buttonType: UIButton.ButtonType = .system,
+                                 
+                                 type1TextString: String,
+                                 type1FontName: FontStyle = .system,
+                                 type1FontSize: CGFloat = 14,
+                                 type1Foreground: UIColor = .lightGray,
+                                 
+                                 type2TextString: String,
+                                 type2FontName: FontStyle = .bold,
+                                 type2FontSize: CGFloat = 14,
+                                 type2Foreground: UIColor = .black) -> UIButton {
+        // UIFont 설정
+        let type1Font: UIFont = type1FontName == FontStyle.system ? UIFont.systemFont(ofSize: type1FontSize) : UIFont.boldSystemFont(ofSize: type1FontSize)
+        
+        let type2Font: UIFont = type2FontName == FontStyle.system ? UIFont.systemFont(ofSize: type2FontSize) : UIFont.boldSystemFont(ofSize: type2FontSize)
+        
+        // Mutable_Attributed_String 설정
+        let attributedTitle = NSMutableAttributedString(
+            string: type1TextString,
+            attributes: [NSAttributedString.Key.font : type1Font,
+                         NSAttributedString.Key.foregroundColor : type1Foreground]
+        )
+        attributedTitle.append(NSAttributedString(
+            string: type2TextString,
+            attributes: [NSAttributedString.Key.font : type2Font,
+                         NSAttributedString.Key.foregroundColor : type2Foreground])
+        )
+        
+        // 버튼 만들기
+        let attributedButton = UIButton(type: buttonType)
+            // 버튼에 string 추가
+            attributedButton.setAttributedTitle(attributedTitle, for: .normal)
+        return attributedButton
+    }
+    
 }
+
 
 
 // MARK: - UIImage
@@ -246,3 +304,63 @@ extension UIImage {
     }
 }
 
+
+// MARK: - TextField
+extension UITextField {
+    
+    func textField(withPlaceholder placeholder: String,
+                   
+                   textColor: UIColor? = .black,
+                   
+                   fontSize: CGFloat? = 16,
+                   
+                   keyboardType: UIKeyboardType = .webSearch,
+                   
+                   isSecureTextEntry: Bool? = false)
+    
+    -> UITextField {
+        
+        let tf = UITextField()
+        
+        // set placeholder _ FontColor
+        tf.attributedPlaceholder = NSAttributedString(
+            string: placeholder,
+            attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray]
+        )
+        
+        // set keyboardType
+        tf.keyboardType = keyboardType
+        
+        // set text color
+        tf.textColor = textColor
+        
+        // set font size
+        tf.font = UIFont.systemFont(ofSize: fontSize!)
+        
+        // set background color
+        tf.backgroundColor = UIColor(white: 1, alpha: 0.3)
+        
+        
+        // padding Left View
+        let paddingView = UIView()
+            paddingView.anchor(width: 16, height: 50)
+        tf.leftView = paddingView
+        tf.leftViewMode = .always
+        
+        // cornerRadius
+        tf.clipsToBounds = true
+        tf.layer.cornerRadius = 10
+        
+        // secureTextEntry
+        tf.isSecureTextEntry = isSecureTextEntry ?? false
+        
+        tf.borderStyle = .none
+        
+        tf.autocapitalizationType = .none
+        tf.autocorrectionType = .no
+        
+        tf.textContentType = .oneTimeCode
+        
+        return tf
+    }
+}

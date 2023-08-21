@@ -1,0 +1,253 @@
+//
+//  SignUpVC.swift
+//  ConstellationOfMemories
+//
+//  Created by 계은성 on 2023/08/21.
+//
+
+import UIKit
+import FirebaseAuth
+
+final class SignUp: UIView {
+    
+    // MARK: - Properties
+    
+    var signUpLoginDelegate: SignUpLoginDelegate?
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    // MARK: - Image_View
+    private lazy var loginImageView: UIImageView = {
+        return UIImageView(image: UIImage(named: "blueSky"))
+    }()
+    
+    
+    
+    // MARK: - Label
+    private let titleLabel: UILabel = {
+        return UILabel().labelConfig(labelText: "Sign Up",
+                                     fontSize: 36,
+                                     textAlignment: .center)
+    }()
+    
+    
+    
+    // MARK: - TextField
+    private lazy var emailTextField: UITextField = {
+        let view = UITextField().textField(withPlaceholder: "Email",
+                                       keyboardType: .emailAddress)
+            view.addTarget(self, action: #selector(textFieldChanged), for: .editingChanged)
+        return view
+    }()
+    
+    private lazy var fullNameTextField: UITextField = {
+        let view = UITextField().textField(withPlaceholder: "FullName")
+            view.addTarget(self, action: #selector(textFieldChanged), for: .editingChanged)
+        return view
+    }()
+    
+    private lazy var passwordTextField: UITextField = {
+        let view = UITextField().textField(withPlaceholder: "pasword",
+                                       isSecureTextEntry: true)
+            view.addTarget(self, action: #selector(textFieldChanged), for: .editingChanged)
+        return view
+    }()
+
+    
+    
+    // MARK: - Button
+    private lazy var signUpButton: UIButton = {
+        let btn = UIButton().authButton(title: "Login")
+            btn.addTarget(self, action: #selector(signUpBtnTapped), for: .touchUpInside)
+        return btn
+    }()
+    
+    private lazy var alreadyHaveButton: UIButton = {
+        let btn = UIButton().mutableAttributedString(
+            type1TextString: "Already have an account?   ",
+            type2TextString: "Sign In")
+ 
+            btn.addTarget(self, action: #selector(bottomBtnTapped), for: .touchUpInside)
+        return btn
+    }()
+    
+    
+    
+    // MARK: - Stack_View
+    private lazy var stackView: UIStackView = {
+        return UIStackView().stackView(arrangedSubviews:
+                                        [self.fullNameTextField,
+                                         self.emailTextField,
+                                         self.passwordTextField,
+                                         self.signUpButton],
+                                       axis: .vertical,
+                                       spacing: 13,
+                                       alignment: .fill,
+                                       distribution: .fillEqually)
+    }()
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    // MARK: - LIfeCycle
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        
+        self.configureUI()
+    }
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    
+    // MARK: - Helper Functions
+    private func configureUI() {
+        // alpha = 0
+        self.alpha = 0
+        // background Color
+        self.backgroundColor = .red
+        
+        // Login_Image_View
+        self.addSubview(self.loginImageView)
+        self.loginImageView.anchor(top: self.topAnchor,
+                                   bottom: self.bottomAnchor,
+                                   leading: self.leadingAnchor,
+                                   trailing: self.trailingAnchor)
+        
+        // Title_Label
+        self.addSubview(self.titleLabel)
+        self.titleLabel.anchor(top: self.topAnchor, paddingTop: 150,
+                               leading: self.leadingAnchor, paddingLeading: 20,
+                               trailing: self.trailingAnchor, paddingTrailing: 20)
+        
+        // Stack_View
+        self.addSubview(self.stackView)
+        self.stackView.anchor(top: self.titleLabel.bottomAnchor, paddingTop: 30,
+                              leading: self.titleLabel.leadingAnchor,
+                              trailing: self.titleLabel.trailingAnchor)
+        
+        // Already_Have_Button
+        self.addSubview(self.alreadyHaveButton)
+        self.alreadyHaveButton.anchor(bottom: self.safeAreaLayoutGuide.bottomAnchor, paddingBottom: 10,
+                                      leading: self.titleLabel.leadingAnchor,
+                                      trailing: self.titleLabel.trailingAnchor)
+    }
+    
+    
+    
+    // login_View로 갈 때 텍스트 필드 비우기 + 버튼 비활성화
+        // loginVC에서 호출 됨
+    func resetSignUpVC() {
+        // 텍스트 필드 비우기
+        self.fullNameTextField.text = ""
+        self.emailTextField.text = ""
+        self.passwordTextField.text = ""
+        // 회원가입 버튼 비활성화
+        self.textFieldChanged()
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    // MARK: - Selectors
+    @objc private func textFieldChanged() {
+        // email 또는 password 둘 중 하나라도 빈 칸인 경우
+        if self.fullNameTextField.text?.isEmpty == true
+            || self.passwordTextField.text?.isEmpty == true
+            || self.emailTextField.text?.isEmpty == true {
+            
+            // 회원가입 버튼 비활성화
+            self.signUpButton.isEnabled = false
+            self.signUpButton.setTitleColor(.lightGray, for: .normal)
+          
+            
+        // 모두 채워졌다면 회원가입 버튼 활성화
+        } else {
+            self.signUpButton.isEnabled = true
+            self.signUpButton.setTitleColor(.white, for: .normal)
+        }
+    }
+    
+    
+    
+    @objc private func signUpBtnTapped() {
+        // 텍스트 필드 옵셔널 바인딩
+        guard let fullName = self.fullNameTextField.text,
+              let email = self.emailTextField.text,
+              let password = self.passwordTextField.text
+        else { return }
+        
+        // 회원 가입하기
+        Auth.auth().createUser(withEmail: email, password: password) { result, error in
+            if let error = error {
+                print("Frailed to register user with error \(error.localizedDescription)")
+                return
+            }
+            // uid 가져오기
+            guard let uid = result?.user.uid else { return }
+            // user정보 만들기
+            let values = [DBString.fullName: fullName,
+                          DBString.email: email,
+                          DBString.password: password] as [String: Any]
+            // user정보를 uid에 저장
+            REF_USERS.child(uid).updateChildValues(values) { error, ref in
+                // MainVC로 이동
+                self.signUpLoginDelegate?.handleLogin()
+            }
+        }
+    }
+    
+    
+    
+    // 하단 버튼을 누르면 -> login_View로 이동
+    @objc private func bottomBtnTapped() {
+        self.signUpLoginDelegate?.handleSignUpToLogin()
+    }
+}

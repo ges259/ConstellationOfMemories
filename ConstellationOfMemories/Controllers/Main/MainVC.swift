@@ -6,26 +6,59 @@
 //
 
 import UIKit
+import FirebaseAuth
 
 final class MainVC: UIViewController {
     
     // MARK: - Properties
     // header View 싱글톤
     private let headerView: HeaderView = HeaderView.shared
-    // CoreData 싱글톤
-    private let coreData: CoreDataManager = CoreDataManager.shared
+    
+    private let service = Service.shared
+    
+    
+    private var user: User?
+    
+    // toggle
+    private var blackViewToggle: BlackViewToggle = .menu
     
     
     
-    // coreData를 담을 배열 생성
-    private var diaryData: [DiaryData] = [] {
-        didSet {
-            self.diaryTable.diaryData = self.diaryData
-        }
-    }
     
     
-    var blackViewToggle: BlackViewToggle = .menu
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+// MARK: - Layout
+    
+    
+    
+    // MARK: - ImageView
+    private lazy var backgroundImage: UIImageView = {
+        return UIImageView(image: UIImage(named: "blueSky"))
+    }()
+    
+    
+    
+    // MARK: - Button
+    private lazy var footerButton: UIButton = {
+        // 버튼 시스템 이미지 크기 바꾸기
+        let btn = UIButton().buttonSustemImage(btnSize: 37, imageString: .moon)
+            btn.addTarget(self, action: #selector(self.starButtonTapped), for: .touchUpInside)
+        return btn
+    }()
     
     
     
@@ -180,23 +213,7 @@ final class MainVC: UIViewController {
     
     
     
-    // MARK: - ImageView
-    private lazy var backgroundImage: UIImageView = {
-        return UIImageView(image: UIImage(named: "blueSky"))
-    }()
-    
-    
-    
-    // MARK: - Button
-    private lazy var footerButton: UIButton = {
-        // 버튼 시스템 이미지 크기 바꾸기
-        let btn = UIButton().buttonSustemImage(btnSize: 37, imageString: .moon)
-            btn.addTarget(self, action: #selector(self.starButtonTapped), for: .touchUpInside)
-        return btn
-    }()
-    
-    
-    
+
     
     
     
@@ -218,13 +235,52 @@ final class MainVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // configure UI
-        self.configureMainVC()
-        
-        // get_CoreData
-        // check_today_diary
-        self.checkTodayDiary()
+        // User가 있다면
+            // MainVC
+        // User가 없다면
+            // Login_View
+        self.checkLogin()
     }
+    
+    
+    
+    // MARK: - Authentication
+    private func checkLogin() {
+        
+        if Auth.auth().currentUser?.uid == nil {
+            print("user is nil")
+            
+            self.view.addSubview(self.loginView)
+            
+            self.configureLoginVC()
+            
+        } else {
+            print("user is not nil")
+        }
+        
+        self.configureMainVC()
+    }
+    
+    
+    
+    // login_View 보이게 하기
+    private func configureLoginVC() {
+        
+    }
+    
+    private lazy var loginView: LoginVC = {
+        let frame = CGRect(x: 0,
+                           y: 0,
+                           width: self.view.frame.width,
+                           height: self.view.frame.height)
+        let view = LoginVC(frame: frame)
+            view.loginMainDelegate = self
+        
+        return view
+    }()
+    
+    
+    
     // MARK: - Configure UI
     private func configureMainVC() {
         // background_Image
@@ -247,19 +303,6 @@ final class MainVC: UIViewController {
         self.view.addSubview(self.footerButton)
         self.footerButton.anchor(bottom: self.view.safeAreaLayoutGuide.bottomAnchor, paddingBottom: 10,
                                  centerX: self.view)
-    }
-    
-    
-    
-    // MARK: - CoreData
-    private func checkTodayDiary() {
-        // 코어데이터에서 데이터 가져오기
-        self.diaryData = self.coreData.readDiaryDatas()
-        
-        // 오늘 일기를 작성 했는지 확인
-        if diaryData.isEmpty == false {
-            self.coreData.configureTodayDiaryToggle(diaryData: self.diaryData[0])
-        }
     }
 }
 
@@ -661,7 +704,7 @@ extension MainVC {
     // 뷰 전환
     // 왼쪽 버튼의 역할 및 이미지를 바꿈
     // 상황에 따라 필요한 토글 설정
-extension MainVC: HeaderMainDelegate, MenuMainDelegate, SecondMainDelegate, DiaryTableMainDelegate, ShopMainDelegate, FirstMainDelegate {
+extension MainVC: LoginMainDelegate, HeaderMainDelegate, MenuMainDelegate, SecondMainDelegate, DiaryTableMainDelegate, ShopMainDelegate, FirstMainDelegate {
     
     // MARK: - Menu
     // MainVC -> MenuVC
@@ -804,7 +847,7 @@ extension MainVC: HeaderMainDelegate, MenuMainDelegate, SecondMainDelegate, Diar
         // 버튼의 이미지 + 역할을 바꿈
         self.headerView.buttonConfig = .diaryTableViewButton
         // 일기를 작성 후 Diary_Table로 왔을 때 업데이트를 위한 코드
-        self.diaryData = self.coreData.readDiaryDatas()
+//        self.diaryData = self.coreData.readDiaryDatas()
         // diary_View_숨기기
             // didSelect_Row_At()에서 열림
         self.DiaryViewHideOrShow(show: false)
@@ -892,8 +935,53 @@ extension MainVC: HeaderMainDelegate, MenuMainDelegate, SecondMainDelegate, Diar
     
     
     
+    
+    
+    
+    
+    // MARK: - Login_View
+    // login_View -> Main
+    func handleLoginToMain() {
+        print(#function)
+        
+        guard let currentUid = Auth.auth().currentUser?.uid else {
+            print("No...")
+            return }
+        print("OKKKKKK")
+        
+        
+        
+        service.fetchUserData(uid: currentUid) { user in
+            self.user = user
+            
+            self.checkLogin()
+            UIView.animate(withDuration: 0.5) {
+                self.loginView.alpha = 0
+                
+            } completion: { _ in
+                self.loginView.removeFromSuperview()
+            }
+        }
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     // MARK: - FirstMainDelegate
     func monthDiaryTapped() {
         print(#function)
     }
+    
+    // MARK: - Fix
 }

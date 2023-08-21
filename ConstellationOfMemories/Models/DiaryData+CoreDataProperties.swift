@@ -27,18 +27,18 @@ extension DiaryData {
     
     
     // date 설정
-    var dateString: String? {
+//    var dateString: String? {
         // 싱글톤
-        let coreDateManager = CoreDataManager.shared
-        
-        // 코어데이터에 저장된 날짜를 가져옴
-        guard let date: Date = self.date else { return "" }
-        
-        // 가져온 날짜 데이터를 String으로 변환
-        let dateString = coreDateManager.configureDate(date: date)
-        return dateString
-    }
-    
+//        let coreDateManager = CoreDataManager.shared
+//
+//        // 코어데이터에 저장된 날짜를 가져옴
+//        guard let date: Date = self.date else { return "" }
+//
+//        // 가져온 날짜 데이터를 String으로 변환
+//        let dateString = coreDateManager.configureDate(date: date)
+//        return dateString
+//    }
+//
     
     
     
