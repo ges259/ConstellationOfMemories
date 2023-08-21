@@ -28,6 +28,39 @@ final class CoreDataManager {
     
     
     
+    // MARK: - [Time]
+    private func configureFormate(date: Date, format: String) -> String {
+        let myformatter = DateFormatter()
+            myformatter.dateFormat = format
+        
+        let date: Date = date
+        
+        let savedDateString: String = myformatter.string(from: date)
+        return savedDateString
+    }
+    
+    
+    func configureDate(date: Date) -> String {
+//        guard let date = diaryData.date else { return "" }
+        
+        let dateString: String = self.configureFormate(date: date, format: "M월 d일에")
+        
+        return dateString
+    }
+    
+    
+    
+    func configureTodayDiaryToggle(diaryData: DiaryData) {
+        // 오늘 며칠인 지 확인
+        let currentTime = Date()
+        let currentData: String = self.configureDate(date: currentTime)
+        
+        // 오늘 일기를 작성했는지 안 했는지 확인
+        DiaryTableView.todayDiaryToggle = diaryData.dateString == currentData
+        ? true
+        : false
+    }
+    
     
     
     

@@ -14,27 +14,23 @@ final class MainVC: UIViewController {
     private let headerView: HeaderView = HeaderView.shared
     // CoreData 싱글톤
     private let coreData: CoreDataManager = CoreDataManager.shared
+    
+    
+    
     // coreData를 담을 배열 생성
     private var diaryData: [DiaryData] = [] {
         didSet {
-            self.diaryTable.diaryData = diaryData
+            self.diaryTable.diaryData = self.diaryData
         }
     }
     
     
-    var blackViewToggle: BlackViewToggle = .menu {
-        didSet {
-            print(blackViewToggle)
-        }
-    }
+    var blackViewToggle: BlackViewToggle = .menu
     
     
     
     
-    // MARK: - Fix
-    /*
-     blackView와 detailBlackView 합치기
-     */
+    
     
     
     
@@ -75,15 +71,14 @@ final class MainVC: UIViewController {
                             width: self.view.frame.width,
                             height: self.view.frame.height - 150)
         let view = CollectionSegementView(frame: frame)
-            view.alpha = 0
-//        view.firstCollection.firstMainDelegate = self
+            view.firstCollection.firstMainDelegate = self
             view.secondCollection.secondMainDelegate = self
         return view
     }()
     
     
     
-    // MARK: - Home _ View
+    // MARK: - Home_View
     private lazy var homeHeader: HomeHeader = {
         let headerFrame = CGRect(x: 0,
                                  y: self.view.frame.height,
@@ -97,15 +92,14 @@ final class MainVC: UIViewController {
                            width: self.view.frame.width,
                            height: self.view.frame.height - 375)
         let view = CollectionSegementView(frame: frame)
-            view.secondCollection.secondMainDelegate = self
-            view.backgroundColor = .clear
-            view.alpha = 0
+            view.firstCollection.firstHomeHeaderDelegate = self.homeHeader
+            view.secondCollection.headerSegementDelegate = self.homeHeader
         return view
     }()
     
     
     
-    // MARK: - ShopCollectionView
+    // MARK: - ShopCollection_View
     private lazy var shopCollection: ShopCollectionView = {
         let frame = CGRect(x: 0,
                            y: self.view.frame.height - 300,
@@ -113,9 +107,6 @@ final class MainVC: UIViewController {
                            height: self.view.frame.height - 150)
         let view = ShopCollectionView(frame: frame)
             view.mainShopDelgate = self
-        
-            
-            view.alpha = 0
         return view
     }()
     
@@ -127,10 +118,7 @@ final class MainVC: UIViewController {
                            y: self.view.frame.height - 300,
                            width: self.view.frame.width,
                            height: self.view.frame.height - 150)
-        let view = SetupTableView(frame: frame)
-        
-        
-        return view
+        return SetupTableView(frame: frame)
     }()
     
     
@@ -157,9 +145,7 @@ final class MainVC: UIViewController {
                             y: 150,
                             width: self.view.frame.width,
                             height: self.view.frame.height - 150)
-        let view = DiaryVC(frame: frame)
-            view.alpha = 0
-        return view
+        return DiaryVC(frame: frame)
     }()
     
     
@@ -171,16 +157,13 @@ final class MainVC: UIViewController {
                            y: 200,
                            width: width,
                            height: width / 9 * 16)
-        
-        let view = DetailView(frame: frame)
-            view.alpha = 0
-        return view
+        return DetailView(frame: frame)
     }()
     
     
     
-    // MARK: - Detail_Black_View
-    private lazy var detailBlackView: UIView = {
+    // MARK: - Black_View
+    private lazy var blackView: UIView = {
         let frame = CGRect(x: 0,
                            y: 150,
                            width: self.view.frame.width,
@@ -237,6 +220,10 @@ final class MainVC: UIViewController {
         
         // configure UI
         self.configureMainVC()
+        
+        // get_CoreData
+        // check_today_diary
+        self.checkTodayDiary()
     }
     // MARK: - Configure UI
     private func configureMainVC() {
@@ -247,7 +234,7 @@ final class MainVC: UIViewController {
                                     leading: self.view.leadingAnchor,
                                     trailing: self.view.trailingAnchor)
         
-        // 헤더뷰
+        // header_View
         self.view.addSubview(self.headerView)
         self.headerView.mainHeaderDelegate = self
         self.headerView.diaryHeaderDelegate = diaryVC
@@ -256,22 +243,27 @@ final class MainVC: UIViewController {
                                        width: self.view.frame.width,
                                        height: 150)
         
-        // footerButton
+        // footer_Button
         self.view.addSubview(self.footerButton)
         self.footerButton.anchor(bottom: self.view.safeAreaLayoutGuide.bottomAnchor, paddingBottom: 10,
                                  centerX: self.view)
-        
-        
-        
-//        self.view.addSubview(self.detailBlackView)
-//        self.view.addSubview(self.menuVC)
-        
-        
-        // MARK: - CoreData
+    }
+    
+    
+    
+    // MARK: - CoreData
+    private func checkTodayDiary() {
         // 코어데이터에서 데이터 가져오기
-        self.diaryData = coreData.readDiaryDatas()
+        self.diaryData = self.coreData.readDiaryDatas()
+        
+        // 오늘 일기를 작성 했는지 확인
+        if diaryData.isEmpty == false {
+            self.coreData.configureTodayDiaryToggle(diaryData: self.diaryData[0])
+        }
     }
 }
+
+
 
 
 
@@ -330,26 +322,28 @@ extension MainVC {
     private func menuHideOrShow(show: Bool, itemTapped: Bool, footerHide: Bool) {
         // 메뉴 보이게 하기
         if show == true {
-            self.view.addSubview(self.detailBlackView)
+            self.view.addSubview(self.blackView)
             self.view.addSubview(self.menuVC)
             
             UIView.animate(withDuration: 0.5) {
                 // menuBlackView 보이게 하기
-                self.detailBlackView.alpha = 1
+                self.blackView.alpha = 1
                 self.menuVC.frame.origin.x = 0
             }
             
             
         // 메뉴 숨기기
         } else {
-            if itemTapped == false {
-                print("Detail_Black_View ------ Delete")
-                self.detailBlackView.removeFromSuperview()
-            }
+            // 메뉴 -> 메뉴 안의 아이템을 클릭하지 않고 main화면으로 다시 돌아간다면
+                // detail_Black_View 삭제
+            // true: (backButton / Black_View_Tapped)
+            // false: (achieve/home/shop/setup)으로 들어가면
+            
+            if itemTapped == false { self.blackView.removeFromSuperview() }
             
             UIView.animate(withDuration: 0.5) {
                 // menuBlackView 숨기기
-                self.detailBlackView.alpha = 0
+                self.blackView.alpha = 0
                 self.menuVC.frame.origin.x = -82
                 
                 if footerHide == true {
@@ -376,7 +370,7 @@ extension MainVC {
         if show == true {
             self.view.addSubview(self.collectionSegementView)
             self.view.addSubview(self.detailView)
-            self.view.bringSubviewToFront(self.detailBlackView)
+            self.view.bringSubviewToFront(self.blackView)
             
             UIView.animate(withDuration: 0.6) {
                 // menuView 숨기기
@@ -398,7 +392,7 @@ extension MainVC {
                 
             } completion: { _ in
                 // remove View
-                self.detailBlackView.removeFromSuperview()
+                self.blackView.removeFromSuperview()
                 self.collectionSegementView.removeFromSuperview()
                 self.detailView.removeFromSuperview()
             }
@@ -457,7 +451,7 @@ extension MainVC {
             // achievement_View
             self.view.addSubview(self.shopCollection)
             self.view.addSubview(self.detailView)
-            self.view.bringSubviewToFront(self.detailBlackView)
+            self.view.bringSubviewToFront(self.blackView)
             
             UIView.animate(withDuration: 0.5) {
                 // menuView 숨기기
@@ -480,7 +474,7 @@ extension MainVC {
             } completion: { _ in
                 // remove View
                 self.shopCollection.removeFromSuperview()
-                self.detailBlackView.removeFromSuperview()
+                self.blackView.removeFromSuperview()
                 self.detailView.removeFromSuperview()
             }
         }
@@ -507,11 +501,11 @@ extension MainVC {
         // setup테이블 숨기기
         } else {
             UIView.animate(withDuration: 0.5) {
+                // footerButton 보이게 하기
+                self.footerButton.alpha = 1
                 // setupTable 숨기기
                 self.setupTableView.alpha = 0
                 self.setupTableView.frame.origin.y = self.view.frame.height
-                // footerButton 보이게 하기
-                self.footerButton.alpha = 1
                 
             } completion: { _ in
                 // remove View
@@ -544,7 +538,7 @@ extension MainVC {
                 self.footerButton.alpha = 1
                 // diary테이블뷰 숨기기
                 self.diaryTable.alpha = 0
-                self.diaryTable.frame.origin.y = self.view.frame.height
+                self.diaryTable.frame.origin.y = self.view.frame.height - 300
 
             } completion: { _ in
                 // remove View
@@ -591,12 +585,12 @@ extension MainVC {
     
     
     
-    // MARK: - Detail_View
+    // MARK: - Detail_View + Black
     func detailViewHideOrShow(show: Bool) {
         if show == true {
             UIView.animate(withDuration: 0.5) {
                 // detailBlackView 보이게 하기
-                self.detailBlackView.alpha = 1
+                self.blackView.alpha = 1
                 // detailview 보이게 하기
                 self.detailView.alpha = 1
             }
@@ -605,7 +599,7 @@ extension MainVC {
         } else {
             UIView.animate(withDuration: 0.5) {
                 // detailBlackView 보이게 하기
-                self.detailBlackView.alpha = 0
+                self.blackView.alpha = 0
                 // detailview 보이게 하기
                 self.detailView.alpha = 0
             }
@@ -667,7 +661,7 @@ extension MainVC {
     // 뷰 전환
     // 왼쪽 버튼의 역할 및 이미지를 바꿈
     // 상황에 따라 필요한 토글 설정
-extension MainVC: MainHeaderDelegate, MainMenuDelegate, SecondMainDelegate, MainDiaryTableDelegate, MainShopDelegate {
+extension MainVC: HeaderMainDelegate, MenuMainDelegate, SecondMainDelegate, DiaryTableMainDelegate, ShopMainDelegate, FirstMainDelegate {
     
     // MARK: - Menu
     // MainVC -> MenuVC
@@ -829,12 +823,14 @@ extension MainVC: MainHeaderDelegate, MainMenuDelegate, SecondMainDelegate, Main
         self.blackViewToggle = .achieve
         // left 버튼의 용도 바꾸기
         self.headerView.buttonConfig = .achieveDetailViewButton
-        // detail_View 보이게 하기
+        // detail_View + black_View 보이게 하기
         self.detailViewHideOrShow(show: true)
     }
     // detailView -> AchieveView
     func handleDetailToAchieve() {
+        // left 버튼의 용도 바꾸기
         self.headerView.buttonConfig = .achievementVCButton
+        // detail_View + black_View 숨기기
         self.detailViewHideOrShow(show: false)
     }
     
@@ -849,13 +845,15 @@ extension MainVC: MainHeaderDelegate, MainMenuDelegate, SecondMainDelegate, Main
         self.blackViewToggle = .shop
         // left 버튼의 용도 바꾸기
         self.headerView.buttonConfig = .shopDetailViewButton
-        // detail_View 보이게 하기
+        // detail_View + black_View 보이게 하기
         self.detailViewHideOrShow(show: true)
     }
     
     // detail_View -> Shop_View
     func handleDetailToShop() {
+        // left 버튼의 용도 바꾸기
         self.headerView.buttonConfig = .shopVCButton
+        // detail_View + black_View 숨기기
         self.detailViewHideOrShow(show: false)
     }
     
@@ -863,6 +861,9 @@ extension MainVC: MainHeaderDelegate, MainMenuDelegate, SecondMainDelegate, Main
     
     
     
+    
+    
+    // MARK: - Black_View
 // [Shop / Achieve]
     // detail_View -> Shop
     // detail_View -> Achieve
@@ -886,5 +887,13 @@ extension MainVC: MainHeaderDelegate, MainMenuDelegate, SecondMainDelegate, Main
         
         
         self.detailViewHideOrShow(show: false)
+    }
+    
+    
+    
+    
+    // MARK: - FirstMainDelegate
+    func monthDiaryTapped() {
+        print(#function)
     }
 }

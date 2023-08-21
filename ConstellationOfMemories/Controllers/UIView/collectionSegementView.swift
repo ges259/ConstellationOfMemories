@@ -11,17 +11,15 @@ final class CollectionSegementView: UIView {
     
     // MARK: - Properties
     var collectionToggle: SegementToggle? {
-        didSet {
-            // frame도 바구기
-            self.resetView()
-        }
+        // 처음 상태로 원상 복구
+        didSet { self.resetView() }
     }
     
     
     
     
     // MARK: - Layout
-    private lazy var firstCollection: FirstCollectionView = {
+    lazy var firstCollection: FirstCollectionView = {
         
         let frame = CGRect(x: 0,
                            y: 50,
@@ -84,6 +82,9 @@ final class CollectionSegementView: UIView {
     private func configureView() {
         // background Color
         self.backgroundColor = .clear
+        
+        // alpha
+        self.alpha = 0
         
         // segmentedControl
         self.addSubview(self.segmentedControl)

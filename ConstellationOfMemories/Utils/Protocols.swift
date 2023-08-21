@@ -8,7 +8,7 @@
 import Foundation
 
 
-protocol MainHeaderDelegate {
+protocol HeaderMainDelegate {
     // MenuVC -> MainVC는 MainVC의 BlackView로 대체
     // MainVC -> MenuVC
     func handleMainToMenu()
@@ -34,41 +34,47 @@ protocol MainHeaderDelegate {
 }
 
 
-protocol DiaryHeaderDelegate {
+protocol HeaderDiaryVCDelegate {
     func diaryFixMode(_ fixMode: Bool)
 }
 
-protocol MainMenuDelegate {
+protocol MenuMainDelegate {
     func handleAchievement()
     func handleHome()
     func handleShop()
     func handleSetup()
 }
 
-//protocol MainDiaryDelegate {
-//    func todayDiaryCompleted()
-//}
-
-//protocol FirstMainDelegate {
-//    func firstTapped()
-//}
+protocol FirstMainDelegate {
+    func monthDiaryTapped()
+}
 
 protocol SecondMainDelegate {
     func secondTapped()
 }
 
 
-protocol MainDiaryTableDelegate {
+protocol DiaryTableMainDelegate {
     func handleTableToDiaryVC()
 }
 
-protocol DiaryVCTableDelegate {
+protocol DiaryTableDiaryDelegate {
     func todayDiaryTrue(diaryData: DiaryData)
     func todayDiaryFalse()
 }
 
 
 
-protocol MainShopDelegate {
+protocol ShopMainDelegate {
     func shopCellTapped()
 }
+
+
+// MARK: - Home_View
+protocol FirstHomeHeaderDelegate {
+    func fontColor()
+}
+protocol SecondHomeHeaderDelegate {
+    func backgroundColr()
+}
+

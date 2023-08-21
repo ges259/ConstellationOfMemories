@@ -12,6 +12,9 @@ final class SecondCollectionView: UIView {
     // MARK: - Properties
     var secondMainDelegate: SecondMainDelegate?
 
+    var headerSegementDelegate: SecondHomeHeaderDelegate?
+    
+    
     private var item = [Int]()
     
     
@@ -21,7 +24,7 @@ final class SecondCollectionView: UIView {
             // item이 항상 맨위로 가도록 설정
             self.upCollectionView()
             
-            self.secondCollection.reloadData()
+//            self.secondCollection.reloadData()
         }
     }
     
@@ -76,12 +79,12 @@ final class SecondCollectionView: UIView {
     
     // MARK: - Helper Functions
     private func ConfigureUI() {
+        
         // collectionView
         self.addSubview(self.secondCollection)
     }
     
     private func upCollectionView() {
-        print("2222222222222222")
         // item이 항상 맨위로 가도록 설정
         let indexPath = IndexPath(item: self.item.count - 1, section: 0)
         self.secondCollection.scrollToItem(at: indexPath, at: .top, animated: true)
@@ -159,12 +162,14 @@ extension SecondCollectionView: UICollectionViewDelegate, UICollectionViewDataSo
     // MARK: - Did_Select_Row_At
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
+        // achieve_View 일 때
         if self.secondCollectionToggle == .achieve {
             // shop(second) -> detailView로 진입
             self.secondMainDelegate?.secondTapped()
+            
+        // home_View 일 때
         } else {
-            // MARK: - Fix
-            print("home")
+            self.headerSegementDelegate?.backgroundColr()
         }
     }
 }

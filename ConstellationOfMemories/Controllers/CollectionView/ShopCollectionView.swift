@@ -14,7 +14,7 @@ final class ShopCollectionView: UIView {
     private var item = [Int]()
     
     
-    var mainShopDelgate: MainShopDelegate?
+    var mainShopDelgate: ShopMainDelegate?
     
     
     
@@ -57,8 +57,14 @@ final class ShopCollectionView: UIView {
     // MARK: - LifeCycle
     override init(frame: CGRect) {
         super.init(frame: frame)
-//        self.backgroundColor = .clear
+
+        // addSubView
         self.addSubview(self.shopCollectionView)
+        
+        // background Color
+        self.backgroundColor = .clear
+        // alpha
+        self.alpha = 0
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

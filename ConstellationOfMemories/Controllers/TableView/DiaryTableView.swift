@@ -30,9 +30,9 @@ final class DiaryTableView: UIView {
     // header View 싱글톤
     private let headerView: HeaderView = HeaderView.shared
     
-    var diaryVCTableDelegate: DiaryVCTableDelegate?
+    var diaryVCTableDelegate: DiaryTableDiaryDelegate?
     
-    var mainDiaryTableDelegate: MainDiaryTableDelegate?
+    var mainDiaryTableDelegate: DiaryTableMainDelegate?
     
     
     
@@ -60,7 +60,7 @@ final class DiaryTableView: UIView {
     // MARK: - LifeCycle
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
+        print(DiaryTableView.todayDiaryToggle)
         self.addSubview(self.diaryTableView)
         
     }
@@ -114,14 +114,21 @@ extension DiaryTableView: UITableViewDelegate, UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: ReuseIdentifier.diaryTableViewCell, for: indexPath) as! DiaryTableViewCell
         
         // 셀의 StringLabel에 Text표시
-        if indexPath.row == 0 { cell.diaryDate = "오늘"
-        } else if indexPath.row == 1 { cell.diaryDate = "어제"
-        } else if indexPath.row == 2 { cell.diaryDate = "그저께"
+        if indexPath.row == 0 {
+            cell.diaryDate = DiaryTableView.todayDiaryToggle == true
+            ? "오늘 떠올린 추억"
+            : "오늘 떠올릴 추억"
+            
+            
+        } else if indexPath.row == 1 { cell.diaryDate = "어제 떠올린 추억"
+        } else if indexPath.row == 2 { cell.diaryDate = "그저께 떠올린 추억"
         } else {
-            // 일기를 적은 날을 표시 (X월 X일)
-            cell.diaryDate = self.diaryData[indexPath.row - 3].dateString
+            // dateString 옵셔널 바인딩
+            if let diaryData = self.diaryData[indexPath.row - 3].dateString {
+                // 일기를 적은 날을 표시 (X월 X일 떠올리 추억)
+                cell.diaryDate = "\(diaryData) 떠올린 추억"
+            }
         }
-
         return cell
     }
     

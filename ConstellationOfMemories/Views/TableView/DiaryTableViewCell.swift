@@ -13,7 +13,7 @@ final class DiaryTableViewCell: UITableViewCell {
     
     var diaryDate: String? {
         didSet {
-            self.configureStringLabel()
+            self.stringLabel.text = diaryDate
         }
     }
     
@@ -75,10 +75,9 @@ final class DiaryTableViewCell: UITableViewCell {
     }
     
     
-    private func configureStringLabel() {
-        guard let date = diaryDate else { return }
-        self.stringLabel.text = "\(date) 떠올린 추억"
-    }
+//    private func configureStringLabel() {
+//
+//    }
     
     
     

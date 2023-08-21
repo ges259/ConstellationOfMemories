@@ -10,7 +10,7 @@ import UIKit
 final class MenuVC: UIView {
     
     // MARK: - Properties
-    var mainMenuDelegate: MainMenuDelegate?
+    var mainMenuDelegate: MenuMainDelegate?
     
     
     

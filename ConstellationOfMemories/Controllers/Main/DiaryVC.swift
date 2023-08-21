@@ -19,6 +19,8 @@ final class DiaryVC: UIView {
             if let diaryData = diaryData {
                 self.diaryTextView.text = diaryData.diaryText
             }
+            
+            
         }
     }
     
@@ -93,6 +95,9 @@ final class DiaryVC: UIView {
     private func configureDiaryVC() {
         // background Color
         self.backgroundColor = .clear
+        
+        // alpha
+        self.alpha = 0
         
         // UI - AutoLayout
         // diaryLabel
@@ -186,7 +191,7 @@ final class DiaryVC: UIView {
  */
 
 // MARK: - DiaryHeaderDelegate
-extension DiaryVC: DiaryHeaderDelegate {
+extension DiaryVC: HeaderDiaryVCDelegate {
     
     func diaryFixMode(_ fixMode: Bool) {
         // 수정뷰로 진입
@@ -296,7 +301,10 @@ extension DiaryVC: UITextViewDelegate {
 
 
 
-extension DiaryVC: DiaryVCTableDelegate {
+
+
+// MARK: - DiaryVCTableDelegate
+extension DiaryVC: DiaryTableDiaryDelegate {
     func todayDiaryTrue(diaryData: DiaryData) {
         self.diaryData = diaryData
     }

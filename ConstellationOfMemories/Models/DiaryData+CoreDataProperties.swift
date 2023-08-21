@@ -22,17 +22,44 @@ extension DiaryData {
     @NSManaged public var fontSize: Int16
     
     
+    
+    
+    
+    
     // date 설정
     var dateString: String? {
-        let myformatter = DateFormatter()
-        myformatter.dateFormat = "M월 d일에"
+        // 싱글톤
+        let coreDateManager = CoreDataManager.shared
         
-        guard let date = self.date else { return "" }
-        let savedDateString = myformatter.string(from: date)
+        // 코어데이터에 저장된 날짜를 가져옴
+        guard let date: Date = self.date else { return "" }
         
-        return savedDateString
+        // 가져온 날짜 데이터를 String으로 변환
+        let dateString = coreDateManager.configureDate(date: date)
+        return dateString
     }
-
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+//    var todayString: String? {
+//        let todatyString: String = self.configureData(format: "")
+//
+//        return todatyString
+//    }
+    
+    
+    
+    
+    
 }
 
 extension DiaryData : Identifiable {

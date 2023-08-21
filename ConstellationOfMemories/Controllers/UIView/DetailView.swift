@@ -59,8 +59,12 @@ final class DetailView: UIView {
     
     // MARK: - Helper Functions
     private func configureUI() {
+        // background Color
         self.backgroundColor = .red
-
+        
+        // alpha
+        self.alpha = 0
+        
         // background_Image
         self.addSubview(self.detailBackground)
         self.detailBackground.anchor(width: self.frame.width, height: self.frame.height,

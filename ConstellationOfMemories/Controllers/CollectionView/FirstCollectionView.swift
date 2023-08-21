@@ -12,7 +12,10 @@ final class FirstCollectionView: UIView {
     // MARK: - Properties
     
     
-//    var firstMainDelegate: FirstMainDelegate?
+    var firstMainDelegate: FirstMainDelegate?
+    
+    var firstHomeHeaderDelegate: FirstHomeHeaderDelegate?
+    
     
     
     
@@ -87,7 +90,6 @@ final class FirstCollectionView: UIView {
     }
     
     private func upCollectionView() {
-        print("111111111")
         // item이 항상 맨위로 가도록 설정
         let indexPath = IndexPath(item: self.item.count - 1, section: 0)
         self.firstCollection.scrollToItem(at: indexPath, at: .top, animated: true)
@@ -126,8 +128,9 @@ extension FirstCollectionView: UICollectionViewDelegate, UICollectionViewDataSou
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
-        print("First")
-//        self.firstMainDelegate?.firstTapped()
+        self.firstHomeHeaderDelegate?.fontColor()
+        
+        self.firstMainDelegate?.monthDiaryTapped()
         
     }
     

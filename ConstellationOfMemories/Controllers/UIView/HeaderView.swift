@@ -14,9 +14,9 @@ final class HeaderView: UIView {
     static let shared = HeaderView()
     
     // MainVC
-    var mainHeaderDelegate: MainHeaderDelegate?
+    var mainHeaderDelegate: HeaderMainDelegate?
     // DiaryVC
-    var diaryHeaderDelegate: DiaryHeaderDelegate?
+    var diaryHeaderDelegate: HeaderDiaryVCDelegate?
     
     
     /*
@@ -438,16 +438,16 @@ extension HeaderView {
     
     
     // MARK: - Animate
+// [Left_Button]
     // left버튼의 이미지가 바뀔 때 자연스럽게 바뀔 수 있도록 하는 메서드
-    func leftButtonAlpha(_ imageString: imageString? = .back) {
+    func leftButtonAlpha(_ imageString: imageString = .back) {
         
         UIView.animate(withDuration: 0.25) {
             self.leftButton.alpha = 0
             self.leftButton.isEnabled = false
             
         } completion: { _ in
-            
-            self.leftButton.setImage(.setImg(imageString!), for: .normal)
+            self.leftButton.setImage(.setImg(imageString), for: .normal)
             
             UIView.animate(withDuration: 0.25) {
                 
@@ -459,8 +459,10 @@ extension HeaderView {
     }
     
     
+    
+// [Right_Button]
     // right 버튼 보이게 하기 + 이미지 바꾸기
-    func rightButtonShow(_ imageString: imageString = .back) {
+    private func rightButtonShow(_ imageString: imageString = .back) {
         self.rightButton.alpha = 0
         self.rightButton.setImage(.setImg(imageString), for: .normal)
         

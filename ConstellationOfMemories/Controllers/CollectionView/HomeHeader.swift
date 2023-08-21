@@ -11,6 +11,18 @@ final class HomeHeader: UIView {
     
     // MARK: - Properties
     
+    var item: [Int] = [] {
+        didSet {
+            print("d")
+        }
+    }
+    
+    
+    
+    
+    
+    
+    
     // enum으로 교체
     var configureView: String? {
         didSet {
@@ -87,6 +99,12 @@ final class HomeHeader: UIView {
         
         self.addSubview(self.homeCollection)
     }
+    private func upCollectionView() {
+        print(#function)
+        // item이 항상 맨위로 가도록 설정
+        let indexPath = IndexPath(item: self.item.count - 1, section: 0)
+        self.homeCollection.scrollToItem(at: indexPath, at: .left, animated: true)
+    }
 }
 
 
@@ -147,3 +165,23 @@ extension HomeHeader: UICollectionViewDelegate, UICollectionViewDataSource, UICo
         return 0
     }
 }
+
+
+
+
+
+// MARK: - Delegate
+extension HomeHeader: FirstHomeHeaderDelegate {
+    func fontColor() {
+        
+        self.upCollectionView()
+    }
+}
+extension HomeHeader: SecondHomeHeaderDelegate {
+    func backgroundColr() {
+        
+        self.upCollectionView()
+    }
+}
+
+
