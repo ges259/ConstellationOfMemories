@@ -22,6 +22,7 @@ struct DBString {
     
     
     // MARK: - Diary
+    static let uid: String = "userId"
     static let date: String = "date"
     static let diaryText: String = "diaryText"
 //    static let like: String = "like"
@@ -32,7 +33,8 @@ struct DBString {
 let DB_REF: DatabaseReference = Database.database().reference()
 
 // user
-let REF_USERS: DatabaseReference = DB_REF.child("users")
+let Users_REF: DatabaseReference = DB_REF.child("users")
+let Diary_REF: DatabaseReference = DB_REF.child("diarys")
 
 
 

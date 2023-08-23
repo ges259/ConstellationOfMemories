@@ -14,7 +14,7 @@ final class SignUp: UIView {
     
     var signUpLoginDelegate: SignUpLoginDelegate?
     
-    
+    private let service: Service = Service.shared
     
     
     
@@ -225,22 +225,11 @@ final class SignUp: UIView {
         else { return }
         
         // 회원 가입하기
-        Auth.auth().createUser(withEmail: email, password: password) { result, error in
-            if let error = error {
-                print("Frailed to register user with error \(error.localizedDescription)")
-                return
-            }
-            // uid 가져오기
-            guard let uid = result?.user.uid else { return }
-            // user정보 만들기
-            let values = [DBString.fullName: fullName,
-                          DBString.email: email,
-                          DBString.password: password] as [String: Any]
-            // user정보를 uid에 저장
-            REF_USERS.child(uid).updateChildValues(values) { error, ref in
-                // MainVC로 이동
-                self.signUpLoginDelegate?.handleLogin()
-            }
+        self.service.signUp(fullName: fullName,
+                            email: email,
+                            password: password) {
+            // MainVC로 이동
+            self.signUpLoginDelegate?.handleLogin()
         }
     }
     

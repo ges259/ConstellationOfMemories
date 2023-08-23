@@ -8,8 +8,11 @@
 import Foundation
 
 struct Diary {
-    // 유저
-    let user: User
+    // user
+//    let user: User
+    
+    // uid
+    let uid: String
     // 일기 작성 날짜
     let date: String
     // 일기 작성 내용
@@ -17,9 +20,13 @@ struct Diary {
     
 //    let like: Int
     
-    init(user: User, dictionary: [String: Any]) {
-        self.user = user
+    init(uid: String, dictionary: [String: Any]) {
+        // user
+//        self.user = user
         
+        // uid
+        self.uid = uid
+            
         self.date = dictionary[DBString.date] as? String ?? ""
         
         self.diaryText = dictionary[DBString.diaryText] as? String ?? ""

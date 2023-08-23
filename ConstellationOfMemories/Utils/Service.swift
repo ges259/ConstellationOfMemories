@@ -7,6 +7,7 @@
 
 import FirebaseCore
 import FirebaseAuth
+import Firebase
 
 
 
@@ -27,8 +28,44 @@ struct Service {
     
     
     
-    func fetchUserData(uid: String,completion: @escaping (User) -> Void) {
-        REF_USERS.child(uid).observeSingleEvent(of: .value) { snapshot in
+    
+    // MARK: - Login
+    func login(email: String, password: String, completion: @escaping () -> Void) {
+        Auth.auth().signIn(withEmail: email, password: password) { result, error in
+            if let error = error {
+                print("Frailed to register user with error \(error.localizedDescription)")
+                return
+            }
+            completion()
+        }
+    }
+    
+    // MARK: - SignUp
+    func signUp(fullName: String, email: String, password: String, completion: @escaping () -> Void) {
+        
+        Auth.auth().createUser(withEmail: email, password: password) { result, error in
+            if let error = error {
+                print("Frailed to register user with error \(error.localizedDescription)")
+                return
+            }
+            // uid 가져오기
+            guard let uid = result?.user.uid else { return }
+            // user정보 만들기
+            let values = [DBString.fullName: fullName,
+                          DBString.email: email,
+                          DBString.password: password] as [String: Any]
+            
+            // Create_User_Data
+                // user정보를 uid를 통해 DB에 저장
+            Users_REF.child(uid).updateChildValues(values) { error, ref in
+                completion()
+            }
+        }
+    }
+    
+    // MARK: - Get_User_Data
+    func fetchUserData(uid: String, completion: @escaping (User) -> Void) {
+        Users_REF.child(uid).observeSingleEvent(of: .value) { snapshot in
             
             guard let dictionary = snapshot.value as? [String: Any] else { return }
             let uid = snapshot.key
@@ -38,5 +75,141 @@ struct Service {
             completion(user)
         }
     }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+     
+    
+    
+    
+    // MARK: - Create_Diary_Data
+    func createDiaryData(uid: String, diaryText: String) {
+        // creation_Date
+        let date = Int(NSDate().timeIntervalSince1970)
+        
+        // 배열에 데이터 넣기
+            // uid + diaryText + date
+        let values: [String: Any] = [DBString.uid: uid,
+                                     DBString.date: date,
+                                     DBString.diaryText: diaryText]
+        
+        // Diariy_Id 만들기 (childByAutoId()를 통해서 랜덤의 Id 만들기
+        let diaryId = Diary_REF.childByAutoId()
+        
+        // key
+//        guard let diaryKey = diaryId.key else { return }
+        
+        // realTime_DB에 데이터를 저장
+        diaryId.updateChildValues(values) { error, ref in
+            if let error = error {
+                print("Create Error, \(error.localizedDescription)")
+                return
+            } else {
+                print("Create!!!!!!")
+            }
+        }
+    }
+    
+    
+    
+    // MARK: - Update_Diary_Data
+    func updateDiaryData(diary: Diary, diaryText: String) {
+        
+
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    // MARK: - Fetch_Diary_Data
+    func fetchDiaryData(completion: @escaping (Diary) -> Void) {
+        // diary 배열 생성
+        var diaryArray = [String]()
+        
+        // diarys에 들어있는 데이터들을 가져옴
+        Diary_REF.observeSingleEvent(of: .value) { snapshot in
+            
+            guard let allObjects = snapshot.children.allObjects as? [DataSnapshot] else { return }
+            
+            allObjects.forEach { snapshot in
+                // diaryId를 가져옴
+                let diaryId = snapshot.key
+                // 배열에 넣기
+                diaryArray.append(diaryId)
+                
+                // 배열의 diaryId를 통해서 diaryId에 있는 정보들을 가져옴
+                    // 이렇게 가져온 정보들은 completion.(~~~)을 통해 정보를 얻을 수 있음
+                Diary_REF.child(diaryId).observeSingleEvent(of: .value) { snapshot in
+                    
+                    guard let dictionary = snapshot.value as? Dictionary<String, AnyObject> else { return }
+                    
+                    guard let currentUid = dictionary[DBString.uid] as? String else { return }
+                    
+                    fetchUserData(uid: currentUid) { user in
+                        let diary = Diary(uid: currentUid, dictionary: dictionary)
+                        
+                        completion(diary)
+                    }
+                }
+            }
+        }
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
 }

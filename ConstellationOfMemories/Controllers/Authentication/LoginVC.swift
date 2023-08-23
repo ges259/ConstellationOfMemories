@@ -218,15 +218,12 @@ final class LoginVC: UIView {
     // 로그인 버튼
         // 버튼을 누르면 -> MainVC로 이동
     @objc private func loginBtnTapped() {
-        print(#function)
-        
         guard let email = self.emailTextField.text,
               let password = self.passwordTextField.text
         else { return }
         
-        print("loginBtnTapped2")
-        Auth.auth().signIn(withEmail: email, password: password) { result, error in
-            print("loginBtnTapped3")
+        // Login
+        Service.shared.login(email: email, password: password) {
             self.handleLogin()
         }
     }
@@ -235,7 +232,6 @@ final class LoginVC: UIView {
     // MainVC로 이동
         // 따로 빼둔 이유는 SignUp_View에서도 이 함수를 통해 MainVC로 이동
     func handleLogin() {
-        print("loginBtnTapped4")
         self.loginMainDelegate?.handleLoginToMain()
     }
 }

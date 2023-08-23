@@ -76,7 +76,7 @@ protocol DiaryTableMainDelegate {
 }
 
 protocol DiaryTableDiaryDelegate {
-//    func todayDiaryTrue(diaryData: DiaryData)
+    func todayDiaryTrue(diaryData: Diary)
     func todayDiaryFalse()
 }
 

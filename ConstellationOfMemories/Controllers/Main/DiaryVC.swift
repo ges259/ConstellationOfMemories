@@ -6,27 +6,45 @@
 //
 
 import UIKit
+import FirebaseAuth
 
 final class DiaryVC: UIView {
     
     // MARK: - Properties
     // 헤더뷰 싱글톤
     private let headerView = HeaderView.shared
+    // service 싱글톤
+    private let service: Service = Service.shared
     
-//    var diaryData: DiaryData? {
-//        didSet {
-//            // diaryTextView에 텍스트 넣기
-//            if let diaryData = diaryData {
-//                self.diaryTextView.text = diaryData.diaryText
-//            }
-//        }
-//    }
+    
     
     // fixToggle이 true이면 -> Save Or Update
     private var fixToggle: Bool = false
     
-    // 코어데이터 싱글톤
-//    private let coredata = CoreDataManager.shared
+    
+    
+    
+    
+    
+    
+    var diaryData: Diary? {
+        didSet {
+            
+        }
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     
     
@@ -204,7 +222,7 @@ extension DiaryVC: HeaderDiaryVCDelegate {
             
         // 저장뷰로 진입
         } else {
-                self.saveOrUpdate()
+            self.saveOrUpdate()
             
             UIView.animate(withDuration: 0.3) {
                 self.diaryTextView.isEditable = false
@@ -215,7 +233,11 @@ extension DiaryVC: HeaderDiaryVCDelegate {
         }
     }
     
-    // MARK: - CoreData
+    
+    
+    
+    
+    // MARK: - API
     private func saveOrUpdate() {
         if self.fixToggle == false { return }
         self.fixToggle = false
@@ -226,30 +248,26 @@ extension DiaryVC: HeaderDiaryVCDelegate {
             return
         }
         
-//        // 코어데이터에 저장
-//            // diaryData가 있다면 (전 화면에서 DiaryData를 받아왔다면) -> update
-//        if let diaryData = self.diaryData {
-//            diaryData.diaryText = self.diaryTextView.text
-////            self.coredata.updateDiaryData(newDiaryData: diaryData)
-//            print("데이터 업데이트")
-//
-//
-//
-//            // diaryData가 없다면 (전 화면에서 DiaryData를 받아오지 못했다면) -> create
-//        } else {
-//            // 빈칸이라면 데이터를 생성(create)하지 않음
-//            if self.diaryTextView.text == "" {
-//                return
-//            }
-//
-//
-//            // 데이터를 생성했다면, toggle바꾸기
-//            DiaryTableView.todayDiaryToggle = true
-//
-//
-////            self.coredata.createDiaryData(diaryText: self.diaryTextView.text)
-//            print("데이터 생성")
-//        }
+        
+        
+        guard let diaryText = self.diaryTextView.text,
+              let currentUid = Auth.auth().currentUser?.uid
+        else { return }
+        
+        
+        // [Create Or Update]
+        // Create
+        if self.diaryData == nil {
+            self.service.createDiaryData(uid: currentUid,diaryText: diaryText)
+            
+            
+        // Update
+        } else {
+            guard let diaryData = diaryData else { return }
+            self.service.updateDiaryData(diary: diaryData, diaryText: diaryText)
+            
+            
+        }
     }
 }
 
@@ -303,12 +321,12 @@ extension DiaryVC: UITextViewDelegate {
 
 // MARK: - DiaryVCTableDelegate
 extension DiaryVC: DiaryTableDiaryDelegate {
-//    func todayDiaryTrue(diaryData: DiaryData) {
-//        self.diaryData = diaryData
-//    }
+    func todayDiaryTrue(diaryData: Diary) {
+          //        self.diaryData = diaryData
+    }
     
     func todayDiaryFalse() {
         self.diaryTextView.text = ""
-//        self.diaryData = nil
+        self.diaryData = nil
     }
 }

@@ -17,7 +17,11 @@ final class MainVC: UIViewController {
     private let service = Service.shared
     
     
-    private var user: User?
+    private var user: User? {
+        didSet {
+            dump(user)
+        }
+    }
     
     // toggle
     private var blackViewToggle: BlackViewToggle = .menu
@@ -276,6 +280,13 @@ final class MainVC: UIViewController {
         self.configureImageView()
         
         
+        
+        // MARK: - Fix
+        // Diary_Data를 가져오는 방법
+//        self.service.fetchDiaryData { stt in
+//            dump(stt)
+//        }
+        
         // User가 있다면
             // MainVC
         // User가 없다면
@@ -286,19 +297,24 @@ final class MainVC: UIViewController {
     
     
     // MARK: - Authentication
+    // user가 있는지 확인
     private func checkLogin() {
-        // user가 있는지 확인
-            // user가 없다면 -> Login_View 로 이동
-        if Auth.auth().currentUser?.uid == nil {
-            print("user is nil")
+        // user가 있다면 -> MainVC 로 이동
+        if let currentUid = Auth.auth().currentUser?.uid {
+            print("login")
+            // fetch_User
+            self.service.fetchUserData(uid: currentUid) { user in
+                self.user = user
+            }
+            // Login_View 숨기기
+            self.loginViewHideOrShow(show: false)
+
             
+            // user가 없다면 -> Login_View 로 이동
+        } else {
+            print("user is nil")
             // Login_View 보이게 하기
             self.loginViewHideOrShow(show: true)
-            
-            // user가 있다면 -> Main으로 이동
-        } else {
-            print("login")
-            self.loginViewHideOrShow(show: false)
         }
     }
     
@@ -807,6 +823,7 @@ extension MainVC {
 extension MainVC: LoginMainDelegate, HeaderMainDelegate, MenuMainDelegate, SecondMainDelegate, DiaryTableMainDelegate, ShopMainDelegate, FirstMainDelegate, SetupMainDelegate, LogoutMainDelegate {
     
     // MARK: - Menu
+// [Left_Button]
     // MainVC -> MenuVC
     func handleMainToMenu() {
         self.blackViewToggle = .menu
@@ -815,6 +832,7 @@ extension MainVC: LoginMainDelegate, HeaderMainDelegate, MenuMainDelegate, Secon
         // menu_View_보이게 하기
         self.menuHideOrShow(show: true, itemTapped: true, footerHide: false)
     }
+// [Left_Button]
     // Menu -> MainVC
     func handleMenuToMain() {
         // 버튼의 이미지 + 역할을 바꿈
@@ -828,6 +846,7 @@ extension MainVC: LoginMainDelegate, HeaderMainDelegate, MenuMainDelegate, Secon
     
     
     // MARK: - Achieve_View
+// [Menu - Button]
     // menu -> achieveView
     func handleAchievement() {
         // 버튼의 이미지 + 역할을 바꿈
@@ -837,6 +856,7 @@ extension MainVC: LoginMainDelegate, HeaderMainDelegate, MenuMainDelegate, Secon
         // achievement_View_보이게 하기
         self.achievementViewHideOrShow(show: true)
     }
+// [Left_Button]
     // AchieveView -> MainVC
     func handleAchievementToMain() {
         // 버튼의 이미지 + 역할을 바꿈
@@ -850,6 +870,7 @@ extension MainVC: LoginMainDelegate, HeaderMainDelegate, MenuMainDelegate, Secon
     
     
     // MARK: - Home_View
+// [Menu - Button]
     // menu -> HomeView
     func handleHome() {
         // 버튼의 이미지 + 역할을 바꿈
@@ -859,6 +880,8 @@ extension MainVC: LoginMainDelegate, HeaderMainDelegate, MenuMainDelegate, Secon
         // Home_View_보이게 하기
         self.HomeViewHideOrShow(show: true)
     }
+    
+// [Left_Button]
     // Home -> Main
     func handleHomeToMain() {
         // 버튼의 이미지 + 역할을 바꿈
@@ -872,6 +895,7 @@ extension MainVC: LoginMainDelegate, HeaderMainDelegate, MenuMainDelegate, Secon
     
     
     // MARK: - Shop_View
+// [Menu - Button]
     // menu -> ShopView
     func handleShop() {
         // 버튼의 이미지 + 역할을 바꿈
@@ -879,6 +903,8 @@ extension MainVC: LoginMainDelegate, HeaderMainDelegate, MenuMainDelegate, Secon
         // shop_View_보이게 하기
         self.shopViewHideOrShow(show: true)
     }
+    
+// [Left_Button]
     // ShopVC -> MainVC
     func handleShopToMain() {
         // 버튼의 이미지 + 역할을 바꿈
@@ -892,6 +918,7 @@ extension MainVC: LoginMainDelegate, HeaderMainDelegate, MenuMainDelegate, Secon
     
     
     // MARK: - Setup_View
+// [Menu - Button]
     // menu -> SetupView
     func handleSetup() {
         // 버튼의 이미지 + 역할을 바꿈
@@ -899,6 +926,7 @@ extension MainVC: LoginMainDelegate, HeaderMainDelegate, MenuMainDelegate, Secon
         // setup_Table_보이게 하기
         self.setupTableHideOrShow(show: true)
     }
+// [Left_Button]
     // SetupVC -> MainVC
     func handleSetupToMain() {
         // 버튼의 이미지 + 역할을 바꿈
@@ -912,6 +940,7 @@ extension MainVC: LoginMainDelegate, HeaderMainDelegate, MenuMainDelegate, Secon
     
     
     // MARK: - Diary_Table
+// [Footer_Button]
     // MainVC -> Diary_Table
     @objc private func starButtonTapped() {
         // 버튼의 이미지 바꾸기
@@ -922,6 +951,8 @@ extension MainVC: LoginMainDelegate, HeaderMainDelegate, MenuMainDelegate, Secon
         // diary_Table_View_보이게 하기
         self.diaryTableHideOrShow(show: true)
     }
+    
+// [Left_Button]
     // Diary_Table -> MainVC
     func handleTableToMain() {
         // 버튼의 이미지 + 역할을 바꿈
@@ -935,6 +966,7 @@ extension MainVC: LoginMainDelegate, HeaderMainDelegate, MenuMainDelegate, Secon
     
     
     // MARK: - DiaryVC
+// [Cell]
     // Diary_Table -> DiaryVC
     func handleTableToDiaryVC() {
         // 버튼의 이미지 + 역할을 바꿈 (위에서 바꾼 Toggle을 통해 right버튼도 바뀜)
@@ -942,6 +974,8 @@ extension MainVC: LoginMainDelegate, HeaderMainDelegate, MenuMainDelegate, Secon
         // diary_View_보이게 하기
         self.DiaryViewHideOrShow(show: true)
     }
+    
+// [Left_Button]
     // DiaryVC -> Diary_Table
     func handleDiaryToTable() {
         // 버튼의 이미지 + 역할을 바꿈
@@ -958,7 +992,8 @@ extension MainVC: LoginMainDelegate, HeaderMainDelegate, MenuMainDelegate, Secon
     
     
     // MARK: - Detail_View
-// [Achieve]
+// *** [Achieve] ***
+// [Item]
     // achieve -> Detail
         // second segement를 누르면 detail로 진입
     func secondTapped() {
@@ -969,6 +1004,8 @@ extension MainVC: LoginMainDelegate, HeaderMainDelegate, MenuMainDelegate, Secon
         // detail_View + black_View 보이게 하기
         self.detailViewHideOrShow(show: true)
     }
+    
+// [Left_Button]
     // detailView -> AchieveView
     func handleDetailToAchieve() {
         // left 버튼의 용도 바꾸기
@@ -981,7 +1018,8 @@ extension MainVC: LoginMainDelegate, HeaderMainDelegate, MenuMainDelegate, Secon
     
     
     
-// [Shop]
+// *** [Shop] ***
+// [Item]
     // Shop_View -> detail_View
     func shopCellTapped() {
         // detail_View + detail_Black_View 보이게 하기
@@ -992,6 +1030,7 @@ extension MainVC: LoginMainDelegate, HeaderMainDelegate, MenuMainDelegate, Secon
         self.detailViewHideOrShow(show: true)
     }
     
+// [Left_Button]
     // detail_View -> Shop_View
     func handleDetailToShop() {
         // left 버튼의 용도 바꾸기
@@ -1007,7 +1046,7 @@ extension MainVC: LoginMainDelegate, HeaderMainDelegate, MenuMainDelegate, Secon
     
     
     // MARK: - Black_View
-// [Shop / Achieve]
+// [Black_View - Tapped]
     // detail_View -> Shop
     // detail_View -> Achieve
     // detail_View -> Main
@@ -1019,24 +1058,25 @@ extension MainVC: LoginMainDelegate, HeaderMainDelegate, MenuMainDelegate, Secon
             self.menuHideOrShow(show: false, itemTapped: false, footerHide: false)
             // 버튼의 이미지 + 역할 바꾸기
             self.headerView.buttonConfig = .mainViewButton
+            break
             
             
         case .shop:
             self.headerView.buttonConfig = .shopVCButton
             self.detailViewHideOrShow(show: false)
-            
+            break
             
             
         case .achieve:
             self.headerView.buttonConfig = .achievementVCButton
             self.detailViewHideOrShow(show: false)
-            
+            break
             
             
         case .logout:
-            
             self.headerView.buttonConfig = .setupVCButton
             self.logoutViewHideOrShow(show: false)
+            break
         }
     }
     
@@ -1048,21 +1088,13 @@ extension MainVC: LoginMainDelegate, HeaderMainDelegate, MenuMainDelegate, Secon
     
     
     // MARK: - Login_View
-    // Main -> Login_View
-//    private func handleMainToLogin() {
-//
-//    }
-    
+// [Login_View - Button]
+// [SignUp_View - Button]
     // login_View -> Main
     func handleLoginToMain() {
-        print(#function)
-        
-        guard let currentUid = Auth.auth().currentUser?.uid else {
-            return }
-        
-        service.fetchUserData(uid: currentUid) { user in
-            self.user = user
-            self.checkLogin()
+        // user가 있다면
+        if Auth.auth().currentUser?.uid != nil {
+            checkLogin()
         }
     }
     
@@ -1072,29 +1104,33 @@ extension MainVC: LoginMainDelegate, HeaderMainDelegate, MenuMainDelegate, Secon
     
     
     // MARK: - Logout_View
+// [Cell - Button]
     // setup_View -> BlackView
     func setupBlackViewShow() {
         // blackViewToggle 바꾸기
         self.blackViewToggle = .logout
         // left 버튼의 역할 바꾸기
         self.headerView.buttonConfig = .logoutSetupButton
-        
+        // Logout_Veiw 보이게 하기
         self.logoutViewHideOrShow(show: true)
     }
     
+// [Left_Button]
     // Logout_View -> Setup_View
-    // [back_Button]
     func handleLogoutToSetup() {
         self.headerView.buttonConfig = .setupVCButton
         self.logoutViewHideOrShow(show: false)
     }
     
+// [Logout_View - Button]
+// [Black_View]
     // Logout_View -> Setup_View
     func cancelBtnTapped() {
         self.headerView.buttonConfig = .setupVCButton
         self.logoutViewHideOrShow(show: false)
     }
     
+// [Logout_View - Button]
     // Logout
     func logoutBtnTapped() {
         // logout_View에서 나가기

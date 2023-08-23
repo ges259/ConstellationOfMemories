@@ -22,17 +22,33 @@ final class DiaryTableView: UIView {
     
     
     // coreData를 담을 배열 생성
-//    var diaryData: [DiaryData] = [] {
-//        didSet {
-//            self.diaryTableView.reloadData()
-//        }
-//    }
+    var diaryData: [Diary] = [] {
+        didSet {
+            
+            self.fetchDiaryData()
+            // table_View_Reload
+            self.diaryTableView.reloadData()
+        }
+    }
+    
+    
+    
+    
+    
+    
+    
     // header View 싱글톤
     private let headerView: HeaderView = HeaderView.shared
     
     var diaryVCTableDelegate: DiaryTableDiaryDelegate?
     
     var mainDiaryTableDelegate: DiaryTableMainDelegate?
+    
+    
+//    var diaryData
+    
+    
+    
     
     
     
@@ -71,7 +87,13 @@ final class DiaryTableView: UIView {
     
     
     // MARK: - Helper Functions
-    
+    private func fetchDiaryData() {
+        
+        
+//        Service.shared.fetchDiaryData(uif: <#T##String#>, completion: <#T##(Diary) -> Void#>)
+        
+        
+    }
     
     
     
@@ -145,7 +167,11 @@ extension DiaryTableView: UITableViewDelegate, UITableViewDataSource {
         // 첫번째 셀
         if indexPath.row == 0 {
             // 오늘 일기를 적지 않았다면,
-
+            
+            // MARK: - Fix
+            // DiaryVC에 Diary 데이터를 주기
+            
+            
             if DiaryTableView.todayDiaryToggle == false {
 
                 self.diaryVCTableDelegate?.todayDiaryFalse()
@@ -159,6 +185,14 @@ extension DiaryTableView: UITableViewDelegate, UITableViewDataSource {
                 self.headerView.rightButtonConfig = .saveMode
 
 //                self.diaryVCTableDelegate?.todayDiaryTrue(diaryData: self.diaryData[indexPath.row])
+                
+                
+                
+                
+                // MARK: - Fix - data 넣기
+//                self.diaryVCTableDelegate?.todayDiaryTrue(diaryData: Diary())
+                
+                
             }
 
         // 2번째 셀부터 ~~~ 마지막 셀까지
