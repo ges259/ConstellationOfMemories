@@ -14,6 +14,19 @@ struct Service {
     static let shared = Service()
     init() {}
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     func fetchUserData(uid: String,completion: @escaping (User) -> Void) {
         REF_USERS.child(uid).observeSingleEvent(of: .value) { snapshot in
             

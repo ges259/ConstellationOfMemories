@@ -151,7 +151,11 @@ final class MainVC: UIViewController {
                            y: self.view.frame.height - 300,
                            width: self.view.frame.width,
                            height: self.view.frame.height - 150)
-        return SetupTableView(frame: frame)
+        let view = SetupTableView(frame: frame)
+        
+        view.setupMainDelegate = self
+        
+        return view
     }()
     
     
@@ -212,6 +216,40 @@ final class MainVC: UIViewController {
     }()
     
     
+    // MARK: - Login_View
+    private lazy var loginView: LoginVC = {
+        let frame = CGRect(x: 0,
+                           y: 0,
+                           width: self.view.frame.width,
+                           height: self.view.frame.height)
+        let view = LoginVC(frame: frame)
+            view.loginMainDelegate = self
+        return view
+    }()
+    
+    
+    
+    
+    
+    // MARK: - Logout_View
+    // black_View + 로그아웃 창
+    private lazy var logoutView: LogoutView = {
+        let frame = CGRect(x: self.view.frame.width / 6,
+                           y: self.view.frame.height / 5 * 2,
+                           width: self.view.frame.width / 3 * 2,
+                           height: 150)
+        let view = LogoutView(frame: frame)
+            view.logoutMainDelegate = self
+        return view
+    }()
+    
+    
+    
+    
+    
+    
+    
+    
     
 
     
@@ -235,6 +273,9 @@ final class MainVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.configureImageView()
+        
+        
         // User가 있다면
             // MainVC
         // User가 없다면
@@ -246,50 +287,36 @@ final class MainVC: UIViewController {
     
     // MARK: - Authentication
     private func checkLogin() {
-        
+        // user가 있는지 확인
+            // user가 없다면 -> Login_View 로 이동
         if Auth.auth().currentUser?.uid == nil {
             print("user is nil")
             
-            self.view.addSubview(self.loginView)
+            // Login_View 보이게 하기
+            self.loginViewHideOrShow(show: true)
             
-            self.configureLoginVC()
-            
+            // user가 있다면 -> Main으로 이동
         } else {
-            print("user is not nil")
+            print("login")
+            self.loginViewHideOrShow(show: false)
         }
-        
-        self.configureMainVC()
     }
-    
-    
-    
-    // login_View 보이게 하기
-    private func configureLoginVC() {
-        
-    }
-    
-    private lazy var loginView: LoginVC = {
-        let frame = CGRect(x: 0,
-                           y: 0,
-                           width: self.view.frame.width,
-                           height: self.view.frame.height)
-        let view = LoginVC(frame: frame)
-            view.loginMainDelegate = self
-        
-        return view
-    }()
     
     
     
     // MARK: - Configure UI
-    private func configureMainVC() {
+    private func configureImageView() {
         // background_Image
         self.view.addSubview(self.backgroundImage)
         self.backgroundImage.anchor(top: self.view.topAnchor,
                                     bottom: self.view.bottomAnchor,
                                     leading: self.view.leadingAnchor,
                                     trailing: self.view.trailingAnchor)
-        
+    }
+    
+    
+    
+    private func configureMainVC() {
         // header_View
         self.view.addSubview(self.headerView)
         self.headerView.mainHeaderDelegate = self
@@ -628,8 +655,8 @@ extension MainVC {
     
     
     
-    // MARK: - Detail_View + Black
-    func detailViewHideOrShow(show: Bool) {
+    // MARK: - Detail_View
+    private func detailViewHideOrShow(show: Bool) {
         if show == true {
             UIView.animate(withDuration: 0.5) {
                 // detailBlackView 보이게 하기
@@ -645,6 +672,79 @@ extension MainVC {
                 self.blackView.alpha = 0
                 // detailview 보이게 하기
                 self.detailView.alpha = 0
+            }
+        }
+    }
+    
+    
+    // MARK: - Login_View
+    private func loginViewHideOrShow(show: Bool) {
+        // Login_View_Show
+        if show == true {
+            // login_View 보이게 하기
+            self.view.addSubview(self.loginView)
+            
+            // login_View 보이게 하기
+            UIView.animate(withDuration: 0.5) {
+                self.loginView.alpha = 1
+                
+                
+            } completion: { _ in
+                self.headerView.removeFromSuperview()
+                self.footerButton.removeFromSuperview()
+            }
+            
+            
+        // Login_View_Hide
+        } else {
+            // configure UI
+            self.configureMainVC()
+            
+            UIView.animate(withDuration: 0.5) {
+                // login_View 숨기기
+                self.loginView.alpha = 0
+                // Layout 보이게 하기
+                self.headerView.alpha = 1
+                self.footerButton.alpha = 1
+                
+            } completion: { _ in
+                self.loginView.removeFromSuperview()
+            }
+        }
+    }
+    
+    
+    
+    // MARK: - Logout_View
+    private func logoutViewHideOrShow(show: Bool) {
+        print(show)
+        if show == true {
+            self.view.addSubview(self.blackView)
+            self.view.addSubview(self.logoutView)
+            
+            UIView.animate(withDuration: 0.5) {
+                // setup_View 숨기기
+                self.setupTableView.alpha = 0.5
+                // login_View 보이게 하기
+                self.logoutView.alpha = 1
+                // Black_View 보이게 하기
+                self.blackView.alpha = 1
+            }
+            
+            
+        } else {
+            UIView.animate(withDuration: 0.5) {
+                // setup_View 보이게 하기
+                self.setupTableView.alpha = 1
+                // login_View 숨기기
+                self.logoutView.alpha = 0
+                // Black_View 숨기기
+                self.blackView.alpha = 0
+                
+                
+            } completion: { _ in
+                self.logoutView.removeFromSuperview()
+                self.blackView.removeFromSuperview()
             }
         }
     }
@@ -704,7 +804,7 @@ extension MainVC {
     // 뷰 전환
     // 왼쪽 버튼의 역할 및 이미지를 바꿈
     // 상황에 따라 필요한 토글 설정
-extension MainVC: LoginMainDelegate, HeaderMainDelegate, MenuMainDelegate, SecondMainDelegate, DiaryTableMainDelegate, ShopMainDelegate, FirstMainDelegate {
+extension MainVC: LoginMainDelegate, HeaderMainDelegate, MenuMainDelegate, SecondMainDelegate, DiaryTableMainDelegate, ShopMainDelegate, FirstMainDelegate, SetupMainDelegate, LogoutMainDelegate {
     
     // MARK: - Menu
     // MainVC -> MenuVC
@@ -911,6 +1011,7 @@ extension MainVC: LoginMainDelegate, HeaderMainDelegate, MenuMainDelegate, Secon
     // detail_View -> Shop
     // detail_View -> Achieve
     // detail_View -> Main
+    // detail_View -> Setup
     @objc private func detailBlackViewTapped() {
         switch self.blackViewToggle {
         case .menu:
@@ -922,14 +1023,21 @@ extension MainVC: LoginMainDelegate, HeaderMainDelegate, MenuMainDelegate, Secon
             
         case .shop:
             self.headerView.buttonConfig = .shopVCButton
+            self.detailViewHideOrShow(show: false)
+            
             
             
         case .achieve:
             self.headerView.buttonConfig = .achievementVCButton
+            self.detailViewHideOrShow(show: false)
+            
+            
+            
+        case .logout:
+            
+            self.headerView.buttonConfig = .setupVCButton
+            self.logoutViewHideOrShow(show: false)
         }
-        
-        
-        self.detailViewHideOrShow(show: false)
     }
     
     
@@ -940,30 +1048,83 @@ extension MainVC: LoginMainDelegate, HeaderMainDelegate, MenuMainDelegate, Secon
     
     
     // MARK: - Login_View
+    // Main -> Login_View
+//    private func handleMainToLogin() {
+//
+//    }
+    
     // login_View -> Main
     func handleLoginToMain() {
         print(#function)
         
         guard let currentUid = Auth.auth().currentUser?.uid else {
-            print("No...")
             return }
-        print("OKKKKKK")
-        
-        
         
         service.fetchUserData(uid: currentUid) { user in
             self.user = user
-            
             self.checkLogin()
-            UIView.animate(withDuration: 0.5) {
-                self.loginView.alpha = 0
-                
-            } completion: { _ in
-                self.loginView.removeFromSuperview()
-            }
         }
     }
     
+    
+    
+    
+    
+    
+    // MARK: - Logout_View
+    // setup_View -> BlackView
+    func setupBlackViewShow() {
+        // blackViewToggle 바꾸기
+        self.blackViewToggle = .logout
+        // left 버튼의 역할 바꾸기
+        self.headerView.buttonConfig = .logoutSetupButton
+        
+        self.logoutViewHideOrShow(show: true)
+    }
+    
+    // Logout_View -> Setup_View
+    // [back_Button]
+    func handleLogoutToSetup() {
+        self.headerView.buttonConfig = .setupVCButton
+        self.logoutViewHideOrShow(show: false)
+    }
+    
+    // Logout_View -> Setup_View
+    func cancelBtnTapped() {
+        self.headerView.buttonConfig = .setupVCButton
+        self.logoutViewHideOrShow(show: false)
+    }
+    
+    // Logout
+    func logoutBtnTapped() {
+        // logout_View에서 나가기
+        self.logoutViewHideOrShow(show: false)
+        // setup_View 숨기기
+        self.setupTableHideOrShow(show: false)
+        // left 버튼의 용도 및 이미지 바꾸기
+        self.headerView.buttonConfig = .mainViewButton
+        
+        UIView.animate(withDuration: 0.3) {
+            // header_View + fotter_Button 숨기기
+            self.headerView.alpha = 0
+            self.footerButton.alpha = 0
+            
+            
+        } completion: { _ in
+            UIView.animate(withDuration: 0.3) {
+                do {
+                    // 로그아웃
+                    try Auth.auth().signOut()
+                    // MainVC로 이동
+                    DispatchQueue.main.async {
+                        // login_View 보이게 하기
+                        self.user = nil
+                        self.checkLogin()
+                    }
+                } catch { print("DEBUG: Error signin out") }
+            }
+        }
+    }
     
     
     
@@ -982,6 +1143,4 @@ extension MainVC: LoginMainDelegate, HeaderMainDelegate, MenuMainDelegate, Secon
     func monthDiaryTapped() {
         print(#function)
     }
-    
-    // MARK: - Fix
 }

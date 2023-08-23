@@ -10,19 +10,44 @@ import UIKit
 final class SetupTableviewCell: UITableViewCell {
     
     // MARK: - Properties
+    var setupCellSetupDelegate: SetupCellSetupDelegate?
+    
     
     private var inforToggle: Bool = false {
+        didSet { self.toggleAnimate() }
+    }
+    
+    
+    var setupCellTitle: SetupCelltitle? {
         didSet {
-            self.toggleAnimate()
+            if self.setupCellTitle == .info {
+                // titleLabel 바꾸기
+                self.titleLabel.text = "알림"
+                
+                
+                
+                // 버튼 바꾸기
+                // DB에서 가져와야 함
+                // MARK: - Fix
+                // 일단 임시방편
+                self.inforButton.setTitle("On", for: .normal)
+                
+                
+            } else {
+                // titleLabel 바꾸기
+                self.titleLabel.text = "로그아웃"
+                
+                // 버튼 바꾸기
+                self.inforButton.setTitle("logout", for: .normal)
+            }
         }
     }
     
     
     
     // MARK: - Layout
-    lazy var titleLabel: UILabel = {
-        return UILabel().labelConfig(labelText: "11",
-                                     LabelTextColor: UIColor.nightFontColor,
+    private lazy var titleLabel: UILabel = {
+        return UILabel().labelConfig(LabelTextColor: UIColor.nightFontColor,
                                      fontName: .system,
                                      fontSize: 20)
     }()
@@ -70,32 +95,43 @@ final class SetupTableviewCell: UITableViewCell {
         // toggleButton
         self.contentView.addSubview(self.inforButton)
         self.inforButton.anchor(trailing: self.trailingAnchor, paddingTrailing: 20,
-                                 width: 50, height: 35,
+                                 width: 100, height: 35,
                                  centerY: self,
                                  cornerRadius: 10)
     }
     
     private func toggleAnimate() {
         
-        UIView.animate(withDuration: 0.3) {
-            self.inforButton.alpha = 0
-            
-            
-        } completion: { _ in
-            if self.inforToggle == true {
-                self.inforButton.setTitle("ON", for: .normal)
-                self.inforButton.backgroundColor = UIColor(white: 1, alpha: 0.5)
-                self.inforButton.setTitleColor(.white, for: .normal)
-                
-            } else {
-                self.inforButton.setTitle("OFF", for: .normal)
-                self.inforButton.backgroundColor = UIColor(white: 1, alpha: 0.3)
-                self.inforButton.setTitleColor(.white, for: .normal)
-            }
-            
+        // 알림 On / Off 버튼을 눌렀을 경우
+        if self.setupCellTitle == .info {
             UIView.animate(withDuration: 0.3) {
-                self.inforButton.alpha = 1
+                self.inforButton.alpha = 0
+                
+            } completion: { _ in
+                if self.inforToggle == true {
+                    self.inforButton.setTitle("ON", for: .normal)
+                    self.inforButton.backgroundColor = UIColor(white: 1, alpha: 0.5)
+                    self.inforButton.setTitleColor(.white, for: .normal)
+                    
+                } else {
+                    self.inforButton.setTitle("OFF", for: .normal)
+                    self.inforButton.backgroundColor = UIColor(white: 1, alpha: 0.3)
+                    self.inforButton.setTitleColor(.white, for: .normal)
+                }
+                
+                UIView.animate(withDuration: 0.3) {
+                    self.inforButton.alpha = 1
+                }
             }
+            
+            
+            
+            
+            
+        // 로그아웃 버튼을 눌렀을 경우
+        } else {
+            // 새로운 뷰 (+ 블랙 뷰)
+            self.setupCellSetupDelegate?.logoutBtnTapped()
         }
     }
     

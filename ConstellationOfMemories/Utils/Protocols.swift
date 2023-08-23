@@ -25,23 +25,29 @@ protocol HeaderMainDelegate {
     func handleMainToMenu()
     // Menu -> MainVC
     func handleMenuToMain()
+    
     // tableView -> MainVC
     func handleTableToMain()
     // TableView -> DiaryVC -> TableView Cell을 통해
     // DiaryVC -> TableView
     func handleDiaryToTable()
     
+    // Achieve -> Main
+    func handleAchievementToMain()
+    // Shop - > Main
     func handleShopToMain()
-    
-    func handleDetailToAchieve()
-    
-    func handleDetailToShop()
-    
+    // Setup -> Main
     func handleSetupToMain()
-    
+    // Home -> Main
     func handleHomeToMain()
     
-    func handleAchievementToMain()
+    // [Detail]_Achieve -> Achieve
+    func handleDetailToAchieve()
+    // [Detail]_Shop -> Shop
+    func handleDetailToShop()
+    
+    // Logout -> Setup
+    func handleLogoutToSetup()
 }
 
 
@@ -89,3 +95,24 @@ protocol SecondHomeHeaderDelegate {
     func backgroundColr()
 }
 
+
+protocol SetupCellSetupDelegate {
+    func logoutBtnTapped()
+}
+
+
+
+
+
+protocol LogoutMainDelegate {
+    func cancelBtnTapped()
+    func logoutBtnTapped()
+}
+
+
+
+
+protocol SetupMainDelegate {
+    func cancelBtnTapped()
+    func setupBlackViewShow()
+}

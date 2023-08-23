@@ -246,6 +246,7 @@ final class SignUp: UIView {
     
     
     
+    // MARK: - SignUp
     // 하단 버튼을 누르면 -> login_View로 이동
     @objc private func bottomBtnTapped() {
         self.signUpLoginDelegate?.handleSignUpToLogin()

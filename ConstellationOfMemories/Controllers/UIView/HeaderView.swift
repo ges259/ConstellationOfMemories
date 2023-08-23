@@ -247,6 +247,12 @@ extension HeaderView {
             // 뒤로가기
             self.mainHeaderDelegate?.handleAchievementToMain()
             break
+            
+            
+            
+        case .logoutSetupButton:
+            self.mainHeaderDelegate?.handleLogoutToSetup()
+            break
         }
     }
     
@@ -415,6 +421,10 @@ extension HeaderView {
             
         case .achievementVCButton:
             self.rightButtonHide()
+            break
+            
+            
+        case .logoutSetupButton:
             break
         }
     }

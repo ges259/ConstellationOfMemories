@@ -25,6 +25,7 @@ enum LeftBtnTapImgChange {
     case achieveDetailViewButton
     case shopDetailViewButton
     case setupVCButton
+    case logoutSetupButton
     case achievementVCButton
 }
 
@@ -134,4 +135,11 @@ enum BlackViewToggle {
     case menu
     case shop
     case achieve
+    case logout
+}
+
+
+enum SetupCelltitle {
+    case info
+    case logout
 }

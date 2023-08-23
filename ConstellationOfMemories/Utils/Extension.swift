@@ -173,7 +173,7 @@ extension UIStackView {
 
 // MARK: - UILabel
 extension UILabel {
-    func labelConfig(labelText: String? = nil,
+    func labelConfig(labelText: String? = "",
                LabelTextColor: UIColor? = .darkGray,
                
                fontName: FontStyle? = .system,
@@ -192,10 +192,9 @@ extension UILabel {
         
         
         // text
-        if let labelText = labelText {
-            lbl.text = labelText
-            lbl.textColor = LabelTextColor
-        }
+        lbl.text = labelText
+        // text Color
+        lbl.textColor = LabelTextColor
         
         // font
         if let fontSize = fontSize {
@@ -234,18 +233,20 @@ extension UIButton {
         return btn
     }
     
-    func authButton(title: String) -> UIButton{
+    func authButton(title: String,
+                    backgroundColor: UIColor = UIColor(white: 1, alpha: 0.3))
+    -> UIButton {
         let btn = UIButton(type: .system)
         
-        btn.setTitle(title, for: .normal)
-        btn.setTitleColor(.lightGray, for: .normal)
-        btn.titleLabel?.font = UIFont.boldSystemFont(ofSize: 18)
-        btn.backgroundColor = UIColor(white: 1, alpha: 0.3)
+            btn.setTitle(title, for: .normal)
+            btn.setTitleColor(.lightGray, for: .normal)
+            btn.titleLabel?.font = UIFont.boldSystemFont(ofSize: 18)
+            btn.backgroundColor = backgroundColor
 //        btn.isEnabled = false
         
-        btn.heightAnchor.constraint(equalToConstant: 50).isActive = true
-        btn.clipsToBounds = true
-        btn.layer.cornerRadius = 10
+            btn.heightAnchor.constraint(equalToConstant: 50).isActive = true
+            btn.clipsToBounds = true
+            btn.layer.cornerRadius = 10
         
         return btn
     }
