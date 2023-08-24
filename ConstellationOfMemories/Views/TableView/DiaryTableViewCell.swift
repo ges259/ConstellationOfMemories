@@ -11,9 +11,9 @@ final class DiaryTableViewCell: UITableViewCell {
     
     // MARK: - Properties
     
-    var diaryDate: String? {
+    var diaryString: String? {
         didSet {
-            self.stringLabel.text = diaryDate
+            self.stringLabel.text = diaryString
         }
     }
     

@@ -14,7 +14,11 @@ struct Diary {
     // uid
     let uid: String
     // 일기 작성 날짜
-    let date: String
+//    let date: String
+    let month: String
+    let day: String
+    
+    
     // 일기 작성 내용
     let diaryText: String
     
@@ -27,7 +31,8 @@ struct Diary {
         // uid
         self.uid = uid
             
-        self.date = dictionary[DBString.date] as? String ?? ""
+        self.month = dictionary[DBString.month] as? String ?? ""
+        self.day = dictionary[DBString.day] as? String ?? ""
         
         self.diaryText = dictionary[DBString.diaryText] as? String ?? ""
     }

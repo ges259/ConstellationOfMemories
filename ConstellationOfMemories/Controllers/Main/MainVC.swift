@@ -17,11 +17,11 @@ final class MainVC: UIViewController {
     private let service = Service.shared
     
     
-    private var user: User? {
-        didSet {
-            dump(user)
-        }
-    }
+    private var user: User?
+    
+    private var diaryData: [Diary] = []
+    
+    
     
     // toggle
     private var blackViewToggle: BlackViewToggle = .menu
@@ -29,6 +29,12 @@ final class MainVC: UIViewController {
     
     
     
+    
+    
+    // 오늘 일기를 썻는지
+    static var todayDiaryToggle: Bool = false
+    // 오늘 며칠인지
+    static var today: String = ""
     
     
     
@@ -172,7 +178,7 @@ final class MainVC: UIViewController {
                            height: self.view.frame.height - 150)
         let view = DiaryTableView(frame: frame)
             view.mainDiaryTableDelegate = self
-            view.diaryVCTableDelegate = diaryVC
+            view.diaryTableDiaryDelegate = diaryVC
         return view
     }()
     
@@ -273,20 +279,41 @@ final class MainVC: UIViewController {
     
     
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     // MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        // Image_View는
+            // Login_View 와 MainVC 두 곳 모두에서 사용 됨
         self.configureImageView()
-        
-        
-        
-        // MARK: - Fix
-        // Diary_Data를 가져오는 방법
-//        self.service.fetchDiaryData { stt in
-//            dump(stt)
-//        }
-        
         // User가 있다면
             // MainVC
         // User가 없다면
@@ -302,13 +329,22 @@ final class MainVC: UIViewController {
         // user가 있다면 -> MainVC 로 이동
         if let currentUid = Auth.auth().currentUser?.uid {
             print("login")
-            // fetch_User
+            // User_Data 가져오기
             self.service.fetchUserData(uid: currentUid) { user in
                 self.user = user
             }
+            
+            // Diary_Data를 가져오기
+            self.service.fetchDiaryDatas { datas in
+                // diaryData에 데이터 넣기
+                self.diaryData = datas
+                // 오늘 일기를 썻는지 안 썻는지 확인
+                self.today()
+            }
+            
             // Login_View 숨기기
             self.loginViewHideOrShow(show: false)
-
+            
             
             // user가 없다면 -> Login_View 로 이동
         } else {
@@ -346,6 +382,25 @@ final class MainVC: UIViewController {
         self.view.addSubview(self.footerButton)
         self.footerButton.anchor(bottom: self.view.safeAreaLayoutGuide.bottomAnchor, paddingBottom: 10,
                                  centerX: self.view)
+    }
+    
+    
+    
+    
+    
+    
+    // MARK: - Today_Diary_Toggle
+    private func today() {
+        guard let diaryLastDay = self.diaryData.first?.day else { return }
+        // Today
+        let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "d"
+        MainVC.today = dateFormatter.string(from: Date())
+        
+        // todayDairyToggle 설정
+        MainVC.todayDiaryToggle = MainVC.today == diaryLastDay
+            ? true
+            : false
     }
 }
 
@@ -399,8 +454,7 @@ final class MainVC: UIViewController {
 
 
 
-
-// MARK: - Hide_OR_Show
+// MARK: - View Transition
 
 extension MainVC {
     
@@ -815,7 +869,7 @@ extension MainVC {
 
 
 
-// MARK: - View Transition
+// MARK: - View Config
 // 뷰가 바뀌는 상황 (버튼을 누르는 상황 등)
     // 뷰 전환
     // 왼쪽 버튼의 역할 및 이미지를 바꿈
@@ -943,6 +997,8 @@ extension MainVC: LoginMainDelegate, HeaderMainDelegate, MenuMainDelegate, Secon
 // [Footer_Button]
     // MainVC -> Diary_Table
     @objc private func starButtonTapped() {
+        // Diary_Data 보내기
+        self.diaryTable.diaryData = self.diaryData
         // 버튼의 이미지 바꾸기
             // header에서 바꾸면 diaryVC -> Diary_Table로 이동할 때도 애니메이션이 작동하므로 여기서 설정
         self.headerView.leftButtonAlpha(.back)
@@ -1153,8 +1209,12 @@ extension MainVC: LoginMainDelegate, HeaderMainDelegate, MenuMainDelegate, Secon
                     try Auth.auth().signOut()
                     // MainVC로 이동
                     DispatchQueue.main.async {
-                        // login_View 보이게 하기
+                        // 배열 비우기
+                        self.diaryData = []
+                        // user 비우기
+                            // 그래야 checkLogin()을 했을 때 로그아웃이 됨
                         self.user = nil
+                        // login_View 보이게 하기
                         self.checkLogin()
                     }
                 } catch { print("DEBUG: Error signin out") }

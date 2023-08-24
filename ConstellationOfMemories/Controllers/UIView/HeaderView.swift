@@ -13,10 +13,14 @@ final class HeaderView: UIView {
     // 싱글톤
     static let shared = HeaderView()
     
+    
     // MainVC
     var mainHeaderDelegate: HeaderMainDelegate?
     // DiaryVC
     var diaryHeaderDelegate: HeaderDiaryVCDelegate?
+    
+    
+    
     
     
     /*

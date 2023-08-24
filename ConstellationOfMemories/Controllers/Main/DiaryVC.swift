@@ -22,16 +22,7 @@ final class DiaryVC: UIView {
     private var fixToggle: Bool = false
     
     
-    
-    
-    
-    
-    
-    var diaryData: Diary? {
-        didSet {
-            
-        }
-    }
+    var diaryData: Diary? 
     
     
     
@@ -58,7 +49,7 @@ final class DiaryVC: UIView {
     
     
     // MARK: - TextView
-    lazy var diaryTextView: UITextView = {
+    private lazy var diaryTextView: UITextView = {
         let tv = UITextView()
             tv.backgroundColor = UIColor.clear
             tv.font = UIFont.systemFont(ofSize: 16)
@@ -71,7 +62,7 @@ final class DiaryVC: UIView {
     
     
     // MARK: - Label
-    lazy var diaryLabel: UILabel = {
+    private lazy var diaryLabel: UILabel = {
         let lbl = UILabel().labelConfig(labelText: "오늘의 하루는 어땠나요?",
                                   LabelTextColor: .white,
                                   fontName: .bold,
@@ -248,8 +239,6 @@ extension DiaryVC: HeaderDiaryVCDelegate {
             return
         }
         
-        
-        
         guard let diaryText = self.diaryTextView.text,
               let currentUid = Auth.auth().currentUser?.uid
         else { return }
@@ -258,16 +247,15 @@ extension DiaryVC: HeaderDiaryVCDelegate {
         // [Create Or Update]
         // Create
         if self.diaryData == nil {
-            self.service.createDiaryData(uid: currentUid,diaryText: diaryText)
-            
-            
+            self.service.createDiaryData(uid: currentUid, diaryText: diaryText)
+
         // Update
         } else {
             guard let diaryData = diaryData else { return }
             self.service.updateDiaryData(diary: diaryData, diaryText: diaryText)
-            
-            
         }
+        
+        // delegate?
     }
 }
 
@@ -319,10 +307,12 @@ extension DiaryVC: UITextViewDelegate {
 
 
 
-// MARK: - DiaryVCTableDelegate
+// MARK: - DiaryTableDiaryDelegate
 extension DiaryVC: DiaryTableDiaryDelegate {
     func todayDiaryTrue(diaryData: Diary) {
-          //        self.diaryData = diaryData
+        self.diaryData = diaryData
+        
+        self.diaryTextView.text = diaryData.diaryText
     }
     
     func todayDiaryFalse() {

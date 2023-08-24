@@ -23,7 +23,8 @@ struct DBString {
     
     // MARK: - Diary
     static let uid: String = "userId"
-    static let date: String = "date"
+    static let month: String = "month"
+    static let day: String = "day"
     static let diaryText: String = "diaryText"
 //    static let like: String = "like"
 }

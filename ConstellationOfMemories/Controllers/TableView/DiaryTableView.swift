@@ -17,15 +17,16 @@ final class DiaryTableView: UIView {
     // 12시가 지나면 false로 자동으로 바꿔지도록.
     // 방법이...
         // 서버에서?
-    static var todayDiaryToggle: Bool = false
+    
+    
     
     
     
     // coreData를 담을 배열 생성
     var diaryData: [Diary] = [] {
         didSet {
+            dump("Diary_Data_Count == \(diaryData.count)")
             
-            self.fetchDiaryData()
             // table_View_Reload
             self.diaryTableView.reloadData()
         }
@@ -37,10 +38,16 @@ final class DiaryTableView: UIView {
     
     
     
+    
+    
+    
+    
+    
+    
     // header View 싱글톤
     private let headerView: HeaderView = HeaderView.shared
     
-    var diaryVCTableDelegate: DiaryTableDiaryDelegate?
+    var diaryTableDiaryDelegate: DiaryTableDiaryDelegate?
     
     var mainDiaryTableDelegate: DiaryTableMainDelegate?
     
@@ -76,7 +83,7 @@ final class DiaryTableView: UIView {
     // MARK: - LifeCycle
     override init(frame: CGRect) {
         super.init(frame: frame)
-        print(DiaryTableView.todayDiaryToggle)
+        print(MainVC.todayDiaryToggle)
         self.addSubview(self.diaryTableView)
         
     }
@@ -113,11 +120,11 @@ extension DiaryTableView: UITableViewDelegate, UITableViewDataSource {
     // MARK: - Cell
     // 셀의 개수
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//        return DiaryTableView.todayDiaryToggle == false
-//        ? self.diaryData.count + 1
-//        : self.diaryData.count
-        
-        return 4
+        return MainVC.todayDiaryToggle == false
+        ? self.diaryData.count + 1
+        : self.diaryData.count
+//        return self.diaryData.count
+//        return 4
     }
     
     
@@ -139,21 +146,27 @@ extension DiaryTableView: UITableViewDelegate, UITableViewDataSource {
         
         // 셀의 StringLabel에 Text표시
         if indexPath.row == 0 {
-            cell.diaryDate = DiaryTableView.todayDiaryToggle == true
+            cell.diaryString = MainVC.todayDiaryToggle == true
             ? "오늘 떠올린 추억"
             : "오늘 떠올릴 추억"
             
             
-        } else if indexPath.row == 1 { cell.diaryDate = "어제 떠올린 추억"
-        } else if indexPath.row == 2 { cell.diaryDate = "그저께 떠올린 추억"
+        } else if indexPath.row == 1 { cell.diaryString = "어제 떠올린 추억"
+        } else if indexPath.row == 2 { cell.diaryString = "그저께 떠올린 추억"
         } else {
-            // dateString 옵셔널 바인딩
-//            if let diaryData = self.diaryData[indexPath.row - 3].dateString {
-                // 일기를 적은 날을 표시 (X월 X일 떠올리 추억)
-//                cell.diaryDate = "\(diaryData) 떠올린 추억"
-                cell.diaryDate = "떠올린 추억"
+            var date: String!
+            // 일기를 안 썻다면
+            if MainVC.todayDiaryToggle == false {
+                // "M월 d일에 떠올린 추억"
+                date = "\(diaryData[indexPath.row - 1].month)월 \(diaryData[indexPath.row - 1].day)일에 떠올린 추억"
+                
+            // 일기를 썻다면
+            } else {
+                // "M월 d일에 떠올린 추억"
+                date = "\(diaryData[indexPath.row].month)월 \(diaryData[indexPath.row].day)일에 떠올린 추억"
+            }
             
-//            }
+            cell.diaryString = date
         }
         return cell
     }
@@ -167,45 +180,39 @@ extension DiaryTableView: UITableViewDelegate, UITableViewDataSource {
         // 첫번째 셀
         if indexPath.row == 0 {
             // 오늘 일기를 적지 않았다면,
-            
-            // MARK: - Fix
-            // DiaryVC에 Diary 데이터를 주기
-            
-            
-            if DiaryTableView.todayDiaryToggle == false {
+            if MainVC.todayDiaryToggle == false {
 
-                self.diaryVCTableDelegate?.todayDiaryFalse()
+                self.diaryTableDiaryDelegate?.todayDiaryFalse()
                 // fix모드로 diaryVC진입
                 self.headerView.rightButtonConfig = .fixMode
-
+                
 
             // 오늘 일기를 적었다면
             } else {
                 // save모드로 diaryVC진입
                 self.headerView.rightButtonConfig = .saveMode
-
-//                self.diaryVCTableDelegate?.todayDiaryTrue(diaryData: self.diaryData[indexPath.row])
-                
-                
-                
-                
-                // MARK: - Fix - data 넣기
-//                self.diaryVCTableDelegate?.todayDiaryTrue(diaryData: Diary())
-                
-                
+                // DiaryVC로 데이터 보내기
+                self.diaryTableDiaryDelegate?.todayDiaryTrue(diaryData: self.diaryData[indexPath.row])
             }
+            
+            
+            
 
         // 2번째 셀부터 ~~~ 마지막 셀까지
         } else if indexPath.row > 0 {
+            // 오늘 일기를 적지 않았다면,
+            if MainVC.todayDiaryToggle == false {
+                self.diaryTableDiaryDelegate?.todayDiaryTrue(diaryData: self.diaryData[indexPath.row - 1])
+                
+                
+                // 오늘 일기를 적었다면
+            } else {
+                self.diaryTableDiaryDelegate?.todayDiaryTrue(diaryData: self.diaryData[indexPath.row])
+            }
+            
+            
             // save모드로 diaryVC진입
             self.headerView.rightButtonConfig = .saveMode
-
-
-            if DiaryTableView.todayDiaryToggle == false {
-//                self.diaryVCTableDelegate?.todayDiaryTrue(diaryData: self.diaryData[indexPath.row - 1])
-            } else {
-//                self.diaryVCTableDelegate?.todayDiaryTrue(diaryData: self.diaryData[indexPath.row])
-            }
         }
         
         // 뷰 전환

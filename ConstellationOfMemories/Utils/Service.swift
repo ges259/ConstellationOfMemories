@@ -63,7 +63,7 @@ struct Service {
         }
     }
     
-    // MARK: - Get_User_Data
+    // MARK: - Fetch_User_Data
     func fetchUserData(uid: String, completion: @escaping (User) -> Void) {
         Users_REF.child(uid).observeSingleEvent(of: .value) { snapshot in
             
@@ -107,13 +107,22 @@ struct Service {
     
     // MARK: - Create_Diary_Data
     func createDiaryData(uid: String, diaryText: String) {
-        // creation_Date
-        let date = Int(NSDate().timeIntervalSince1970)
+        
+        let dateFormatter = DateFormatter()
+        // month
+            dateFormatter.dateFormat = "M"
+        let month = dateFormatter.string(from: Date())
+        // day
+            dateFormatter.dateFormat = "d"
+        let day = dateFormatter.string(from: Date())
+        
+        
         
         // 배열에 데이터 넣기
             // uid + diaryText + date
         let values: [String: Any] = [DBString.uid: uid,
-                                     DBString.date: date,
+                                     DBString.month: month,
+                                     DBString.day: day,
                                      DBString.diaryText: diaryText]
         
         // Diariy_Id 만들기 (childByAutoId()를 통해서 랜덤의 Id 만들기
@@ -129,6 +138,7 @@ struct Service {
                 return
             } else {
                 print("Create!!!!!!")
+                MainVC.todayDiaryToggle = true
             }
         }
     }
@@ -148,9 +158,29 @@ struct Service {
     
     
     
-    
     // MARK: - Fetch_Diary_Data
-    func fetchDiaryData(completion: @escaping (Diary) -> Void) {
+    func fetchDiaryDatas(completion: @escaping ([Diary]) -> Void) {
+        var diaryDatas: [Diary] = []
+        // 한 번만 completion을 하기 위해 따로 카운트
+            // diary가 모두 배열에 채워지면 completion
+        
+        
+        self.fetchDiaryData { data, num in
+            diaryDatas.append(data)
+            
+            diaryDatas.sort { diary1, diary2 in
+                return diary1.day > diary2.day
+            }
+            
+            
+            // diary가 모두 배열에 채워지면 completion
+            if diaryDatas.count == num {
+                completion(diaryDatas)
+            }
+        }
+    }
+    
+    private func fetchDiaryData(completion: @escaping (Diary, Int) -> Void) {
         // diary 배열 생성
         var diaryArray = [String]()
         
@@ -158,13 +188,12 @@ struct Service {
         Diary_REF.observeSingleEvent(of: .value) { snapshot in
             
             guard let allObjects = snapshot.children.allObjects as? [DataSnapshot] else { return }
-            
+
             allObjects.forEach { snapshot in
                 // diaryId를 가져옴
                 let diaryId = snapshot.key
                 // 배열에 넣기
                 diaryArray.append(diaryId)
-                
                 // 배열의 diaryId를 통해서 diaryId에 있는 정보들을 가져옴
                     // 이렇게 가져온 정보들은 completion.(~~~)을 통해 정보를 얻을 수 있음
                 Diary_REF.child(diaryId).observeSingleEvent(of: .value) { snapshot in
@@ -176,7 +205,8 @@ struct Service {
                     fetchUserData(uid: currentUid) { user in
                         let diary = Diary(uid: currentUid, dictionary: dictionary)
                         
-                        completion(diary)
+                        
+                        completion(diary, allObjects.count)
                     }
                 }
             }
