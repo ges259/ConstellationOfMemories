@@ -64,6 +64,12 @@ final class SetupTableView: UIView {
     
     
     
+    
+    
+    
+    
+    
+    
     // MARK: - LifeCycle
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -85,27 +91,22 @@ final class SetupTableView: UIView {
         
         self.alpha = 0
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    // MARK: - API
-    
-    
-    
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -134,6 +135,12 @@ extension SetupTableView: SetupCellSetupDelegate {
 
 
 
+
+
+
+
+
+
 // MARK: - UITableView
 
 extension SetupTableView: UITableViewDelegate, UITableViewDataSource {
@@ -144,12 +151,16 @@ extension SetupTableView: UITableViewDelegate, UITableViewDataSource {
         return 2
     }
     
+    
+    
     // 섹션 _타이틀 이름
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return section == 0
             ? "알림 설정"
             : "계정"
     }
+    
+    
     
     // 섹션 헤더 설정
     func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
@@ -160,8 +171,6 @@ extension SetupTableView: UITableViewDelegate, UITableViewDataSource {
             headerView.textLabel?.textColor = .nightFontColor
         }
     }
-    
-    
     
     
     
@@ -180,21 +189,23 @@ extension SetupTableView: UITableViewDelegate, UITableViewDataSource {
     
     
     
-    
-    
     // MARK: - cellForRowAt
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        
         let cell = tableView.dequeueReusableCell(withIdentifier: ReuseIdentifier.setupTableViewCell, for: indexPath) as! SetupTableviewCell
         
-        cell.setupCellTitle = indexPath.section == 0
-        ? .info
-        : .logout
-        
+        // info
+        if indexPath.section == 0 {
+            cell.setupCellTitle = .info
+            cell.titleLabel.text = "알림"
+            cell.cellButton.setTitle(self.user?.notiString, for: .normal)
+            
+        // logout
+        } else {
+            cell.setupCellTitle = .logout
+            cell.titleLabel.text = "로그아웃"
+        }
         
         cell.setupCellSetupDelegate = self
-        
         return cell
     }
 }

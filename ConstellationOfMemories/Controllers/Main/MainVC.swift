@@ -11,28 +11,27 @@ import FirebaseAuth
 final class MainVC: UIViewController {
     
     // MARK: - Properties
+// Singleton
     // header View 싱글톤
     private let headerView: HeaderView = HeaderView.shared
-    
+    // Service 싱글톤
     private let service = Service.shared
     
-    
+// Data
     // User
     private var user: User?
-    
     // Diary_Data
     private var diaryData: [Diary] = [] {
-        didSet {
-            // Diary_Data 보내기
-            self.diaryTable.diaryData = diaryData
-        }
+        // Diary_Table로   [Diary] 데이터 보내기
+        didSet { self.diaryTable.diaryData = diaryData }
     }
     
-    
-    
+// Toggle
     // Black_View_Toggle
     private var blackViewToggle: BlackViewToggle = .menu
-    
+    // Today_Diary_Toggle
+        // 오늘 일기를 썻는지
+    static var todayDiaryToggle: Bool = false
     // Today
         // 오늘 며칠인지
     static var today: String = ""
@@ -364,12 +363,12 @@ final class MainVC: UIViewController {
         self.service.fetchDiaryDatas { datas in
             // 일기를 하나도 안 쓴 사람.
             if datas == nil {
-                DiaryTableView.todayDiaryToggle = false
+                MainVC.todayDiaryToggle = false
                 // diaryData에 데이터 넣기
                 self.diaryData = []
                 
                 
-                
+            // 일기를 1개라도 썻다면 (diary_날짜 데이터가 있음)
             } else {
                 guard let datas = datas else { return }
                 // 오늘 일기를 썻는지 안 썻는지 확인
@@ -389,7 +388,7 @@ final class MainVC: UIViewController {
         MainVC.today = dateFormatter.string(from: Date())
         
         // todayDairyToggle 설정
-        DiaryTableView.todayDiaryToggle = MainVC.today == diaryLastDay
+        MainVC.todayDiaryToggle = MainVC.today == diaryLastDay
         ? true
         : false
         
@@ -1266,6 +1265,10 @@ extension MainVC: LoginMainDelegate, HeaderMainDelegate, MenuMainDelegate, Secon
         print(#function)
     }
 }
+
+
+
+
 
 
 extension MainVC: DiaryVCMainDelegate {

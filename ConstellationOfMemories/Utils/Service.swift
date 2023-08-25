@@ -42,7 +42,7 @@ struct Service {
     
     // MARK: - SignUp
     func signUp(fullName: String, email: String, password: String, completion: @escaping () -> Void) {
-        
+        print(#function)
         Auth.auth().createUser(withEmail: email, password: password) { result, error in
             if let error = error {
                 print("Frailed to register user with error \(error.localizedDescription)")
@@ -96,15 +96,6 @@ struct Service {
     
     
     
-    
-    
-    
-    
-    
-     
-    
-    
-    
     // MARK: - Create_Diary_Data
     func createDiaryData(diaryText: String) {
         // Date
@@ -140,7 +131,7 @@ struct Service {
                 return
             } else {
                 print("Create!!!!!!")
-                DiaryTableView.todayDiaryToggle = true
+                MainVC.todayDiaryToggle = true
             }
         }
     }
@@ -149,16 +140,12 @@ struct Service {
     
     // MARK: - Update_Diary_Data
     func updateDiaryData(diary: Diary, diaryText: String) {
+        print("Update!!!!!")
         // uid
         guard let uid = Auth.auth().currentUser?.uid else { return }
         // update_Diary
         Diary_REF.child(uid).child("\(diary.month)\(diary.day)").child(DBString.diaryText).setValue(diaryText)
     }
-    
-    
-    
-    
-    
     
     
     
@@ -219,6 +206,39 @@ struct Service {
                     completion(diary, allObjects.count)
                 }
             }
+        }
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    // MARK: - Info
+    func fetchInfo(on: Bool) {
+        // uid
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        
+        // 알람 켜기
+        if on == true {
+            Users_REF.child(uid).child(DBString.noti).setValue(1)
+        // 알람 끄기
+        } else {
+            Users_REF.child(uid).child(DBString.noti).setValue(0)
         }
     }
 }

@@ -10,18 +10,12 @@ struct User {
     let uid: String
     let fullName: String
     let email: String
-    
-    
     // 글자 색상
-    let fontColor: Int = 1
+    let fontColor: Int
     // 배경 화면
-    let backgroundUrl: Int = 101
-    
-    
+    let backgroundUrl: Int
     // 알림 설정
-    let noti: Bool
-    // 일기 작성 날짜
-    let lastDiary: Bool
+    let noti: Int
     
     
     // 생성자
@@ -31,14 +25,23 @@ struct User {
         // user 정보
         self.fullName = dictionary[DBString.fullName] as? String ?? ""
         self.email = dictionary[DBString.email] as? String ?? ""
-        
-        
-        // info는 자동 생성 되도록
-        self.noti = false
-        self.lastDiary = false
+        // info(알림)
+        self.noti = dictionary[DBString.noti] as? Int ?? 0
+        // font_Color
+        self.fontColor = dictionary[DBString.fontColor] as? Int ?? 1
+        // background_Image
+        self.backgroundUrl = dictionary[DBString.backgroundColor] as? Int ?? 101
     }
     
     
     // 이니셜
     var firstInitial: String { return String(fullName.prefix(1))}
+    
+    var notiString: String {
+        switch noti {
+        case 0: return "OFF"
+        case 1: return "ON"
+        default: return "OFF"
+        }
+    }
 }

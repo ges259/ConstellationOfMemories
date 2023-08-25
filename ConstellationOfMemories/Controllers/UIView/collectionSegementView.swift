@@ -165,17 +165,6 @@ final class CollectionSegementView: UIView {
             }
         }
     }
-    
-    
-    
-    // MARK: - API
-    
-    
-    
-    
-    
-    
-    
 }
 
 

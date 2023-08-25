@@ -18,7 +18,7 @@ struct DBString {
     static let backgroundColor: String = "backgroundColor"
     
     // 알림 설정
-    static let notification: String = "notification"
+    static let noti: String = "noti"
     //
     static let lastDiary: String = "lastDiary"
     

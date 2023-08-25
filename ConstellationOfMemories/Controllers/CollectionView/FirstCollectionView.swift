@@ -128,10 +128,11 @@ extension FirstCollectionView: UICollectionViewDelegate, UICollectionViewDataSou
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
-        self.firstHomeHeaderDelegate?.fontColor()
-        
-        self.firstMainDelegate?.monthDiaryTapped()
-        
+        _ = self.firstCollectionToggle == .achieve
+        // achieve_View 일 때
+            ? self.firstMainDelegate?.monthDiaryTapped()
+        // home_View 일 때
+            : self.firstHomeHeaderDelegate?.fontColor()
     }
     
     

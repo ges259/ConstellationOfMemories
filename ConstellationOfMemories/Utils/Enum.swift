@@ -139,7 +139,28 @@ enum BlackViewToggle {
 }
 
 
-enum SetupCelltitle {
+//enum SetupBtntitle: CustomStringConvertible {
+//    case ON
+//    case OFF
+//
+//    var description: String {
+//        switch self {
+//        case .ON: return "ON"
+//        case .OFF: return "OFF"
+//        }
+//    }
+//}
+
+enum SetupCelltitle: CustomStringConvertible {
     case info
     case logout
+    
+    var description: String {
+        switch self {
+        case .info: return "알림"
+        case .logout: return "로그아웃"
+        }
+    }
 }
+
+

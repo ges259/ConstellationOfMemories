@@ -17,15 +17,10 @@ final class DiaryVC: UIView {
     private let service: Service = Service.shared
     
     
-    
-    // fixToggle이 true이면 -> Save Or Update
-    private var fixToggle: Bool = false
-    
-    
+    // diary_Data
     var diaryData: Diary? 
     
-    
-    
+    // Delegate
     var diaryVCMainDelegate: DiaryVCMainDelegate?
     
     
@@ -53,7 +48,7 @@ final class DiaryVC: UIView {
         let tv = UITextView()
             tv.backgroundColor = UIColor.clear
             tv.font = UIFont.systemFont(ofSize: 16)
-//            tv.text = "텍스트를 여기에 입력하세요."
+            tv.text = "텍스트를 여기에 입력하세요."
             tv.textColor = .white
             tv.isEditable = false
         return tv
@@ -63,13 +58,12 @@ final class DiaryVC: UIView {
     
     // MARK: - Label
     private lazy var diaryLabel: UILabel = {
-        let lbl = UILabel().labelConfig(labelText: "오늘의 하루는 어땠나요?",
-                                  LabelTextColor: .white,
-                                  fontName: .bold,
-                                  fontSize: 25,
-                                  numberOfLines: 0,
-                                  textAlignment: .center)
-        return lbl
+        return UILabel().labelConfig(labelText: "오늘의 하루는 어땠나요?",
+                                     LabelTextColor: .white,
+                                     fontName: .bold,
+                                     fontSize: 25,
+                                     numberOfLines: 0,
+                                     textAlignment: .center)
     }()
     
     
@@ -160,15 +154,6 @@ final class DiaryVC: UIView {
     @objc private func shareButtonTapped() {
         print(#function)
     }
-    
-    
-    
-    // MARK: - API
-    
-    
-    
-    
-    
 }
 
 
@@ -213,7 +198,12 @@ extension DiaryVC: HeaderDiaryVCDelegate {
             
         // 저장뷰로 진입
         } else {
-            self.saveOrUpdate()
+            if self.diaryTextView.text != "텍스트를 여기에 입력하세요."
+                && self.diaryTextView.text != ""
+                && self.diaryData?.diaryText != self.diaryTextView.text {
+                // Update_OR_Create
+                self.saveOrUpdate()
+            }
             
             UIView.animate(withDuration: 0.3) {
                 self.diaryTextView.isEditable = false
@@ -230,17 +220,9 @@ extension DiaryVC: HeaderDiaryVCDelegate {
     
     // MARK: - API
     private func saveOrUpdate() {
-        if self.fixToggle == false { return }
-        self.fixToggle = false
-        
-        
-        // 빈칸 또는 placeholder 상태라면 Create / Update하지 않음
-        if self.diaryTextView.text == "텍스트를 여기에 입력하세요." {
-            return
-        }
-        
+        print(#function)
+        // text
         guard let diaryText = self.diaryTextView.text else { return }
-        
         
         // [Create Or Update]
         // Create
@@ -282,9 +264,6 @@ extension DiaryVC: UITextViewDelegate {
     // 클릭시 텍스트뷰에 "텍스트를 여기에 입력하세요." 가 있다면 -> ""로 설정
     // 글자 색상 바꾸기
     func textViewDidBeginEditing(_ textView: UITextView) {
-        // fixToggle이 true이면 Save / Update
-        self.fixToggle = true
-        
         if self.diaryTextView.text == "텍스트를 여기에 입력하세요." {
             self.diaryTextView.text = ""
             self.diaryTextView.textColor = .white
@@ -304,8 +283,6 @@ extension DiaryVC: UITextViewDelegate {
 
 
 
-
-
 // MARK: - DiaryTableDiaryDelegate
 extension DiaryVC: DiaryTableDiaryDelegate {
     func todayDiaryTrue(diaryData: Diary) {
@@ -315,7 +292,7 @@ extension DiaryVC: DiaryTableDiaryDelegate {
     }
     
     func todayDiaryFalse() {
-        self.diaryTextView.text = ""
+        self.diaryTextView.text = "텍스트를 여기에 입력하세요."
         self.diaryData = nil
     }
 }

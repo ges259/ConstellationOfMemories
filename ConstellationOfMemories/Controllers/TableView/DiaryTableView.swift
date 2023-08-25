@@ -10,50 +10,11 @@ import UIKit
 final class DiaryTableView: UIView {
     
     // MARK: - Properties
-    
-    
-    
-    // MARK: - Fix
-    // 12시가 지나면 false로 자동으로 바꿔지도록.
-    // 방법이...
-        // 서버에서?
-    
-    // Today_Diary_Toggle
-        // 오늘 일기를 썻는지
-    static var todayDiaryToggle: Bool = false {
-        didSet {
-            print(DiaryTableView.todayDiaryToggle)
-        }
-    }
-    
-    
-    
     // coreData를 담을 배열 생성
     var diaryData: [Diary] = [] {
-        didSet {
-            
-            
-            
-            
-            
-            dump("Diary_Data_Count == \(diaryData.count)")
-            
-            // table_View_Reload
-            self.diaryTableView.reloadData()
-        }
+        // table_View_Reload
+        didSet { self.diaryTableView.reloadData() }
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
     // header View 싱글톤
     private let headerView: HeaderView = HeaderView.shared
@@ -63,7 +24,18 @@ final class DiaryTableView: UIView {
     var mainDiaryTableDelegate: DiaryTableMainDelegate?
     
     
-//    var diaryData
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     
     
@@ -91,36 +63,48 @@ final class DiaryTableView: UIView {
     
     
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     // MARK: - LifeCycle
     override init(frame: CGRect) {
         super.init(frame: frame)
-        print(DiaryTableView.todayDiaryToggle)
+        print(MainVC.todayDiaryToggle)
         self.addSubview(self.diaryTableView)
         
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    
-    
-    // MARK: - Helper Functions
-    private func fetchDiaryData() {
-        
-        
-//        Service.shared.fetchDiaryData(uif: <#T##String#>, completion: <#T##(Diary) -> Void#>)
-        
-        
-    }
-    
-    
-    
-    
-    
-    // MARK: - API
-    
-    
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -131,14 +115,10 @@ extension DiaryTableView: UITableViewDelegate, UITableViewDataSource {
     // MARK: - Cell
     // 셀의 개수
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return DiaryTableView.todayDiaryToggle == false
+        return MainVC.todayDiaryToggle == false
         ? self.diaryData.count + 1
         : self.diaryData.count
-//        return self.diaryData.count
-//        return 4
     }
-    
-    
     
     
     
@@ -149,15 +129,13 @@ extension DiaryTableView: UITableViewDelegate, UITableViewDataSource {
     
     
     
-    
-    
     // MARK: - Cell_For_Row_At
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: ReuseIdentifier.diaryTableViewCell, for: indexPath) as! DiaryTableViewCell
         
         // 셀의 StringLabel에 Text표시
         if indexPath.row == 0 {
-            cell.diaryString = DiaryTableView.todayDiaryToggle == true
+            cell.diaryString = MainVC.todayDiaryToggle == true
             ? "오늘 떠올린 추억"
             : "오늘 떠올릴 추억"
             
@@ -165,33 +143,13 @@ extension DiaryTableView: UITableViewDelegate, UITableViewDataSource {
         } else if indexPath.row == 1 { cell.diaryString = "어제 떠올린 추억"
         } else if indexPath.row == 2 { cell.diaryString = "그저께 떠올린 추억"
         } else {
-//            var date: String!
-//            // 일기를 안 썻다면
-//            if DiaryTableView.todayDiaryToggle == false {
-//
-//                // "M월 d일에 떠올린 추억"
-//                date = "\(diaryData[indexPath.row - 1].month)월 \(diaryData[indexPath.row - 1].day)일에 떠올린 추억"
-//
-//                print(date)
-//
-//            // 일기를 썻다면
-//            } else {
-//                // "M월 d일에 떠올린 추억"
-//                date = "\(diaryData[indexPath.row].month)월 \(diaryData[indexPath.row].day)일에 떠올린 추억"
-//                print(date)
-//            }
-            
-            
-            let date = DiaryTableView.todayDiaryToggle == false
+            let date = MainVC.todayDiaryToggle == false
             ? "\(diaryData[indexPath.row - 1].month)월 \(diaryData[indexPath.row - 1].day)일에 떠올린 추억"
             : "\(diaryData[indexPath.row].month)월 \(diaryData[indexPath.row].day)일에 떠올린 추억"
-            
             cell.diaryString = date
         }
         return cell
     }
-    
-    
     
     
     
@@ -200,7 +158,7 @@ extension DiaryTableView: UITableViewDelegate, UITableViewDataSource {
         // 첫번째 셀
         if indexPath.row == 0 {
             // 오늘 일기를 적지 않았다면,
-            if DiaryTableView.todayDiaryToggle == false {
+            if MainVC.todayDiaryToggle == false {
 
                 self.diaryTableDiaryDelegate?.todayDiaryFalse()
                 // fix모드로 diaryVC진입
@@ -221,7 +179,7 @@ extension DiaryTableView: UITableViewDelegate, UITableViewDataSource {
         // 2번째 셀부터 ~~~ 마지막 셀까지
         } else if indexPath.row > 0 {
             // 오늘 일기를 적지 않았다면,
-            if DiaryTableView.todayDiaryToggle == false {
+            if MainVC.todayDiaryToggle == false {
                 self.diaryTableDiaryDelegate?.todayDiaryTrue(diaryData: self.diaryData[indexPath.row - 1])
                 
                 
@@ -230,11 +188,9 @@ extension DiaryTableView: UITableViewDelegate, UITableViewDataSource {
                 self.diaryTableDiaryDelegate?.todayDiaryTrue(diaryData: self.diaryData[indexPath.row])
             }
             
-            
             // save모드로 diaryVC진입
             self.headerView.rightButtonConfig = .saveMode
         }
-        
         // 뷰 전환
             // dairy_Table -> DiaryVC
         self.mainDiaryTableDelegate?.handleTableToDiaryVC()

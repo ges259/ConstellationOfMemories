@@ -106,8 +106,8 @@ final class SecondCollectionView: UIView {
 
 
 // MARK: - CollectionView
+
 extension SecondCollectionView: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-    
     
     // MARK: - Cell
     // 셀의 개수
@@ -150,7 +150,8 @@ extension SecondCollectionView: UICollectionViewDelegate, UICollectionViewDataSo
             ? 10
             : 4
     }
-
+    
+    
     
     // MARK: - Cell_For_Row_At
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -158,18 +159,15 @@ extension SecondCollectionView: UICollectionViewDelegate, UICollectionViewDataSo
 
         return cell
     }
+    
+    
 
     // MARK: - Did_Select_Row_At
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
+        _ = self.secondCollectionToggle == .achieve
         // achieve_View 일 때
-        if self.secondCollectionToggle == .achieve {
-            // shop(second) -> detailView로 진입
-            self.secondMainDelegate?.secondTapped()
-            
+            ? self.secondMainDelegate?.secondTapped()
         // home_View 일 때
-        } else {
-            self.headerSegementDelegate?.backgroundColr()
-        }
+            : self.headerSegementDelegate?.backgroundColr()
     }
 }

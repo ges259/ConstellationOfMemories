@@ -13,52 +13,28 @@ final class SetupTableviewCell: UITableViewCell {
     var setupCellSetupDelegate: SetupCellSetupDelegate?
     
     
-    private var inforToggle: Bool = false {
-        didSet { self.toggleAnimate() }
-    }
     
     // 셀의 타이틀 이름 바꾸기
-    var setupCellTitle: SetupCelltitle? {
-        didSet {
-            if self.setupCellTitle == .info {
-                // titleLabel 바꾸기
-                self.titleLabel.text = "알림"
-                
-                
-                
-                // 버튼 바꾸기
-                // DB에서 가져와야 함
-                // MARK: - Fix
-                // 일단 임시방편
-                self.cellButton.setTitle("On", for: .normal)
-                
-                
-            } else {
-                // titleLabel 바꾸기
-                self.titleLabel.text = "로그아웃"
-                
-                // 버튼 바꾸기
-                self.cellButton.setTitle("logout", for: .normal)
-            }
-        }
-    }
+    var setupCellTitle: SetupCelltitle?
+    
     
     
     
     // MARK: - Layout
-    private lazy var titleLabel: UILabel = {
-        return UILabel().labelConfig(LabelTextColor: UIColor.nightFontColor,
+    lazy var titleLabel: UILabel = {
+        return UILabel().labelConfig(labelText: "로그아웃",
+                                     LabelTextColor: UIColor.nightFontColor,
                                      fontName: .system,
                                      fontSize: 20)
     }()
     
-    private lazy var cellButton: UIButton = {
+    lazy var cellButton: UIButton = {
         let btn = UIButton()
         
             btn.backgroundColor = UIColor(white: 1, alpha: 0.3)
-            btn.setTitle("OFF", for: .normal)
+            btn.setTitle("Logout", for: .normal)
             btn.titleLabel?.textAlignment = .center
-            btn.titleLabel?.font = .systemFont(ofSize: 16)
+            btn.titleLabel?.font = .boldSystemFont(ofSize: 16)
         
             btn.addTarget(self, action: #selector(self.toggleButtonTapped), for: .touchUpInside)
         return btn
@@ -108,16 +84,28 @@ final class SetupTableviewCell: UITableViewCell {
                 self.cellButton.alpha = 0
                 
             } completion: { _ in
-                if self.inforToggle == true {
-                    self.cellButton.setTitle("ON", for: .normal)
-                    self.cellButton.backgroundColor = UIColor(white: 1, alpha: 0.5)
-                    self.cellButton.setTitleColor(.white, for: .normal)
+            // Button_Title_Change
+                // ON -> OFF
+                if self.cellButton.titleLabel?.text == "ON" {
+                    print("ON")
+                    Service.shared.fetchInfo(on: false)
                     
-                } else {
                     self.cellButton.setTitle("OFF", for: .normal)
                     self.cellButton.backgroundColor = UIColor(white: 1, alpha: 0.3)
                     self.cellButton.setTitleColor(.white, for: .normal)
+                    
+                    
+                // OFF -> ON
+                } else {
+                    print("OFF")
+                    Service.shared.fetchInfo(on: true)
+                    
+                    self.cellButton.setTitle("ON", for: .normal)
+                    self.cellButton.backgroundColor = UIColor(white: 1, alpha: 0.5)
+                    self.cellButton.setTitleColor(.white, for: .normal)
                 }
+                
+                
                 
                 UIView.animate(withDuration: 0.3) {
                     self.cellButton.alpha = 1
@@ -140,7 +128,7 @@ final class SetupTableviewCell: UITableViewCell {
     
     // MARK: - Selectors
     @objc private func toggleButtonTapped() {
-        self.inforToggle.toggle()
+        self.toggleAnimate()
     }
     
     
