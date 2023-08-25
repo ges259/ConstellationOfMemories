@@ -451,7 +451,7 @@ extension HeaderView {
     
     
     
-    // MARK: - Animate
+    // MARK: - Button Animate
 // [Left_Button]
     // left버튼의 이미지가 바뀔 때 자연스럽게 바뀔 수 있도록 하는 메서드
     func leftButtonAlpha(_ imageString: imageString = .back) {

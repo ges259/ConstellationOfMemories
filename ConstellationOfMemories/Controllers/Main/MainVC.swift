@@ -17,23 +17,24 @@ final class MainVC: UIViewController {
     private let service = Service.shared
     
     
+    // User
     private var user: User?
     
-    private var diaryData: [Diary] = []
+    // Diary_Data
+    private var diaryData: [Diary] = [] {
+        didSet {
+            // Diary_Data 보내기
+            self.diaryTable.diaryData = diaryData
+        }
+    }
     
     
     
-    // toggle
+    // Black_View_Toggle
     private var blackViewToggle: BlackViewToggle = .menu
     
-    
-    
-    
-    
-    
-    // 오늘 일기를 썻는지
-    static var todayDiaryToggle: Bool = false
-    // 오늘 며칠인지
+    // Today
+        // 오늘 며칠인지
     static var today: String = ""
     
     
@@ -66,6 +67,7 @@ final class MainVC: UIViewController {
     private lazy var footerButton: UIButton = {
         // 버튼 시스템 이미지 크기 바꾸기
         let btn = UIButton().buttonSustemImage(btnSize: 37, imageString: .moon)
+            btn.alpha = 0
             btn.addTarget(self, action: #selector(self.starButtonTapped), for: .touchUpInside)
         return btn
     }()
@@ -192,7 +194,9 @@ final class MainVC: UIViewController {
                             y: 150,
                             width: self.view.frame.width,
                             height: self.view.frame.height - 150)
-        return DiaryVC(frame: frame)
+        let view = DiaryVC(frame: frame)
+            view.diaryVCMainDelegate = self
+        return view
     }()
     
     
@@ -335,12 +339,7 @@ final class MainVC: UIViewController {
             }
             
             // Diary_Data를 가져오기
-            self.service.fetchDiaryDatas { datas in
-                // diaryData에 데이터 넣기
-                self.diaryData = datas
-                // 오늘 일기를 썻는지 안 썻는지 확인
-                self.today()
-            }
+            self.fetchDiaryDatas()
             
             // Login_View 숨기기
             self.loginViewHideOrShow(show: false)
@@ -352,6 +351,49 @@ final class MainVC: UIViewController {
             // Login_View 보이게 하기
             self.loginViewHideOrShow(show: true)
         }
+    }
+    
+    
+    
+    
+    // MARK: - Fetcj_Diary_Data
+    private func fetchDiaryDatas() {
+        // Diary_Data를 가져오기
+            // 로그아웃 -> 다른 아이디로 로그인 시 버그,
+                // 좀 어지럽네
+        self.service.fetchDiaryDatas { datas in
+            // 일기를 하나도 안 쓴 사람.
+            if datas == nil {
+                DiaryTableView.todayDiaryToggle = false
+                // diaryData에 데이터 넣기
+                self.diaryData = []
+                
+                
+                
+            } else {
+                guard let datas = datas else { return }
+                // 오늘 일기를 썻는지 안 썻는지 확인
+                self.today(datas: datas)
+            }
+        }
+    }
+    
+    
+    
+    // MARK: - Today_Diary_Toggle
+    private func today(datas: [Diary]) {
+        guard let diaryLastDay = datas.first?.day else { return }
+        // Today
+        let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "d"
+        MainVC.today = dateFormatter.string(from: Date())
+        
+        // todayDairyToggle 설정
+        DiaryTableView.todayDiaryToggle = MainVC.today == diaryLastDay
+        ? true
+        : false
+        
+        self.diaryData = datas
     }
     
     
@@ -373,6 +415,7 @@ final class MainVC: UIViewController {
         self.view.addSubview(self.headerView)
         self.headerView.mainHeaderDelegate = self
         self.headerView.diaryHeaderDelegate = diaryVC
+        self.headerView.alpha = 0
         self.headerView.frame = CGRect(x: 0,
                                        y: 0,
                                        width: self.view.frame.width,
@@ -382,25 +425,12 @@ final class MainVC: UIViewController {
         self.view.addSubview(self.footerButton)
         self.footerButton.anchor(bottom: self.view.safeAreaLayoutGuide.bottomAnchor, paddingBottom: 10,
                                  centerX: self.view)
-    }
-    
-    
-    
-    
-    
-    
-    // MARK: - Today_Diary_Toggle
-    private func today() {
-        guard let diaryLastDay = self.diaryData.first?.day else { return }
-        // Today
-        let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "d"
-        MainVC.today = dateFormatter.string(from: Date())
         
-        // todayDairyToggle 설정
-        MainVC.todayDiaryToggle = MainVC.today == diaryLastDay
-            ? true
-            : false
+        // Fetch_Diary_Data의 시간을 버는 용도
+        UIView.animate(withDuration: 3) {
+            self.headerView.alpha = 1
+            self.footerButton.alpha = 1
+        }
     }
 }
 
@@ -975,6 +1005,7 @@ extension MainVC: LoginMainDelegate, HeaderMainDelegate, MenuMainDelegate, Secon
 // [Menu - Button]
     // menu -> SetupView
     func handleSetup() {
+        self.setupTableView.user = self.user
         // 버튼의 이미지 + 역할을 바꿈
         self.headerView.buttonConfig = .setupVCButton
         // setup_Table_보이게 하기
@@ -997,8 +1028,6 @@ extension MainVC: LoginMainDelegate, HeaderMainDelegate, MenuMainDelegate, Secon
 // [Footer_Button]
     // MainVC -> Diary_Table
     @objc private func starButtonTapped() {
-        // Diary_Data 보내기
-        self.diaryTable.diaryData = self.diaryData
         // 버튼의 이미지 바꾸기
             // header에서 바꾸면 diaryVC -> Diary_Table로 이동할 때도 애니메이션이 작동하므로 여기서 설정
         self.headerView.leftButtonAlpha(.back)
@@ -1148,10 +1177,7 @@ extension MainVC: LoginMainDelegate, HeaderMainDelegate, MenuMainDelegate, Secon
 // [SignUp_View - Button]
     // login_View -> Main
     func handleLoginToMain() {
-        // user가 있다면
-        if Auth.auth().currentUser?.uid != nil {
-            checkLogin()
-        }
+        self.checkLogin()
     }
     
     
@@ -1238,5 +1264,12 @@ extension MainVC: LoginMainDelegate, HeaderMainDelegate, MenuMainDelegate, Secon
     // MARK: - FirstMainDelegate
     func monthDiaryTapped() {
         print(#function)
+    }
+}
+
+
+extension MainVC: DiaryVCMainDelegate {
+    func updateDiaryData() {
+        self.fetchDiaryDatas()
     }
 }

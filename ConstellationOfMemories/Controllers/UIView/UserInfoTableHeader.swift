@@ -9,32 +9,23 @@ import UIKit
 
 final class UserInfoTableHeader: UIView {
     
-    // MARK: - Properties
-    
-    
-    
-    
-    
-    
     // MARK: - View
-    private lazy var profileView: UIImageView = {
-        let img = UIImageView(image: UIImage.setImg(.person, pointSize: 40))
-        
-        img.tintColor = .white
-        return img
+    private lazy var profileView: UILabel = {
+        return UILabel().labelConfig(LabelTextColor: .white,
+                                        fontName: .bold,
+                                        fontSize: 20,
+                                        textAlignment: .center)
     }()
 
 
     // MARK: - Label
     private lazy var fullNameLabel: UILabel = {
-        return UILabel().labelConfig(labelText: "계은성",
-                                     LabelTextColor: .white,
+        return UILabel().labelConfig(LabelTextColor: .white,
                                      fontName: .system,
                                      fontSize: 16)
     }()
     private lazy var emailLabel: UILabel = {
-        return UILabel().labelConfig(labelText: "chwl0571@daum.net",
-                                     LabelTextColor: .white,
+        return UILabel().labelConfig(LabelTextColor: .white,
                                      fontName: .system,
                                      fontSize: 13)
     }()
@@ -47,6 +38,14 @@ final class UserInfoTableHeader: UIView {
                                        axis: .vertical,
                                        distribution: .fillEqually)
     }()
+    
+    
+    
+    
+    
+    
+    
+    
     
     
     // MARK: - LifeCycle
@@ -62,35 +61,46 @@ final class UserInfoTableHeader: UIView {
     
     
     
+    
+    
+    
+    
+    
+    
     // MARK: - Helper Functions
     private func configureHeader() {
         // background Color
         self.backgroundColor = .clear
-        
         // profileView
         self.addSubview(self.profileView)
         self.profileView.anchor(leading: self.leadingAnchor, paddingLeading: 20,
-                                centerY: self)
-        
-        
+                                width: 40, height: 40,
+                                centerY: self,
+                                cornerRadius: self.profileView.frame.width / 2)
         // initialLabel
         self.addSubview(self.stackView)
         self.stackView.anchor(top: self.profileView.topAnchor,
                               bottom: self.profileView.bottomAnchor,
                               leading: self.profileView.trailingAnchor, paddingLeading: 10)
-        
-        
     }
-    
-    
-    
-    // MARK: - Selectors
-    
-    
-    
-    
-    // MARK: - API
-    
-    
-    
+}
+
+
+
+
+
+
+
+
+
+
+// MARK: - SetupInfoHeaderDelegate
+extension UserInfoTableHeader: SetupInfoHeaderDelegate {
+    func configInfoHeader(user: User?) {
+        guard let user = user else { return }
+        
+        self.fullNameLabel.text = user.fullName
+        self.emailLabel.text = user.email
+        self.profileView.text = user.firstInitial
+    }
 }

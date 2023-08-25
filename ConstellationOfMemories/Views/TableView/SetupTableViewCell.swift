@@ -17,7 +17,7 @@ final class SetupTableviewCell: UITableViewCell {
         didSet { self.toggleAnimate() }
     }
     
-    
+    // 셀의 타이틀 이름 바꾸기
     var setupCellTitle: SetupCelltitle? {
         didSet {
             if self.setupCellTitle == .info {
@@ -30,7 +30,7 @@ final class SetupTableviewCell: UITableViewCell {
                 // DB에서 가져와야 함
                 // MARK: - Fix
                 // 일단 임시방편
-                self.inforButton.setTitle("On", for: .normal)
+                self.cellButton.setTitle("On", for: .normal)
                 
                 
             } else {
@@ -38,7 +38,7 @@ final class SetupTableviewCell: UITableViewCell {
                 self.titleLabel.text = "로그아웃"
                 
                 // 버튼 바꾸기
-                self.inforButton.setTitle("logout", for: .normal)
+                self.cellButton.setTitle("logout", for: .normal)
             }
         }
     }
@@ -52,7 +52,7 @@ final class SetupTableviewCell: UITableViewCell {
                                      fontSize: 20)
     }()
     
-    private lazy var inforButton: UIButton = {
+    private lazy var cellButton: UIButton = {
         let btn = UIButton()
         
             btn.backgroundColor = UIColor(white: 1, alpha: 0.3)
@@ -93,8 +93,8 @@ final class SetupTableviewCell: UITableViewCell {
                                centerY: self)
         
         // toggleButton
-        self.contentView.addSubview(self.inforButton)
-        self.inforButton.anchor(trailing: self.trailingAnchor, paddingTrailing: 20,
+        self.contentView.addSubview(self.cellButton)
+        self.cellButton.anchor(trailing: self.trailingAnchor, paddingTrailing: 20,
                                  width: 100, height: 35,
                                  centerY: self,
                                  cornerRadius: 10)
@@ -105,22 +105,22 @@ final class SetupTableviewCell: UITableViewCell {
         // 알림 On / Off 버튼을 눌렀을 경우
         if self.setupCellTitle == .info {
             UIView.animate(withDuration: 0.3) {
-                self.inforButton.alpha = 0
+                self.cellButton.alpha = 0
                 
             } completion: { _ in
                 if self.inforToggle == true {
-                    self.inforButton.setTitle("ON", for: .normal)
-                    self.inforButton.backgroundColor = UIColor(white: 1, alpha: 0.5)
-                    self.inforButton.setTitleColor(.white, for: .normal)
+                    self.cellButton.setTitle("ON", for: .normal)
+                    self.cellButton.backgroundColor = UIColor(white: 1, alpha: 0.5)
+                    self.cellButton.setTitleColor(.white, for: .normal)
                     
                 } else {
-                    self.inforButton.setTitle("OFF", for: .normal)
-                    self.inforButton.backgroundColor = UIColor(white: 1, alpha: 0.3)
-                    self.inforButton.setTitleColor(.white, for: .normal)
+                    self.cellButton.setTitle("OFF", for: .normal)
+                    self.cellButton.backgroundColor = UIColor(white: 1, alpha: 0.3)
+                    self.cellButton.setTitleColor(.white, for: .normal)
                 }
                 
                 UIView.animate(withDuration: 0.3) {
-                    self.inforButton.alpha = 1
+                    self.cellButton.alpha = 1
                 }
             }
             

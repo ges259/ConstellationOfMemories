@@ -116,3 +116,12 @@ protocol SetupMainDelegate {
     func cancelBtnTapped()
     func setupBlackViewShow()
 }
+
+
+protocol DiaryVCMainDelegate {
+    func updateDiaryData()
+}
+
+protocol SetupInfoHeaderDelegate {
+    func configInfoHeader(user: User?)
+}

@@ -8,13 +8,13 @@
 import FirebaseCore
 import FirebaseAuth
 import Firebase
+import FirebaseDatabase
 
 
 
 struct Service {
     static let shared = Service()
     init() {}
-    
     
     
     
@@ -106,39 +106,41 @@ struct Service {
     
     
     // MARK: - Create_Diary_Data
-    func createDiaryData(uid: String, diaryText: String) {
-        
+    func createDiaryData(diaryText: String) {
+        // Date
         let dateFormatter = DateFormatter()
-        // month
+            // month
             dateFormatter.dateFormat = "M"
         let month = dateFormatter.string(from: Date())
-        // day
+            // day
             dateFormatter.dateFormat = "d"
         let day = dateFormatter.string(from: Date())
         
+        // uid
+        guard let uid = Auth.auth().currentUser?.uid else { return }
         
         
         // 배열에 데이터 넣기
             // uid + diaryText + date
-        let values: [String: Any] = [DBString.uid: uid,
-                                     DBString.month: month,
+        let value: [String: Any] = [DBString.month: month,
                                      DBString.day: day,
                                      DBString.diaryText: diaryText]
         
-        // Diariy_Id 만들기 (childByAutoId()를 통해서 랜덤의 Id 만들기
-        let diaryId = Diary_REF.childByAutoId()
         
-        // key
-//        guard let diaryKey = diaryId.key else { return }
+        // Diariy_Id 만들기 (childByAutoId()를 통해서 랜덤의 Id 만들기
+//        let diaryId = Diary_REF.child(uid).childByAutoId()
+        let diaryId = Diary_REF.child(uid).child("\(month)\(day)")
+
+        
         
         // realTime_DB에 데이터를 저장
-        diaryId.updateChildValues(values) { error, ref in
+        diaryId.updateChildValues(value) { error, ref in
             if let error = error {
-                print("Create Error, \(error.localizedDescription)")
+                print("***** Create Error *****, \(error.localizedDescription)")
                 return
             } else {
                 print("Create!!!!!!")
-                MainVC.todayDiaryToggle = true
+                DiaryTableView.todayDiaryToggle = true
             }
         }
     }
@@ -147,8 +149,10 @@ struct Service {
     
     // MARK: - Update_Diary_Data
     func updateDiaryData(diary: Diary, diaryText: String) {
-        
-
+        // uid
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        // update_Diary
+        Diary_REF.child(uid).child("\(diary.month)\(diary.day)").child(DBString.diaryText).setValue(diaryText)
     }
     
     
@@ -159,87 +163,62 @@ struct Service {
     
     
     // MARK: - Fetch_Diary_Data
-    func fetchDiaryDatas(completion: @escaping ([Diary]) -> Void) {
+    func fetchDiaryDatas(completion: @escaping ([Diary]?) -> Void) {
         var diaryDatas: [Diary] = []
-        // 한 번만 completion을 하기 위해 따로 카운트
-            // diary가 모두 배열에 채워지면 completion
-        
         
         self.fetchDiaryData { data, num in
-            diaryDatas.append(data)
-            
-            diaryDatas.sort { diary1, diary2 in
-                return diary1.day > diary2.day
+            // 데이터가 없다면 nil 반환(completion)
+            guard let data = data else {
+                completion(nil)
+                return
             }
             
+            // diaryDatas - 데이터 추가
+            diaryDatas.append(data)
             
-            // diary가 모두 배열에 채워지면 completion
+            // diaryDatas - 배열 정렬
+            diaryDatas.sort { diary1, diary2 in return diary1.day > diary2.day }
+            
+            // 한 번만 completion을 하기 위해 따로 카운트
+                // diary가 모두 배열에 채워지면 completion
             if diaryDatas.count == num {
                 completion(diaryDatas)
+                return
             }
         }
     }
     
-    private func fetchDiaryData(completion: @escaping (Diary, Int) -> Void) {
+    private func fetchDiaryData(completion: @escaping (Diary?, Int) -> Void) {
         // diary 배열 생성
         var diaryArray = [String]()
+        // uid
+        guard let uid = Auth.auth().currentUser?.uid else { return }
         
         // diarys에 들어있는 데이터들을 가져옴
-        Diary_REF.observeSingleEvent(of: .value) { snapshot in
-            
+        Diary_REF.child(uid).observeSingleEvent(of: .value) { snapshot in
+            // Diary의 uid
             guard let allObjects = snapshot.children.allObjects as? [DataSnapshot] else { return }
+            // 데이터가 없다면 nil 반환(completion)
+            if allObjects.count == 0 { completion(nil, 0) }
 
+            // 데이터 가져오기
             allObjects.forEach { snapshot in
                 // diaryId를 가져옴
                 let diaryId = snapshot.key
                 // 배열에 넣기
                 diaryArray.append(diaryId)
+
                 // 배열의 diaryId를 통해서 diaryId에 있는 정보들을 가져옴
                     // 이렇게 가져온 정보들은 completion.(~~~)을 통해 정보를 얻을 수 있음
-                Diary_REF.child(diaryId).observeSingleEvent(of: .value) { snapshot in
-                    
+                Diary_REF.child(uid).child(diaryId).observeSingleEvent(of: .value) { snapshot in
+                    // dictionary 값으로 만들기
                     guard let dictionary = snapshot.value as? Dictionary<String, AnyObject> else { return }
-                    
-                    guard let currentUid = dictionary[DBString.uid] as? String else { return }
-                    
-                    fetchUserData(uid: currentUid) { user in
-                        let diary = Diary(uid: currentUid, dictionary: dictionary)
-                        
-                        
-                        completion(diary, allObjects.count)
-                    }
+                    // Diary 객체 생성
+                    let diary = Diary(diaryId: diaryId,uid: uid, dictionary: dictionary)
+                    // completion()
+                    completion(diary, allObjects.count)
                 }
             }
         }
     }
-    
-    
-    
-    
-    
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
 }

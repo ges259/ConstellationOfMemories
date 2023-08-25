@@ -13,12 +13,14 @@ struct DBString {
     static let fullName: String = "fullName"
     static let email: String = "email"
     static let password: String = "password"
-    
+        
     static let fontColor: String = "fontColor"
     static let backgroundColor: String = "backgroundColor"
     
+    // 알림 설정
     static let notification: String = "notification"
-    
+    //
+    static let lastDiary: String = "lastDiary"
     
     
     // MARK: - Diary
@@ -26,7 +28,6 @@ struct DBString {
     static let month: String = "month"
     static let day: String = "day"
     static let diaryText: String = "diaryText"
-//    static let like: String = "like"
 }
 
 

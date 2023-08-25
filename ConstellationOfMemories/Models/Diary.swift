@@ -11,10 +11,11 @@ struct Diary {
     // user
 //    let user: User
     
+    // diaryId
+    let diaryId: String
     // uid
     let uid: String
     // 일기 작성 날짜
-//    let date: String
     let month: String
     let day: String
     
@@ -24,10 +25,10 @@ struct Diary {
     
 //    let like: Int
     
-    init(uid: String, dictionary: [String: Any]) {
+    init(diaryId: String, uid: String, dictionary: [String: Any]) {
         // user
 //        self.user = user
-        
+        self.diaryId = diaryId
         // uid
         self.uid = uid
             

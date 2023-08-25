@@ -12,8 +12,13 @@ final class SetupTableView: UIView {
     // MARK: - Properties
     var setupMainDelegate: SetupMainDelegate?
     
+    var user: User? {
+        didSet {
+            self.setupinfoHeaderDelegate?.configInfoHeader(user: self.user)
+        }
+    }
     
-    
+    var setupinfoHeaderDelegate: SetupInfoHeaderDelegate?
     
     
     
@@ -39,7 +44,9 @@ final class SetupTableView: UIView {
                           forCellReuseIdentifier: ReuseIdentifier.setupTableViewCell)
         
             // setupTableview - headerView 추가
-            view.tableHeaderView = UserInfoTableHeader(frame: headerFrame)
+        let header = UserInfoTableHeader(frame: headerFrame)
+        self.setupinfoHeaderDelegate = header
+            view.tableHeaderView = header
             view.isScrollEnabled = false
         return view
     }()

@@ -26,7 +26,7 @@ final class DiaryVC: UIView {
     
     
     
-    
+    var diaryVCMainDelegate: DiaryVCMainDelegate?
     
     
     
@@ -239,15 +239,13 @@ extension DiaryVC: HeaderDiaryVCDelegate {
             return
         }
         
-        guard let diaryText = self.diaryTextView.text,
-              let currentUid = Auth.auth().currentUser?.uid
-        else { return }
+        guard let diaryText = self.diaryTextView.text else { return }
         
         
         // [Create Or Update]
         // Create
         if self.diaryData == nil {
-            self.service.createDiaryData(uid: currentUid, diaryText: diaryText)
+            self.service.createDiaryData(diaryText: diaryText)
 
         // Update
         } else {
@@ -255,7 +253,8 @@ extension DiaryVC: HeaderDiaryVCDelegate {
             self.service.updateDiaryData(diary: diaryData, diaryText: diaryText)
         }
         
-        // delegate?
+        // delegate
+        self.diaryVCMainDelegate?.updateDiaryData()
     }
 }
 
