@@ -353,26 +353,89 @@ final class MainVC: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
 
-        self.launchScreen()
+        self.configureBackground()
+        // checkLogin
+            // User가 있다면 -> MainVC
+            // User가 없다면 -> Login_View
+        self.checkLogin()
     }
     
     
     
-    // MARK: - launchScreen
-    func launchScreen() {
+    // MARK: - Configure UI
+    func configureBackground() {
         // background_Image
         self.view.addSubview(self.backgroundImage)
         self.backgroundImage.anchor(top: self.view.topAnchor,
                                     bottom: self.view.bottomAnchor,
                                     leading: self.view.leadingAnchor,
                                     trailing: self.view.trailingAnchor)
+    }
+    
+    private func configureMainVC() {
+        // header_View
+        self.view.addSubview(self.headerView)
+        self.headerView.mainHeaderDelegate = self
+        self.headerView.diaryHeaderDelegate = diaryVC
+        self.headerView.alpha = 0
+        self.headerView.frame = CGRect(x: 0,
+                                       y: 0,
+                                       width: self.view.frame.width,
+                                       height: 150)
+        // footer_Button
+        self.view.addSubview(self.footerButton)
+        self.footerButton.alpha = 0
+        self.footerButton.anchor(bottom: self.view.safeAreaLayoutGuide.bottomAnchor, paddingBottom: 10,
+                                 centerX: self.view)
+        
+        // Fetch_Diary_Data의 시간을 버는 용도
+        UIView.animate(withDuration: 2) {
+            self.headerView.alpha = 1
+            self.footerButton.alpha = 1
+        }
+    }
+    
+    
+    
+    
+    
+    // MARK: - Authentication
+    // user가 있는지 확인
+    private func checkLogin() {
+        // user가 있다면 -> MainVC 로 이동
+        if let currentUid = Auth.auth().currentUser?.uid {
+            self.launchScreen()
+            
+            print("login")
+            // User_Data 가져오기
+            self.service.fetchUserData(uid: currentUid) { user in
+                self.user = user
+            }
+            
+            // Diary_Data를 가져오기
+            self.fetchDiaryDatas()
+            
+            // Login_View 숨기기
+            self.loginViewHideOrShow(show: false)
+            
+            
+            // user가 없다면 -> Login_View 로 이동
+        } else {
+            print("user is nil")
+            // Login_View 보이게 하기
+            self.loginViewHideOrShow(show: true)
+        }
+    }
+    
+    
+    
+    
+    // MARK: - launchScreen
+    func launchScreen() {
         self.view.addSubview(self.launchScreen1)
         self.view.addSubview(self.launchScreen2)
         
-        // checkLogin
-            // User가 있다면 -> MainVC
-            // User가 없다면 -> Login_View
-        self.checkLogin()
+        
         
 // blueSky
         self.launchScreen1.imageView.image = UIImage(named: self.backgroundArray[0])
@@ -468,33 +531,16 @@ final class MainVC: UIViewController {
         }
     }
     
+
     
     
-    // MARK: - Authentication
-    // user가 있는지 확인
-    private func checkLogin() {
-        // user가 있다면 -> MainVC 로 이동
-        if let currentUid = Auth.auth().currentUser?.uid {
-            print("login")
-            // User_Data 가져오기
-            self.service.fetchUserData(uid: currentUid) { user in
-                self.user = user
-            }
-            
-            // Diary_Data를 가져오기
-            self.fetchDiaryDatas()
-            
-            // Login_View 숨기기
-            self.loginViewHideOrShow(show: false)
-            
-            
-            // user가 없다면 -> Login_View 로 이동
-        } else {
-            print("user is nil")
-            // Login_View 보이게 하기
-            self.loginViewHideOrShow(show: true)
-        }
-    }
+    
+    
+    
+    
+    
+// MARK: - API
+    
     
     
     // MARK: - Fetcj_Diary_Data
@@ -542,32 +588,6 @@ final class MainVC: UIViewController {
         
         // Diary_Data에 데이터 저장
         self.diaryData = datas
-    }
-    
-    
-    
-    // MARK: - Configure UI
-    private func configureMainVC() {
-        // header_View
-        self.view.addSubview(self.headerView)
-        self.headerView.mainHeaderDelegate = self
-        self.headerView.diaryHeaderDelegate = diaryVC
-        self.headerView.alpha = 0
-        self.headerView.frame = CGRect(x: 0,
-                                       y: 0,
-                                       width: self.view.frame.width,
-                                       height: 150)
-        // footer_Button
-        self.view.addSubview(self.footerButton)
-        self.footerButton.alpha = 0
-        self.footerButton.anchor(bottom: self.view.safeAreaLayoutGuide.bottomAnchor, paddingBottom: 10,
-                                 centerX: self.view)
-        
-        // Fetch_Diary_Data의 시간을 버는 용도
-        UIView.animate(withDuration: 2) {
-            self.headerView.alpha = 1
-            self.footerButton.alpha = 1
-        }
     }
 }
 
@@ -1318,7 +1338,7 @@ extension MainVC: LoginMainDelegate, HeaderMainDelegate, MenuMainDelegate, Secon
         // fetch_User & fetch_Diary
         self.checkLogin()
         // header 및 footer_Button 구현
-        self.configureMainVC()
+//        self.configureMainVC()
     }
     
     
