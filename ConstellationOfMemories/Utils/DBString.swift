@@ -22,10 +22,10 @@ struct DBString {
     //
     static let lastDiary: String = "lastDiary"
     
-    static let dawn: String = "dawn"
-    static let morning: String = "morning"
-    static let sunset: String = "sunset"
-    static let night: String = "night"
+    static let dawn: String = "dawn1"
+    static let morning: String = "morning1"
+    static let sunset: String = "sunset1"
+    static let night: String = "night1"
     
     
     

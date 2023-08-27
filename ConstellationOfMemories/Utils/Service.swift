@@ -64,8 +64,13 @@ struct Service {
         }
     }
     
+    
+    
     // MARK: - Fetch_User_Data
-    func fetchUserData(uid: String, completion: @escaping (User) -> Void) {
+    func fetchUserData(completion: @escaping (User) -> Void) {
+        
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        
         Users_REF.child(uid).observeSingleEvent(of: .value) { snapshot in
             
             guard let dictionary = snapshot.value as? [String: Any] else { return }

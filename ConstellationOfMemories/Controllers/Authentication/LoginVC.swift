@@ -142,6 +142,7 @@ final class LoginVC: UIView {
     
     // MARK: - Helper Functions
     private func configureUI() {
+        self.alpha = 0
         // Title_Label
         self.addSubview(self.titleLabel)
         self.titleLabel.anchor(top: self.topAnchor, paddingTop: 150,
@@ -221,6 +222,14 @@ final class LoginVC: UIView {
     func handleLogin() {
         self.loginMainDelegate?.handleLoginToMain()
     }
+    
+    func resetLoginView() {
+        // 텍스트 필드 비우기
+        self.emailTextField.text = ""
+        self.passwordTextField.text = ""
+        // 로그인 버튼 비활성화
+        self.textFieldChanged()
+    }
 }
 
 
@@ -260,11 +269,7 @@ extension LoginVC: SignUpLoginDelegate {
                 
                 
             } completion: { _ in
-                // 텍스트 필드 비우기
-                self.emailTextField.text = ""
-                self.passwordTextField.text = ""
-                // 로그인 버튼 비활성화
-                self.textFieldChanged()
+                self.resetLoginView()
             }
         }
     }
