@@ -20,12 +20,8 @@ final class SecondCollectionView: UIView {
     
     // 맨 위로 정렬
     var secondCollectionToggle: SegementToggle? {
-        didSet {
-            // item이 항상 맨위로 가도록 설정
-            self.upCollectionView()
-            
-//            self.secondCollection.reloadData()
-        }
+        // item이 항상 맨위로 가도록 설정
+        didSet { self.upCollectionView() }
     }
     
     

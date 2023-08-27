@@ -8,6 +8,7 @@
 import UIKit
 import CoreData
 import FirebaseCore
+import FirebaseAuth
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -19,6 +20,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         
         FirebaseApp.configure()
+        
+//        // hour
+//        let dateFormatter = DateFormatter()
+//            dateFormatter.dateFormat = "H"
+//        MainVC.hour = dateFormatter.string(from: Date())
+        
+        
+        
         
         
         return true

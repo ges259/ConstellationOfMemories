@@ -19,7 +19,14 @@ final class MainVC: UIViewController {
     
 // Data
     // User
-    private var user: User?
+    private var user: User? {
+        didSet {
+            guard let user = user else { return }
+            dump(user)
+            self.thisTime()
+            
+        }
+    }
     // Diary_Data
     private var diaryData: [Diary] = [] {
         // Diary_Table로   [Diary] 데이터 보내기
@@ -32,19 +39,34 @@ final class MainVC: UIViewController {
     // Today_Diary_Toggle
         // 오늘 일기를 썻는지
     static var todayDiaryToggle: Bool = false
-    // Today
-        // 오늘 며칠인지
-    static var today: String = ""
     
     
+    func thisTime(){
+        let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "H"
+        guard let hour = Int(dateFormatter.string(from: Date())) else { return }
+        
+        guard let user = user else { return }
+
+        if hour < 7 {
+            self.backgroundArray = [user.dawn, user.morning, user.sunset, user.night]
+            
+            
+        } else if 7 <= hour && hour < 18 {
+            self.backgroundArray = [user.morning, user.sunset, user.night, user.dawn]
+            
+            
+        } else if 18 <= hour && hour < 19 {
+            self.backgroundArray = [user.sunset, user.night, user.dawn, user.morning]
+            
+            
+        } else if 19 <= hour && hour <= 24 {
+            self.backgroundArray = [user.night, user.dawn, user.morning, user.sunset]
+        }
+    }
     
     
-    
-    
-    
-    
-    
-    
+    private var backgroundArray: [String] = [DBString.dawn, DBString.morning, DBString.sunset, DBString.night]
     
     
     
@@ -56,8 +78,25 @@ final class MainVC: UIViewController {
     
     
     // MARK: - ImageView
+    private lazy var launchScreen1: LaounchSccreen = {
+//         UIImageView(image: UIImage(named: "dawn1"))
+        let frame = CGRect(x: self.view.frame.width,
+                           y: 0,
+                           width: self.view.frame.width,
+                           height: self.view.frame.height)
+        return LaounchSccreen(frame: frame)
+    }()
+    private lazy var launchScreen2: LaounchSccreen = {
+        let frame = CGRect(x: 0,
+                           y: 0,
+                           width: self.view.frame.width,
+                           height: self.view.frame.height)
+        return LaounchSccreen(frame: frame)
+    }()
+    
+    // background
     private lazy var backgroundImage: UIImageView = {
-        return UIImageView(image: UIImage(named: "blueSky"))
+        return UIImageView(image: UIImage(named: "night1"))
     }()
     
     
@@ -309,19 +348,124 @@ final class MainVC: UIViewController {
     // MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
-        // Image_View는
-            // Login_View 와 MainVC 두 곳 모두에서 사용 됨
-        self.configureImageView()
-        // User가 있다면
-            // MainVC
-        // User가 없다면
-            // Login_View
+
+        self.launchScreen()
+    }
+    
+    
+    
+    // MARK: - launchScreen
+    func launchScreen() {
+        // background_Image
+        self.view.addSubview(self.backgroundImage)
+        self.backgroundImage.anchor(top: self.view.topAnchor,
+                                    bottom: self.view.bottomAnchor,
+                                    leading: self.view.leadingAnchor,
+                                    trailing: self.view.trailingAnchor)
+        self.view.addSubview(self.launchScreen1)
+        self.view.addSubview(self.launchScreen2)
+        
+        // checkLogin
+            // User가 있다면 -> MainVC
+            // User가 없다면 -> Login_View
         self.checkLogin()
+        
+// blueSky
+        self.launchScreen1.imageView.image = UIImage(named: self.backgroundArray[0])
+        
+        UIView.animate(withDuration: 2) {
+            // launchScreen1 숨기기
+            self.launchScreen1.frame.origin.x = -self.view.frame.width
+            // launchScreen2 보이게 하기
+            self.launchScreen2.frame.origin.x = 0
+            
+            
+            
+        } completion: { _ in
+// 1
+            // launchScreen1 이미지 바꾸기
+            self.launchScreen1.imageView.image = UIImage(named: self.backgroundArray[0])
+            // launchScreen1 위치 바꾸기
+            self.launchScreen1.frame.origin.x = self.view.frame.width
+
+            UIView.animate(withDuration: 0.6) {
+                // launchScreen1 보이게 하기
+                self.launchScreen1.frame.origin.x = 0
+                // launchScreen2 숨기기
+                self.launchScreen2.frame.origin.x = -self.view.frame.width
+                
+                
+                
+            } completion: { _ in
+// 2
+                // launchScreen2 이미지 바꾸기
+                self.launchScreen2.imageView.image = UIImage(named: self.backgroundArray[1])
+                // launchScreen2 위치 바꾸기
+                self.launchScreen2.frame.origin.x = self.view.frame.width
+
+                UIView.animate(withDuration: 0.6) {
+                    // launchScreen1 숨기기
+                    self.launchScreen1.frame.origin.x = -self.view.frame.width
+                    // launchScreen2 보이게 하기
+                    self.launchScreen2.frame.origin.x = 0
+                    
+                    
+                    
+                } completion: { _ in
+// 3
+                    // launchScreen1 이미지 바꾸기
+                    self.launchScreen1.imageView.image = UIImage(named: self.backgroundArray[2])
+                    // launchScreen1 위치 바꾸기
+                    self.launchScreen1.frame.origin.x = self.view.frame.width
+                    
+                    UIView.animate(withDuration: 0.6) {
+                        // launchScreen1 보이게 하기
+                        self.launchScreen1.frame.origin.x = 0
+                        // launchScreen2 숨기기
+                        self.launchScreen2.frame.origin.x = -self.view.frame.width
+                        
+                        
+                        
+// 4
+                    } completion: { _ in
+                        // launchScreen1 이미지 바꾸기
+                        self.launchScreen2.imageView.image = UIImage(named: self.backgroundArray[3])
+                        // launchScreen1 위치 바꾸기
+                        self.launchScreen2.frame.origin.x = self.view.frame.width
+                        
+                        UIView.animate(withDuration: 0.6) {
+                            // launchScreen1 숨기기
+                            self.launchScreen1.frame.origin.x = -self.view.frame.width
+                            // launchScreen2 보이게 하기
+                            self.launchScreen2.frame.origin.x = 0
+                            
+                            
+                            
+                        } completion: { _ in
+// background_Image
+                            UIView.animate(withDuration: 0.3) {
+                                self.launchScreen2.alpha = 0
+                                // backgroundImage 이미지 바꾸기
+                                self.backgroundImage.image = UIImage(named: self.backgroundArray[3])
+                                
+                            } completion: { _ in
+// removeFromSuperView()
+                                // remove_View
+                                self.launchScreen1.removeFromSuperview()
+                                self.launchScreen2.removeFromSuperview()
+                                
+                                // header 및 footer_Button 구현
+                                self.configureMainVC()
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
     
     
@@ -353,8 +497,6 @@ final class MainVC: UIViewController {
     }
     
     
-    
-    
     // MARK: - Fetcj_Diary_Data
     private func fetchDiaryDatas() {
         // Diary_Data를 가져오기
@@ -381,34 +523,30 @@ final class MainVC: UIViewController {
     
     // MARK: - Today_Diary_Toggle
     private func today(datas: [Diary]) {
-        guard let diaryLastDay = datas.first?.day else { return }
         // Today
         let dateFormatter = DateFormatter()
+            // day
             dateFormatter.dateFormat = "d"
-        MainVC.today = dateFormatter.string(from: Date())
+        let today = dateFormatter.string(from: Date())
+        
+        // Last_Day
+        guard let diaryLastDay = datas.first?.day else { return }
         
         // todayDairyToggle 설정
-        MainVC.todayDiaryToggle = MainVC.today == diaryLastDay
-        ? true
-        : false
+            // Today와 Last_Day를 비교
+                // -> 같으면 true
+                // -> 다르면 false
+        MainVC.todayDiaryToggle = today == diaryLastDay
+            ? true
+            : false
         
+        // Diary_Data에 데이터 저장
         self.diaryData = datas
     }
     
     
     
     // MARK: - Configure UI
-    private func configureImageView() {
-        // background_Image
-        self.view.addSubview(self.backgroundImage)
-        self.backgroundImage.anchor(top: self.view.topAnchor,
-                                    bottom: self.view.bottomAnchor,
-                                    leading: self.view.leadingAnchor,
-                                    trailing: self.view.trailingAnchor)
-    }
-    
-    
-    
     private func configureMainVC() {
         // header_View
         self.view.addSubview(self.headerView)
@@ -419,14 +557,14 @@ final class MainVC: UIViewController {
                                        y: 0,
                                        width: self.view.frame.width,
                                        height: 150)
-        
         // footer_Button
         self.view.addSubview(self.footerButton)
+        self.footerButton.alpha = 0
         self.footerButton.anchor(bottom: self.view.safeAreaLayoutGuide.bottomAnchor, paddingBottom: 10,
                                  centerX: self.view)
         
         // Fetch_Diary_Data의 시간을 버는 용도
-        UIView.animate(withDuration: 3) {
+        UIView.animate(withDuration: 2) {
             self.headerView.alpha = 1
             self.footerButton.alpha = 1
         }
@@ -797,7 +935,7 @@ extension MainVC {
         // Login_View_Hide
         } else {
             // configure UI
-            self.configureMainVC()
+//            self.configureMainVC()
             
             UIView.animate(withDuration: 0.5) {
                 // login_View 숨기기
@@ -805,6 +943,7 @@ extension MainVC {
                 // Layout 보이게 하기
                 self.headerView.alpha = 1
                 self.footerButton.alpha = 1
+                
                 
             } completion: { _ in
                 self.loginView.removeFromSuperview()
@@ -1176,7 +1315,10 @@ extension MainVC: LoginMainDelegate, HeaderMainDelegate, MenuMainDelegate, Secon
 // [SignUp_View - Button]
     // login_View -> Main
     func handleLoginToMain() {
+        // fetch_User & fetch_Diary
         self.checkLogin()
+        // header 및 footer_Button 구현
+        self.configureMainVC()
     }
     
     

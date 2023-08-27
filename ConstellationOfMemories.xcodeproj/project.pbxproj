@@ -46,6 +46,7 @@
 		5FEB58F62A93A7B600F62205 /* LoginVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FEB58F52A93A7B600F62205 /* LoginVC.swift */; };
 		5FEB58F82A93A7D000F62205 /* SignUpVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FEB58F72A93A7D000F62205 /* SignUpVC.swift */; };
 		5FEB58FC2A9400EA00F62205 /* Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FEB58FB2A9400EA00F62205 /* Service.swift */; };
+		5FFB1C4B2A9A7AF00044CDAE /* LaunchScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FFB1C4A2A9A7AF00044CDAE /* LaunchScreen.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -87,6 +88,7 @@
 		5FEB58F52A93A7B600F62205 /* LoginVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginVC.swift; sourceTree = "<group>"; };
 		5FEB58F72A93A7D000F62205 /* SignUpVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpVC.swift; sourceTree = "<group>"; };
 		5FEB58FB2A9400EA00F62205 /* Service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Service.swift; sourceTree = "<group>"; };
+		5FFB1C4A2A9A7AF00044CDAE /* LaunchScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchScreen.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -111,6 +113,7 @@
 				5FB75C3F2A8E73C900F74E12 /* DetailView.swift */,
 				5F0BE8132A86508D0090AC1F /* UserInfoTableHeader.swift */,
 				5F210EB02A94FCE20000D280 /* LogoutView.swift */,
+				5FFB1C4A2A9A7AF00044CDAE /* LaunchScreen.swift */,
 			);
 			path = UIView;
 			sourceTree = "<group>";
@@ -356,6 +359,7 @@
 				5F15D1D42A813917005A00E1 /* Protocols.swift in Sources */,
 				5FB75C402A8E73C900F74E12 /* DetailView.swift in Sources */,
 				5F8200C02A8D5CBB0068345B /* FirstCollectionView.swift in Sources */,
+				5FFB1C4B2A9A7AF00044CDAE /* LaunchScreen.swift in Sources */,
 				5F15D1D02A813905005A00E1 /* StringConstants.swift in Sources */,
 				5FEB58F82A93A7D000F62205 /* SignUpVC.swift in Sources */,
 				5F0BE8182A8664D40090AC1F /* SetupTableViewCell.swift in Sources */,
@@ -512,7 +516,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ConstellationOfMemories/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UILaunchStoryboardName = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -538,7 +542,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ConstellationOfMemories/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UILaunchStoryboardName = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (

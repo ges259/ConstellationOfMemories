@@ -15,12 +15,18 @@ struct DBString {
     static let password: String = "password"
         
     static let fontColor: String = "fontColor"
-    static let backgroundColor: String = "backgroundColor"
+    static let backgroundURL: String = "backgroundURL"
     
     // 알림 설정
     static let noti: String = "noti"
     //
     static let lastDiary: String = "lastDiary"
+    
+    static let dawn: String = "dawn"
+    static let morning: String = "morning"
+    static let sunset: String = "sunset"
+    static let night: String = "night"
+    
     
     
     // MARK: - Diary

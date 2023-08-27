@@ -31,12 +31,6 @@ final class LoginVC: UIView {
     
     
     
-    // MARK: - Image_View
-    private lazy var loginImageView: UIImageView = {
-        return UIImageView(image: UIImage(named: "blueSky"))
-    }()
-    
-    
     
     // MARK: - Label
     private let titleLabel: UILabel = {
@@ -148,13 +142,6 @@ final class LoginVC: UIView {
     
     // MARK: - Helper Functions
     private func configureUI() {
-        // Login_Image_View
-        self.addSubview(self.loginImageView)
-        self.loginImageView.anchor(top: self.topAnchor,
-                                   bottom: self.bottomAnchor,
-                                   leading: self.leadingAnchor,
-                                   trailing: self.trailingAnchor)
-        
         // Title_Label
         self.addSubview(self.titleLabel)
         self.titleLabel.anchor(top: self.topAnchor, paddingTop: 150,

@@ -9,8 +9,9 @@ import FirebaseCore
 import FirebaseAuth
 import Firebase
 import FirebaseDatabase
+import FirebaseStorage
 
-
+import UIKit
 
 struct Service {
     static let shared = Service()
@@ -240,5 +241,29 @@ struct Service {
         } else {
             Users_REF.child(uid).child(DBString.noti).setValue(0)
         }
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    func imageUpload(fileName: String, image: UIImage?) {
+        
+        guard let image = image, let uploadData = image.jpegData(compressionQuality: 1) else { return }
+        
+        
+        
+        let storageREF = Storage.storage().reference().child(DBString.backgroundURL).child(fileName)
+        
+        
+        storageREF.putData(uploadData)
+        
+        
+        
     }
 }

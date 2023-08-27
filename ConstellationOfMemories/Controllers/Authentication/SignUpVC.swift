@@ -33,11 +33,6 @@ final class SignUp: UIView {
     
     
     
-    // MARK: - Image_View
-    private lazy var loginImageView: UIImageView = {
-        return UIImageView(image: UIImage(named: "blueSky"))
-    }()
-    
     
     
     // MARK: - Label
@@ -137,15 +132,6 @@ final class SignUp: UIView {
     private func configureUI() {
         // alpha = 0
         self.alpha = 0
-        // background Color
-        self.backgroundColor = .red
-        
-        // Login_Image_View
-        self.addSubview(self.loginImageView)
-        self.loginImageView.anchor(top: self.topAnchor,
-                                   bottom: self.bottomAnchor,
-                                   leading: self.leadingAnchor,
-                                   trailing: self.trailingAnchor)
         
         // Title_Label
         self.addSubview(self.titleLabel)
