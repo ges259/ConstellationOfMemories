@@ -82,9 +82,9 @@ final class DiaryTableView: UIView {
     // MARK: - LifeCycle
     override init(frame: CGRect) {
         super.init(frame: frame)
-        print(MainVC.todayDiaryToggle)
-        self.addSubview(self.diaryTableView)
         
+        self.addSubview(self.diaryTableView)
+        self.alpha = 0
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

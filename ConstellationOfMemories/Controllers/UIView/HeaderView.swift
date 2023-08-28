@@ -20,7 +20,7 @@ final class HeaderView: UIView {
     var diaryHeaderDelegate: HeaderDiaryVCDelegate?
     
     
-    
+    var animateTime: Double = 0.3
     
     
     /*
@@ -178,34 +178,99 @@ extension HeaderView {
      */
     @objc private func headerLeftButtonTapped() {
         switch buttonConfig {
-        // menu_LeftButton_Tapped
-        case .menuViewButton:
-            // blackViewTapped()를 통해 MainVC로 돌아가므로 따로 코드 X
-                // 또한 blackViewTapped()에서 .mainButton으로 바뀜
-            
-            self.mainHeaderDelegate?.handleMenuToMain()
-            break
-            
-            
         // Main_LeftButton_Tapped
             // MainVC -> MenuVC
         case .mainViewButton:
+            self.animateTime = 0.3
+            // 이미지 변경 + 애니메이션
+            self.leftButtonAlpha(.back)
             // 메뉴 오픈 - Delegate
             self.mainHeaderDelegate?.handleMainToMenu()
             break
             
             
-        // TableView_LeftButton_Tapped
-            // TableView -> MainVC
+            
+        // menu_LeftButton_Tapped
+            // Menu -> MainVC
+        case .menuViewButton:
+            self.animateTime = 0.3
+            // 이미지 변경 + 애니메이션
+//            self.leftButtonAlpha(.menu)
+            // blackViewTapped()를 통해 MainVC로 돌아가므로 따로 코드 X
+                // 또한 blackViewTapped()에서 .mainButton으로 바뀜
+            self.mainHeaderDelegate?.handleMenuToMain()
+            self.leftButtonAlpha(.menu)
+            break
+            
+            
+        case .achievementVCButton:
+            self.animateTime = 0.7
+            self.headerTitle(title: "추억 일기")
+            self.leftButtonAlpha(.menu)
+            // 뒤로가기
+            self.mainHeaderDelegate?.handleAchievementToMain()
+            break
+            
+            
+            
+        case .achieveDetailViewButton:
+            self.mainHeaderDelegate?.handleDetailToAchieve()
+            break
+            
+            
+            
+        case .homeViewButton:
+            self.animateTime = 0.7
+            self.headerTitle(title: "추억 일기")
+            self.leftButtonAlpha(.menu)
+            self.mainHeaderDelegate?.handleHomeToMain()
+            break
+            
+            
+            
+        case .shopVCButton:
+            self.animateTime = 0.7
+            self.headerTitle(title: "추억 일기")
+            self.leftButtonAlpha(.menu)
+            // 뒤로가기
+            self.mainHeaderDelegate?.handleShopToMain()
+            break
+        case .shopDetailViewButton:
+            self.mainHeaderDelegate?.handleDetailToShop()
+            break
+            
+            
+            
+        case .setupVCButton:
+            self.animateTime = 0.7
+            self.headerTitle(title: "추억 일기")
+            self.leftButtonAlpha(.menu)
+            // 뒤로가기
+            self.mainHeaderDelegate?.handleSetupToMain()
+            break
+        case .logoutSetupButton:
+            self.mainHeaderDelegate?.handleLogoutToSetup()
+            break
+            
+            
+            
+        // Diary_Table_LeftButton_Tapped
+            // Diary_Table -> MainVC
         case .diaryTableViewButton:
+            self.animateTime = 0.7
+            self.headerTitle(title: "추억 일기")
+            self.leftButtonAlpha(.menu)
             // MainVC 로 dismiss(테이블뷰 내리기) - Delegate
             self.mainHeaderDelegate?.handleTableToMain()
             break
             
             
+            
         // Diary_LeftButton_Tapped
             // DiaryVC -> TableView
         case .diaryViewButton:
+            self.animateTime = 0.5
+            
             // DiaryVC 사라지기
             self.mainHeaderDelegate?.handleDiaryToTable()
             // 저장뷰인 상태에서 나가면 ( - rightButtonConfig느 fixMode인 상태)
@@ -214,48 +279,8 @@ extension HeaderView {
             self.rightButtonConfig = .saveMode
             // check표시를 클릭하지 않고 왼쪽버튼을 통해 나가도 저장이 될 수 있도록 함
             self.headerRightButtonTapped()
-            // right 버튼 숨기기
-            self.rightButtonHide()
-            break
-            
-            
-        case .homeViewButton:
-            
-            self.mainHeaderDelegate?.handleHomeToMain()
-            break
-            
-            
-        case .shopVCButton:
-            // 뒤로가기
-            self.mainHeaderDelegate?.handleShopToMain()
-            break
-            
-            
-        case .achieveDetailViewButton:
-            self.mainHeaderDelegate?.handleDetailToAchieve()
-            break
-            
-            
-        case .shopDetailViewButton:
-            self.mainHeaderDelegate?.handleDetailToShop()
-            break
-            
-            
-        case .setupVCButton:
-            // 뒤로가기
-            self.mainHeaderDelegate?.handleSetupToMain()
-            break
-            
-            
-        case .achievementVCButton:
-            // 뒤로가기
-            self.mainHeaderDelegate?.handleAchievementToMain()
-            break
-            
-            
-            
-        case .logoutSetupButton:
-            self.mainHeaderDelegate?.handleLogoutToSetup()
+            // right Button 숨기기
+            self.rightButton.alpha = 0
             break
         }
     }
@@ -316,11 +341,11 @@ extension HeaderView {
             
         case .coin:
             self.rightButtonShow(.coin)
+            print("Coin")
             break
             
             
         case .achieveDetail:
-//            self.mainHeaderDelegate?.handleDetailToAchieve()
             break
             
             
@@ -362,70 +387,81 @@ extension HeaderView {
      */
     private func changeImgWhenViewChanges() {
         switch buttonConfig {
-        // MenuVC 화면들어오면 -> 버튼 이미지
-        case .menuViewButton:
-            // 이미지 변경 + 애니메이션
-            self.leftButtonAlpha(.back)
-            break
-            
-            
         // MainVC 화면들어오면 -> 버튼 이미지
         case .mainViewButton:
-            // left버튼 이미지 바꾸기 + 애니메이션
+            self.animateTime = 0.3
             self.leftButtonAlpha(.menu)
-            // titleLabel 변경
-            self.titleLabel.text = "추억 일기"
             break
             
             
-        // TableView 화면들어오면 -> 버튼 이미지 및 설정
-        case .diaryTableViewButton:
-            // right Button 숨기기
+            
+        // MenuVC 화면들어오면 -> 버튼 이미지
+        case .menuViewButton:
+            break
+            
+            
+            
+        case .achievementVCButton:
+            self.animateTime = 0.3
+            self.headerTitle(title: "달성률")
             self.rightButtonHide()
-            
+            break
+        case .achieveDetailViewButton:
+            self.animateTime = 0.3
+            self.rightButtonConfig = .achieveDetail
             break
             
             
-        // DiaryVC 화면들어오면 -> 버튼 설정
-        case .diaryViewButton:
-            // MainVC - tableToDiary()를 통해
-                // -> rightbuttonConfig를 설정
-                // -> 설정값에 따라 headerRightButtonTapped()를 하여 뷰를 바꿈
-            self.headerRightButtonTapped()
-            break
-        
+            
         case .homeViewButton:
-//            self.rightButtonShow(.check)
+            self.animateTime = 0.3
+            self.headerTitle(title: "홈")
             break
+            
             
             
         // shopVC 화면들어오면 -> 버튼 이미지 및 텍스트 설정
         case .shopVCButton:
+            self.animateTime = 0.3
             // titleLabel 바꾸기
-            self.titleLabel.text = "상점"
+            self.headerTitle(title: "상점")
             self.rightButtonHide()
             break
-            
-            
-        case .achieveDetailViewButton:
-            self.rightButtonConfig = .achieveDetail
-//            self.rightButtonShow(.check)
-            break
-            
-            
         case .shopDetailViewButton:
             self.rightButtonConfig = .shopDetail
             self.rightButtonShow(.coin)
             break
             
             
+            
         case .setupVCButton:
+            self.animateTime = 0.3
+            self.headerTitle(title: "설정")
             break
             
             
-        case .achievementVCButton:
-            self.rightButtonHide()
+            
+        // TableView 화면들어오면 -> 버튼 이미지 및 설정
+        case .diaryTableViewButton:
+            self.headerTitle(title: "일기 목록")
+            // MARK: - Fix
+            // mainVC에서 해야 함
             break
+            
+            
+            
+        // DiaryVC 화면들어오면 -> 버튼 설정
+        case .diaryViewButton:
+            // 시간 변경
+            self.animateTime = 0.5
+//            self.titleLabel.text = "일기 작성"
+            self.headerTitle(title: "일기 작성")
+            // MainVC - tableToDiary()를 통해
+                // -> rightbuttonConfig를 설정
+                // -> 설정값에 따라 headerRightButtonTapped()를 하여 뷰를 바꿈
+            self.headerRightButtonTapped()
+            break
+
             
             
         case .logoutSetupButton:
@@ -435,6 +471,11 @@ extension HeaderView {
     
     
     
+    
+    
+    
+    
+
     
     
     
@@ -455,15 +496,14 @@ extension HeaderView {
 // [Left_Button]
     // left버튼의 이미지가 바뀔 때 자연스럽게 바뀔 수 있도록 하는 메서드
     func leftButtonAlpha(_ imageString: imageString = .back) {
-        
-        UIView.animate(withDuration: 0.25) {
+        UIView.animate(withDuration: self.animateTime) {
             self.leftButton.alpha = 0
             self.leftButton.isEnabled = false
             
         } completion: { _ in
             self.leftButton.setImage(.setImg(imageString), for: .normal)
             
-            UIView.animate(withDuration: 0.25) {
+            UIView.animate(withDuration: self.animateTime) {
                 
                 self.leftButton.alpha = 1
             } completion: { _ in
@@ -480,14 +520,27 @@ extension HeaderView {
         self.rightButton.alpha = 0
         self.rightButton.setImage(.setImg(imageString), for: .normal)
         
-        UIView.animate(withDuration: 0.3) {
+        UIView.animate(withDuration: self.animateTime) {
             self.rightButton.alpha = 1
         }
     }
     // right 버튼 숨기기
-    private func rightButtonHide() {
-        UIView.animate(withDuration: 0.3) {
+    private func rightButtonHide(completion: (() -> Void)? = nil ) {
+        UIView.animate(withDuration: self.animateTime) {
             self.rightButton.alpha = 0
+        }
+    }
+    // header 버튼 텍스트 바꾸기
+    private func headerTitle(title: String) {
+        UIView.animate(withDuration: self.animateTime) {
+            self.titleLabel.alpha = 0
+            
+        } completion: { _ in
+            self.titleLabel.text = title
+            
+            UIView.animate(withDuration: self.animateTime) {
+                self.titleLabel.alpha = 1
+            }
         }
     }
 }
