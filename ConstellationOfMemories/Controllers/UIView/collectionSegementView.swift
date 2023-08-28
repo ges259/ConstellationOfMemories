@@ -136,14 +136,14 @@ final class CollectionSegementView: UIView {
     // MARK: - Selectors
     @objc private func segmentedValueChanged(segment: UISegmentedControl) {
         segment.selectedSegmentIndex == 0
-            ? self.firstViewHideOrShow(show: true) // first
-            : self.firstViewHideOrShow(show: false) // second
+            ? self.firstViewHideOrShow(value: 1) // first
+            : self.firstViewHideOrShow(value: 2) // second
     }
     
     
     
-    private func firstViewHideOrShow(show: Bool) {
-        if show == true {
+    private func firstViewHideOrShow(value: Int) {
+        if value == 1 {
             UIView.animate(withDuration: 0.5) {
                 // first 보이게 하기
                 self.firstCollection.alpha = 1

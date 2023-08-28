@@ -27,6 +27,7 @@ final class LogoutView: UIView {
     
     private lazy var titleLabel: UILabel = {
         return UILabel().labelConfig(labelText: "로그아웃 하시겠습니까?",
+                                     fontSize: 15,
                                      textAlignment: .center)
     }()
     

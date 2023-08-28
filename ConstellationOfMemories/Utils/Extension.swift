@@ -173,14 +173,17 @@ extension UIStackView {
 
 // MARK: - UILabel
 extension UILabel {
-    func labelConfig(labelText: String? = "",
-               LabelTextColor: UIColor? = .darkGray,
-               
-               fontName: FontStyle? = .system,
-               fontSize: CGFloat? = nil,
-               
-               numberOfLines: Int? = nil,
-               textAlignment: NSTextAlignment? = nil)
+    func labelConfig(labelText: String = "",
+                     LabelTextColor: UIColor = .darkGray,
+                     
+                     fontName: FontStyle = .system,
+                     fontSize: CGFloat? = nil,
+                     
+                     borderColor: UIColor? = nil,
+                     borderWidth: CGFloat = 1,
+                     
+                     numberOfLines: Int? = nil,
+                     textAlignment: NSTextAlignment? = nil)
     -> UILabel {
         
         let lbl = UILabel()
@@ -207,11 +210,29 @@ extension UILabel {
             }
         }
         
+        // Border
+        if let borderColor = borderColor?.cgColor {
+            lbl.layer.borderColor = borderColor
+            lbl.layer.borderWidth = borderWidth
+        }
         
         // textAlignment
         if let textAlignment = textAlignment {
             lbl.textAlignment = textAlignment
         }
+        return lbl
+    }
+    
+    func homeMiniDiary(title: String) -> UILabel {
+        let lbl = UILabel()
+            lbl.text = title
+            lbl.textColor = .nightFontColor
+            lbl.font = .boldSystemFont(ofSize: 9)
+            lbl.textAlignment = .center
+            lbl.layer.borderColor = UIColor.white.cgColor
+            lbl.layer.borderWidth = 1
+            lbl.layer.cornerRadius = 6
+            lbl.clipsToBounds = true
         return lbl
     }
 }

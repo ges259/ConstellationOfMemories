@@ -140,7 +140,7 @@ final class MainVC: UIViewController {
         // 상점 뷰 및 achivementVC
     private lazy var collectionSegementView: CollectionSegementView = {
         let frame = CGRect(x: 0,
-                           y: 150,
+                           y: 190,
                            width: self.width,
                            height: self.height - 150)
         let view = CollectionSegementView(frame: frame)
@@ -156,14 +156,14 @@ final class MainVC: UIViewController {
         let headerFrame = CGRect(x: 0,
                                  y: 150,
                                  width: self.width,
-                                 height: 225)
+                                 height: 265)
         return HomeHeader(frame: headerFrame)
     }()
     private lazy var collectionSegement: CollectionSegementView = {
         let frame = CGRect(x: 0,
-                           y: 375,
+                           y: 415,
                            width: self.width,
-                           height: self.height - 375)
+                           height: self.height - 415)
         let view = CollectionSegementView(frame: frame)
             view.firstCollection.firstHomeHeaderDelegate = self.homeHeader
             view.secondCollection.headerSegementDelegate = self.homeHeader
@@ -376,7 +376,7 @@ final class MainVC: UIViewController {
             // launchScreen1 위치 바꾸기
             self.launchScreen1.frame.origin.x = self.view.frame.width
 
-            UIView.animate(withDuration: 0.6) {
+            UIView.animate(withDuration: 0.5) {
                 // launchScreen1 보이게 하기
                 self.launchScreen1.frame.origin.x = 0
                 // launchScreen2 숨기기
@@ -390,7 +390,7 @@ final class MainVC: UIViewController {
                 // launchScreen2 위치 바꾸기
                 self.launchScreen2.frame.origin.x = self.view.frame.width
 
-                UIView.animate(withDuration: 0.6) {
+                UIView.animate(withDuration: 0.5) {
                     // launchScreen1 숨기기
                     self.launchScreen1.frame.origin.x = -self.view.frame.width
                     // launchScreen2 보이게 하기
@@ -404,7 +404,7 @@ final class MainVC: UIViewController {
                     // launchScreen1 위치 바꾸기
                     self.launchScreen1.frame.origin.x = self.view.frame.width
                     
-                    UIView.animate(withDuration: 0.6) {
+                    UIView.animate(withDuration: 0.5) {
                         // launchScreen1 보이게 하기
                         self.launchScreen1.frame.origin.x = 0
                         // launchScreen2 숨기기
@@ -420,7 +420,7 @@ final class MainVC: UIViewController {
                         // launchScreen1 위치 바꾸기
                         self.launchScreen2.frame.origin.x = self.view.frame.width
                         
-                        UIView.animate(withDuration: 0.6) {
+                        UIView.animate(withDuration: 0.5) {
                             // launchScreen1 숨기기
                             self.launchScreen1.frame.origin.x = -self.view.frame.width
                             // launchScreen2 보이게 하기
@@ -1031,6 +1031,8 @@ extension MainVC: LoginMainDelegate, HeaderMainDelegate, MenuMainDelegate, Secon
 // [Menu - Button]
     // menu -> HomeView
     func handleHome() {
+        // user 전달
+        self.homeHeader.user = self.user
         // 버튼의 이미지 + 역할을 바꿈
         self.headerView.buttonConfig = .homeViewButton
         // collectionView의 토글을 바꿈
@@ -1077,7 +1079,6 @@ extension MainVC: LoginMainDelegate, HeaderMainDelegate, MenuMainDelegate, Secon
     func handleSetup() {
         self.setupTableView.user = self.user
         // 버튼의 이미지 + 역할을 바꿈
-        
         self.headerView.buttonConfig = .setupVCButton
         // setup_Table_보이게 하기
         self.setupTableHideOrShow(show: true)
