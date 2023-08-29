@@ -7,44 +7,40 @@
 
 import UIKit
 
-final class CollectionSegementView: UIView {
+final class AchieveView: UIView {
     
     // MARK: - Properties
-    var collectionToggle: SegementToggle? {
-        // 처음 상태로 원상 복구
-        didSet { self.resetView() }
-    }
+    
+    
     
     
     
     
     // MARK: - Layout
-    lazy var firstCollection: FirstCollectionView = {
-        
+    lazy var firstCollection: AchieveFirstView = {
         let frame = CGRect(x: 0,
                            y: 50,
                            width: self.frame.width,
                            height: self.frame.height - 50)
-        return FirstCollectionView(frame: frame)
+        return AchieveFirstView(frame: frame)
     }()
     
-    lazy var secondCollection: SecondCollectionView = {
+    lazy var secondCollection: AchieveSecondView = {
         let frame = CGRect(x: self.frame.width,
                            y: 50,
                            width: self.frame.width,
                            height: self.frame.height - 50)
-        return SecondCollectionView(frame: frame)
+        return AchieveSecondView(frame: frame)
     }()
 
     
     
     // UISegmentedControl
-    lazy var segmentedControl: UISegmentedControl = {
+    private lazy var segmentedControl: UISegmentedControl = {
         let control = UISegmentedControl(items: ["별자리 컬렉션", "일기 컬렉션"])
             // segment 배경색 (비 선택창)
             control.backgroundColor = .clear
             // segement 선택창 배경 색
-            
             control.setTitleTextAttributes([NSAttributedString.Key.font : UIFont.systemFont(ofSize: 14), NSAttributedString.Key.foregroundColor : UIColor.white], for: .normal)
         
             control.selectedSegmentTintColor = UIColor(white: 1, alpha: 0.3)
@@ -100,18 +96,19 @@ final class CollectionSegementView: UIView {
     }
     
     
+    // MARK: - Fix
+    // item값을 first / second에 전달
+        // 만약 Toggle과 item 모두 first / second 로 전달이 필욯다면
+            // func(메서드도 고려)
     
-    private func resetView() {
-        // item값을 first / second에 전달
-            // 만약 Toggle과 item 모두 first / second 로 전달이 필욯다면
-                // func(메서드도 고려)
-        
-        
-        
+    
+    
+    
+    func resetAchieveView() {
         // 토글을 전달
             // 맨 위로 설정
-        self.firstCollection.firstCollectionToggle = collectionToggle
-        self.secondCollection.secondCollectionToggle = collectionToggle
+        self.firstCollection.upCollectionView()
+        self.secondCollection.upCollectionView()
         
         
         // firstViewHideOrShow를 사용하지 않는 이유:
@@ -135,15 +132,7 @@ final class CollectionSegementView: UIView {
     
     // MARK: - Selectors
     @objc private func segmentedValueChanged(segment: UISegmentedControl) {
-        segment.selectedSegmentIndex == 0
-            ? self.firstViewHideOrShow(value: 1) // first
-            : self.firstViewHideOrShow(value: 2) // second
-    }
-    
-    
-    
-    private func firstViewHideOrShow(value: Int) {
-        if value == 1 {
+        if segment.selectedSegmentIndex == 0 {
             UIView.animate(withDuration: 0.5) {
                 // first 보이게 하기
                 self.firstCollection.alpha = 1

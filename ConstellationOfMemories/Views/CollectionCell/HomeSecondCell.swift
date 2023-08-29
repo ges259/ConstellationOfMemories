@@ -1,13 +1,13 @@
 //
-//  ShopVC.swift
+//  HomeSecondCell.swift
 //  ConstellationOfMemories
 //
-//  Created by 계은성 on 2023/08/10.
+//  Created by 계은성 on 2023/08/29.
 //
 
 import UIKit
-// UICollectionViewController
-final class SecondCollectionCell: UICollectionViewCell {
+
+final class HomeSecondCell: UICollectionViewCell {
     
     // MARK: - Properties
     
@@ -37,3 +37,4 @@ final class SecondCollectionCell: UICollectionViewCell {
     
     
 }
+

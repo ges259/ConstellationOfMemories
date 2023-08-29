@@ -7,22 +7,11 @@
 
 import UIKit
 
-final class SecondCollectionView: UIView {
+final class AchieveSecondView: UIView {
     
     // MARK: - Properties
+    // Delegate
     var secondMainDelegate: SecondMainDelegate?
-
-    var headerSegementDelegate: SecondHomeHeaderDelegate?
-    
-    
-    private var item = [Int]()
-    
-    
-    // 맨 위로 정렬
-    var secondCollectionToggle: SegementToggle? {
-        // item이 항상 맨위로 가도록 설정
-        didSet { self.upCollectionView() }
-    }
     
     
     
@@ -35,7 +24,6 @@ final class SecondCollectionView: UIView {
                                  y: 0,
                                  width: self.frame.width,
                                  height: self.frame.height)
-        
         let layout = UICollectionViewFlowLayout()
             layout.scrollDirection = .vertical
         
@@ -52,7 +40,7 @@ final class SecondCollectionView: UIView {
             view.alwaysBounceVertical = true
             view.backgroundColor = .clear
         
-            view.register(SecondCollectionCell.self,
+            view.register(AchieveSecondCell.self,
                       forCellWithReuseIdentifier: ReuseIdentifier.secondCollectionCell)
         return view
     }()
@@ -80,9 +68,9 @@ final class SecondCollectionView: UIView {
         self.addSubview(self.secondCollection)
     }
     
-    private func upCollectionView() {
+    func upCollectionView() {
         // item이 항상 맨위로 가도록 설정
-        let indexPath = IndexPath(item: self.item.count - 1, section: 0)
+        let indexPath = IndexPath(item: 0, section: 0)
         self.secondCollection.scrollToItem(at: indexPath, at: .top, animated: true)
     }
     
@@ -103,55 +91,38 @@ final class SecondCollectionView: UIView {
 
 // MARK: - CollectionView
 
-extension SecondCollectionView: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+extension AchieveSecondView: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     // MARK: - Cell
     // 셀의 개수
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.secondCollectionToggle == .achieve
-            ? 10
-            : 20
+        return 10
     }
     
     // 아이템의 크기 설정
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        
-        
-        if self.secondCollectionToggle == .achieve {
-            // 좌우 패딩 30 = 60
-            // spacing = 30
-            let width = (self.frame.width - 40 - 10) / 2
-            let height = width / 10 * 16
-            return CGSize(width: width, height: height)
-            
-        } else {
-            // 좌우 패딩 30 = 60
-            // spacing = 30
-            let width = (self.frame.width - 8 - 40 - 1) / 3
-            let height = width / 10 * 16
-            return CGSize(width: width, height: height)
-        }
+        // 좌우 패딩 30 = 60
+        // spacing = 30
+        let width = (self.frame.width - 40 - 10) / 2
+        let height = width / 10 * 16
+        return CGSize(width: width, height: height)
     }
     
     // 상하 spacing
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return self.secondCollectionToggle == .achieve
-            ? 10
-            : 4
+        return 10
     }
     
     // 좌우 spacing
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return self.secondCollectionToggle == .achieve
-            ? 10
-            : 4
+        return 10
     }
     
     
     
     // MARK: - Cell_For_Row_At
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ReuseIdentifier.secondCollectionCell, for: indexPath) as! SecondCollectionCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ReuseIdentifier.secondCollectionCell, for: indexPath) as! AchieveSecondCell
 
         return cell
     }
@@ -160,10 +131,10 @@ extension SecondCollectionView: UICollectionViewDelegate, UICollectionViewDataSo
 
     // MARK: - Did_Select_Row_At
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        _ = self.secondCollectionToggle == .achieve
+//        _ = self.secondCollectionToggle == .achieve
         // achieve_View 일 때
-            ? self.secondMainDelegate?.secondTapped()
+        self.secondMainDelegate?.secondTapped()
         // home_View 일 때
-            : self.headerSegementDelegate?.backgroundColr()
+//            : self.headerSegementDelegate?.backgroundColr()
     }
 }

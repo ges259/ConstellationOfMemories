@@ -22,6 +22,8 @@ struct ReuseIdentifier {
     static let secondCollectionCell: String = "secondCell"
     static let homeCollectionCell: String = "homeCell"
     static let shopCollectionCell: String = "shopCell"
+    static let homeFirstCollection: String = "homeFirst"
+    static let homeSecondCollection: String = "homeSecond"
 }
 
 

@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class HomeHeader: UIView {
+final class HomeView: UIView {
     
     // MARK: - Properties
     var user : User? {
@@ -20,42 +20,48 @@ final class HomeHeader: UIView {
     }
     
     
-    var imgString: [String]?
     
-    private var segmentValue: Int? {
+    // 서버에 저장되어 있는 user의 시간별 background_Image
+    var imgString: [String] = ["blueSky"]
+    
+    
+    
+    // segement 선택 시 해당 변수가 바뀜 -> 이미지 바꿈
+    private var segmentValue: Int = 0 {
         didSet {
-            // 콜렉션뷰 리로드 (필수)
-//            self.homeCollection.reloadData()
+            // Background_Image 바꾸기
+            self.mainImg.image = UIImage(named: self.imgString[self.segmentValue])
+            self.diaryTableImg.image = UIImage(named: self.imgString[self.segmentValue])
+            self.diaryViewImg.image = UIImage(named: self.imgString[self.segmentValue])
         }
     }
     
     
     
     
-    // enum으로 교체
-//    var configureView: String? {
-//        didSet {
-//            // backgroundImage 바꾸기
-//
-//            // titleLabel 글자 색 바꾸기
-//
-//            // leftButton / fotterButton tint 색 바꾸기
-//
-//        }
-//    }
+    
+
     
     
     
     
     
-    // MARK: - Layout
+    
+    
+    
+    
+    
+    
+    
+    
+    
+// MARK: - Header
     // UISegmentedControl
     lazy var headerSegment: UISegmentedControl = {
         let control = UISegmentedControl(items: ["새벽", "아침", "노을", "밤"])
             // segment 배경색 (비 선택창)
             control.backgroundColor = .clear
             // segement 선택창 배경 색
-            
             control.setTitleTextAttributes([NSAttributedString.Key.font : UIFont.systemFont(ofSize: 14), NSAttributedString.Key.foregroundColor : UIColor.white], for: .normal)
         
             control.selectedSegmentTintColor = UIColor(white: 1, alpha: 0.3)
@@ -66,9 +72,6 @@ final class HomeHeader: UIView {
         return control
     }()
     
-    
-    
-    // MARK: - View
     private lazy var homeView: UIView = {
         return UIView().viewConfig(backgroundColor: UIColor(white: 1, alpha: 0.3))
     }()
@@ -94,8 +97,6 @@ final class HomeHeader: UIView {
     
     
     
-    
-    
     // MARK: - Diary_Table
     private lazy var diaryTableImg: UIImageView = {
         return UIImageView(image: UIImage(named: "dawn1"))
@@ -118,8 +119,6 @@ final class HomeHeader: UIView {
     private lazy var diaryTable3: UILabel = {
         return UILabel().homeMiniDiary(title: "그저께 떠올린 추억")
     }()
-    
-    
     
     
     
@@ -155,12 +154,49 @@ final class HomeHeader: UIView {
     
     
     
+// MARK: - Bottom
+    lazy var bottomsegement: UISegmentedControl = {
+        let control = UISegmentedControl(items: ["글자 색상", "배경 화면"])
+            // segment 배경색 (비 선택창)
+            control.backgroundColor = .clear
+            // segement 선택창 배경 색
+            control.setTitleTextAttributes([NSAttributedString.Key.font : UIFont.systemFont(ofSize: 14), NSAttributedString.Key.foregroundColor : UIColor.white], for: .normal)
+        
+            control.selectedSegmentTintColor = UIColor(white: 1, alpha: 0.3)
+        
+            control.selectedSegmentIndex = 0
+            control.addTarget(self, action: #selector(homeSegmentedChanged(segment:)), for: .valueChanged)
+            
+        return control
+    }()
     
     
+    
+    // MARK: - Collection_View
+    lazy var homeFirstcollection: HomeFirstView = {
+        let frame = CGRect(x: 0,
+                           y: 305,
+                           width: self.frame.width,
+                           height: self.frame.height - 305)
+        return HomeFirstView(frame: frame)
+    }()
+    lazy var homeSecondCollection: HomeSecondView = {
+        let frame = CGRect(x: self.frame.width,
+                           y: 305,
+                           width: self.frame.width,
+                           height: self.frame.height - 305)
+        return HomeSecondView(frame: frame)
+    }()
     
     
     
 
+    
+    
+    
+    
+    
+    
     
     
     
@@ -180,28 +216,37 @@ final class HomeHeader: UIView {
     
     
     
-    // MARK: - Helper Functions
+    
+    // MARK: - ConfigureUI
     private func configureHeader() {
-//        self.backgroundColor = .red
+        // self.alpha = 0
+        self.alpha = 0
         // headerSegment
         self.addSubview(self.headerSegment)
         self.headerSegment.anchor(top: self.topAnchor,
                                   leading: self.leadingAnchor,
                                   trailing: self.trailingAnchor,
                                   height: 40)
-        
+        // homeView
         self.addSubview(self.homeView)
         self.homeView.anchor(top: self.headerSegment.bottomAnchor,
-                             bottom: self.bottomAnchor,
                              leading: self.leadingAnchor,
-                             trailing: self.trailingAnchor)
+                             trailing: self.trailingAnchor,
+                             height: 225)
+        // bottomsegement
+        self.addSubview(self.bottomsegement)
+        self.bottomsegement.anchor(top: self.homeView.bottomAnchor,
+                                   leading: self.leadingAnchor,
+                                   trailing: self.trailingAnchor,
+                                   height: 40)
+        // homeFirstcollection
+        self.addSubview(self.homeFirstcollection)
+        // homeSecondCollection
+        self.addSubview(self.homeSecondCollection)
+        
+        
         
         let width = (self.frame.width - 20) / 3
-//        let height = width / 9 * 16
-        
-        
-        
-        
         
 // Main_View
         // mainImg
@@ -222,8 +267,6 @@ final class HomeHeader: UIView {
         self.addSubview(self.moonButton)
         self.moonButton.anchor(bottom: self.mainImg.bottomAnchor, paddingBottom: 10,
                                centerX: self.mainImg)
-        
-        
         
         
         
@@ -263,7 +306,6 @@ final class HomeHeader: UIView {
         
         
         
-        
 // Diary_View
         // diaryViewImg
         self.addSubview(self.diaryViewImg)
@@ -283,23 +325,64 @@ final class HomeHeader: UIView {
         self.addSubview(self.viewTitleLbl)
         self.viewTitleLbl.anchor(top: self.diaryViewLbl.bottomAnchor, paddingTop: 10,
                                  centerX: self.diaryViewImg)
-        //
+        // separatorView
         self.addSubview(self.separatorView)
         self.separatorView.anchor(top: self.viewTitleLbl.bottomAnchor, paddingTop: 5,
                                   leading: self.diaryViewImg.leadingAnchor, paddingLeading: 10,
                                   trailing: self.diaryViewImg.trailingAnchor, paddingTrailing: 10,
-                                  height: 1.5)
-        //
+                                  height: 1.2)
+        // textView
         self.addSubview(self.textView)
         self.textView.anchor(top: self.separatorView.bottomAnchor, paddingTop: 5,
                              leading: self.diaryViewImg.leadingAnchor, paddingLeading: 10,
                              trailing: self.diaryViewImg.trailingAnchor, paddingTrailing: 10,
                              height: 30)
-        //
+        // shareButton
         self.addSubview(self.shareButton)
         self.shareButton.anchor(bottom: self.diaryViewImg.bottomAnchor, paddingBottom: 10,
                                 centerX: self.diaryViewImg)
     }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    // MARK: - Helper Functions
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     
     
@@ -314,99 +397,33 @@ final class HomeHeader: UIView {
         case 0: self.segmentValue = 0
         case 1: self.segmentValue = 1
         case 2: self.segmentValue = 2
+        case 3: self.segmentValue = 3
         default: self.segmentValue = 0
         }
     }
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//// MARK: - CollectionView
-//extension HomeHeader: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-//    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-//        return 3
-//    }
-//
-//    // cell_For_Row_At
-//    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-//        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ReuseIdentifier.homeCollectionCell, for: indexPath) as! HomeHeaderCollectionCell
-//
-//
-//        cell.collectionUI = indexPath.row
-//
-//        cell.imgString = self.imgString?[self.segmentValue ?? 0] ?? "101"
-//
-//
-//
-//
-//        return cell
-//    }
-//
-//    // did_Select_Row_At
-//    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-//
-//        print("Home_Header")
-//    }
-//
-//    // 아이템의 크기 설정
-//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-//
-//        let width = (self.frame.width - 10 - 10) / 3
-//        let height = width / 10 * 16
-//        return CGSize(width: width, height: height)
-//    }
-//
-//    // 상하 spacing
-//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-//        return 5
-//    }
-//
-//    // 좌우 spacing
-//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-//        return 0
-//    }
-//}
-
-
-
-
-
-
-
-
-
-
-
-
-// MARK: - Fix
-// 화면에서 나갔을 때만 불로도록.
-extension HomeHeader: FirstHomeHeaderDelegate {
-    func fontColor() {
-        
-//        self.upCollectionView()
+    
+    
+    @objc private func homeSegmentedChanged(segment: UISegmentedControl) {
+        if segment.selectedSegmentIndex == 0 {
+            UIView.animate(withDuration: 0.5) {
+                // first 보이게 하기
+                self.homeFirstcollection.alpha = 1
+                self.homeFirstcollection.frame.origin.x = 0
+                // second 숨기기
+                self.homeSecondCollection.alpha = 0
+                self.homeSecondCollection.frame.origin.x = self.frame.width
+            }
+            
+            
+        } else {
+            UIView.animate(withDuration: 0.5) {
+                // first 숨기기
+                self.homeFirstcollection.alpha = 0
+                self.homeFirstcollection.frame.origin.x = -self.frame.width * 2
+                // second 보이게 하기
+                self.homeSecondCollection.alpha = 1
+                self.homeSecondCollection.frame.origin.x = 0
+            }
+        }
     }
 }
-extension HomeHeader: SecondHomeHeaderDelegate {
-    func backgroundColr() {
-        
-//        self.upCollectionView()
-    }
-}
-
-

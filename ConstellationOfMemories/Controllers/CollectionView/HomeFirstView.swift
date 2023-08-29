@@ -1,20 +1,16 @@
 //
-//  FirstCollectionView.swift
+//  HomeFirstCollection.swift
 //  ConstellationOfMemories
 //
-//  Created by 계은성 on 2023/08/17.
+//  Created by 계은성 on 2023/08/29.
 //
 
 import UIKit
 
-final class FirstCollectionView: UIView {
+final class HomeFirstView: UIView {
     
     // MARK: - Properties
     
-    
-    var firstMainDelegate: FirstMainDelegate?
-    
-    var firstHomeHeaderDelegate: FirstHomeHeaderDelegate?
     
     
     
@@ -22,15 +18,7 @@ final class FirstCollectionView: UIView {
     private var item = [Int]()
     
     
-    var firstCollectionToggle: SegementToggle? {
-        didSet {
-            
-            // item이 항상 맨위로 가도록 설정
-            self.upCollectionView()
-            
-            self.firstCollection.reloadData()
-        }
-    }
+    
     
     
     
@@ -59,7 +47,7 @@ final class FirstCollectionView: UIView {
             view.alwaysBounceVertical = true
             view.backgroundColor = .clear
         
-            view.register(FirstCollectionCell.self, forCellWithReuseIdentifier: ReuseIdentifier.firstCollectionCell)
+            view.register(HomeFirstCell.self, forCellWithReuseIdentifier: ReuseIdentifier.homeFirstCollection)
         return view
     }()
     
@@ -99,6 +87,8 @@ final class FirstCollectionView: UIView {
     // MARK: - API
     
     
+    
+    
 }
 
 
@@ -112,27 +102,24 @@ final class FirstCollectionView: UIView {
 
 
 // MARK: - CollectionView
-extension FirstCollectionView: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+extension HomeFirstView: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 30
+        return 12
     }
-
+    
+    // Cell_For_Row_At
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ReuseIdentifier.firstCollectionCell, for: indexPath) as! FirstCollectionCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ReuseIdentifier.homeFirstCollection, for: indexPath) as! HomeFirstCell
         
+        cell.backgroundColor = fontColor(index: indexPath.row)
         
         return cell
     }
 
 
-    
+    // Did_Select_Row_At
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
-        _ = self.firstCollectionToggle == .achieve
-        // achieve_View 일 때
-            ? self.firstMainDelegate?.monthDiaryTapped()
-        // home_View 일 때
-            : self.firstHomeHeaderDelegate?.fontColor()
+        print(indexPath.row)
     }
     
     

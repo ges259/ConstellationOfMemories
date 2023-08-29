@@ -496,9 +496,10 @@ extension HeaderView {
 // [Left_Button]
     // left버튼의 이미지가 바뀔 때 자연스럽게 바뀔 수 있도록 하는 메서드
     func leftButtonAlpha(_ imageString: imageString = .back) {
+        self.leftButton.isEnabled = false
         UIView.animate(withDuration: self.animateTime) {
             self.leftButton.alpha = 0
-            self.leftButton.isEnabled = false
+            
             
         } completion: { _ in
             self.leftButton.setImage(.setImg(imageString), for: .normal)

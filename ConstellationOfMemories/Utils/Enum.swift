@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 
 // extension - UILabel
@@ -163,4 +164,23 @@ enum SetupCelltitle: CustomStringConvertible {
     }
 }
 
+
+func fontColor(index: Int) -> UIColor {
+    switch index {
+    case 0: return UIColor.rgb(red: 1, green: 133, blue: 14)
+    case 1: return UIColor.rgb(red: 11, green: 1, blue: 152)
+    case 2: return UIColor.rgb(red: 41, green: 141, blue: 14)
+    case 3: return UIColor.rgb(red: 231, green: 201, blue: 15)
+    case 4: return UIColor.rgb(red: 101, green: 133, blue: 13)
+    case 5: return UIColor.rgb(red: 31, green: 31, blue: 144)
+    case 6: return UIColor.rgb(red: 255, green: 33, blue: 199)
+    case 7: return UIColor.rgb(red: 79, green: 201, blue: 13)
+    case 8: return UIColor.rgb(red: 61, green: 1, blue: 13)
+    case 9: return UIColor.rgb(red: 151, green: 1, blue: 155)
+    case 10: return UIColor.rgb(red: 144, green: 144, blue: 144)
+    case 11: return UIColor.rgb(red: 199, green: 199, blue: 199)
+    case 12: return UIColor.rgb(red: 12, green: 12, blue: 12)
+    default: return UIColor.rgb(red: 158, green: 190, blue: 11)
+    }
+}
 

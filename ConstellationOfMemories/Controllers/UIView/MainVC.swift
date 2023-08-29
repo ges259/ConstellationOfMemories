@@ -36,9 +36,7 @@ final class MainVC: UIViewController {
 // Toggle
     // Black_View_Toggle
     private var blackViewToggle: BlackViewToggle = .menu {
-        didSet {
-            print(blackViewToggle)
-        }
+        didSet { print(blackViewToggle) }
     }
     // Today_Diary_Toggle
         // 오늘 일기를 썻는지
@@ -49,7 +47,6 @@ final class MainVC: UIViewController {
 // launch_Screen
     // Background_Image
     private var backgroundArray: [String] = [DBString.dawn, DBString.morning, DBString.sunset, DBString.night]
-    
     
     
     
@@ -81,13 +78,38 @@ final class MainVC: UIViewController {
     
     
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 // MARK: - Layout
     
     
     
     // MARK: - ImageView
     private lazy var launchScreen1: LaounchSccreen = {
-        let frame = CGRect(x: self.width,
+        let frame = CGRect(x: self.width * 2,
                            y: 0,
                            width: self.width,
                            height: self.height)
@@ -124,7 +146,7 @@ final class MainVC: UIViewController {
     
     
     // MARK: - Menu
-    private lazy var menuVC: MenuVC = {
+    private lazy var menuView: MenuVC = {
         let frame = CGRect(x: -82,
                            y: 150,
                            width: 82,
@@ -138,42 +160,41 @@ final class MainVC: UIViewController {
     
     // MARK: - Achievement
         // 상점 뷰 및 achivementVC
-    private lazy var collectionSegementView: CollectionSegementView = {
+    private lazy var achieveView: AchieveView = {
         let frame = CGRect(x: 0,
-                           y: 190,
+                           y: 150,
                            width: self.width,
                            height: self.height - 150)
-        let view = CollectionSegementView(frame: frame)
+        let view = AchieveView(frame: frame)
             view.firstCollection.firstMainDelegate = self
             view.secondCollection.secondMainDelegate = self
         return view
     }()
     
+    // MARK: - Achieve_Detail
+    private lazy var achieveDetailView: DetailView = {
+        let frame = CGRect(x: 0,
+                           y: 0,
+                           width: self.width,
+                           height: self.height)
+        return DetailView(frame: frame)
+    }()
+    
     
     
     // MARK: - Home_View
-    private lazy var homeHeader: HomeHeader = {
+    private lazy var homeView: HomeView = {
         let headerFrame = CGRect(x: 0,
                                  y: 150,
                                  width: self.width,
-                                 height: 265)
-        return HomeHeader(frame: headerFrame)
-    }()
-    private lazy var collectionSegement: CollectionSegementView = {
-        let frame = CGRect(x: 0,
-                           y: 415,
-                           width: self.width,
-                           height: self.height - 415)
-        let view = CollectionSegementView(frame: frame)
-            view.firstCollection.firstHomeHeaderDelegate = self.homeHeader
-            view.secondCollection.headerSegementDelegate = self.homeHeader
-        return view
+                                 height: self.height)
+        return HomeView(frame: headerFrame)
     }()
     
     
     
     // MARK: - ShopCollection_View
-    private lazy var shopCollection: ShopCollectionView = {
+    private lazy var shopView: ShopCollectionView = {
         let frame = CGRect(x: 0,
                            y: 150,
                            width: self.width,
@@ -182,11 +203,19 @@ final class MainVC: UIViewController {
             view.mainShopDelgate = self
         return view
     }()
+    // MARK: - Shop_Detail
+    private lazy var detailView: DetailView = {
+        let frame = CGRect(x: 20,
+                           y: 150,
+                           width: self.width - 40,
+                           height: self.width / 10 * 16)
+        return DetailView(frame: frame)
+    }()
     
     
     
     // MARK: - Setup_Table
-    private lazy var setupTableView: SetupTableView = {
+    private lazy var setupView: SetupTableView = {
         let frame = CGRect(x: 0,
                            y: 150,
                            width: self.width,
@@ -206,16 +235,15 @@ final class MainVC: UIViewController {
                            height: self.height - 150)
         let view = DiaryTableView(frame: frame)
             view.mainDiaryTableDelegate = self
-            view.diaryTableDiaryDelegate = diaryVC
+            view.diaryTableDiaryDelegate = diaryView
         return view
     }()
     
     
     
-    
     // MARK: - DiaryVC
     // 셀을 누르면 오른쪽 옆에서 나올 뷰 ( 수정 뷰 )
-    private lazy var diaryVC: DiaryVC = {
+    private lazy var diaryView: DiaryVC = {
         let frame = CGRect(x: 0,
                            y: 150,
                            width: self.width,
@@ -227,18 +255,6 @@ final class MainVC: UIViewController {
     
     
     
-    // MARK: - Detail_View
-    private lazy var detailView: DetailView = {
-        let width: CGFloat = (self.width - 150) / 4 * 5
-        let frame = CGRect(x: (self.width - width) / 2,
-                           y: 200,
-                           width: width,
-                           height: width / 9 * 16)
-        return DetailView(frame: frame)
-    }()
-    
-    
-    
     // MARK: - Black_View
     private lazy var blackView: UIView = {
         let frame = CGRect(x: 0,
@@ -246,7 +262,8 @@ final class MainVC: UIViewController {
                            width: self.width,
                            height: self.height)
         let view = UIView(frame: frame)
-            view.backgroundColor = .clear
+//            view.backgroundColor = .clear
+            view.backgroundColor = .red
             view.alpha = 0
         // blackView - add gesture
         let tap = UITapGestureRecognizer(target: self,
@@ -310,6 +327,26 @@ final class MainVC: UIViewController {
     
     
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+     
+    
+    
+    
+    
+    
+    
+    
     // MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -318,8 +355,8 @@ final class MainVC: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         // checkLogin
-            // User가 있다면 -> MainVC
-            // User가 없다면 -> Login_View
+            // User가 있다면 -> launch_Screen -> MainVC
+            // User가 없다면 -> launch_Screen -> Login_View
         self.checkLogin()
     }
 
@@ -362,25 +399,22 @@ final class MainVC: UIViewController {
         
         
 // blueSky
-        UIView.animate(withDuration: 0.6) {
-            // launchScreen1 숨기기
-            self.launchScreen1.frame.origin.x = -self.view.frame.width
-            // launchScreen2 보이게 하기
-            self.launchScreen2.frame.origin.x = 0
-            
+        UIView.animate(withDuration: 1) {
+            // launchScreen1 위치 바꾸기
+                // 처음 화면에서 1초를 기다리기 위한 꼼수...
+                    // 아무 것도 없으면 animate가 안 되더라구........
+            self.launchScreen1.frame.origin.x = self.width
             
 // backgroundArray[0]
         } completion: { _ in
             // launchScreen1 이미지 바꾸기
             self.launchScreen1.imageView.image = UIImage(named: self.backgroundArray[0])
-            // launchScreen1 위치 바꾸기
-            self.launchScreen1.frame.origin.x = self.view.frame.width
-
-            UIView.animate(withDuration: 0.5) {
+            
+            UIView.animate(withDuration: 0.55) {
                 // launchScreen1 보이게 하기
                 self.launchScreen1.frame.origin.x = 0
                 // launchScreen2 숨기기
-                self.launchScreen2.frame.origin.x = -self.view.frame.width
+                self.launchScreen2.frame.origin.x = -self.width
                 
                 
 // backgroundArray[1]
@@ -388,11 +422,11 @@ final class MainVC: UIViewController {
                 // launchScreen2 이미지 바꾸기
                 self.launchScreen2.imageView.image = UIImage(named: self.backgroundArray[1])
                 // launchScreen2 위치 바꾸기
-                self.launchScreen2.frame.origin.x = self.view.frame.width
+                self.launchScreen2.frame.origin.x = self.width
 
-                UIView.animate(withDuration: 0.5) {
+                UIView.animate(withDuration: 0.55) {
                     // launchScreen1 숨기기
-                    self.launchScreen1.frame.origin.x = -self.view.frame.width
+                    self.launchScreen1.frame.origin.x = -self.width
                     // launchScreen2 보이게 하기
                     self.launchScreen2.frame.origin.x = 0
                     
@@ -402,13 +436,13 @@ final class MainVC: UIViewController {
                     // launchScreen1 이미지 바꾸기
                     self.launchScreen1.imageView.image = UIImage(named: self.backgroundArray[2])
                     // launchScreen1 위치 바꾸기
-                    self.launchScreen1.frame.origin.x = self.view.frame.width
+                    self.launchScreen1.frame.origin.x = self.width
                     
-                    UIView.animate(withDuration: 0.5) {
+                    UIView.animate(withDuration: 0.55) {
                         // launchScreen1 보이게 하기
                         self.launchScreen1.frame.origin.x = 0
                         // launchScreen2 숨기기
-                        self.launchScreen2.frame.origin.x = -self.view.frame.width
+                        self.launchScreen2.frame.origin.x = -self.width
                         
                         
 // backgroundArray[3]
@@ -418,11 +452,11 @@ final class MainVC: UIViewController {
                         // launchScreen1 이미지 바꾸기
                         self.launchScreen2.imageView.image = UIImage(named: self.backgroundArray[3])
                         // launchScreen1 위치 바꾸기
-                        self.launchScreen2.frame.origin.x = self.view.frame.width
+                        self.launchScreen2.frame.origin.x = self.width
                         
-                        UIView.animate(withDuration: 0.5) {
+                        UIView.animate(withDuration: 0.55) {
                             // launchScreen1 숨기기
-                            self.launchScreen1.frame.origin.x = -self.view.frame.width
+                            self.launchScreen1.frame.origin.x = -self.width
                             // launchScreen2 보이게 하기
                             self.launchScreen2.frame.origin.x = 0
                             
@@ -479,11 +513,11 @@ final class MainVC: UIViewController {
         // header_View
         self.view.addSubview(self.headerView)
         self.headerView.mainHeaderDelegate = self
-        self.headerView.diaryHeaderDelegate = diaryVC
+        self.headerView.diaryHeaderDelegate = self.diaryView
         self.headerView.alpha = 0
         self.headerView.frame = CGRect(x: 0,
                                        y: 0,
-                                       width: self.view.frame.width,
+                                       width: self.width,
                                        height: 150)
         // footer_Button
         self.view.addSubview(self.footerButton)
@@ -491,8 +525,8 @@ final class MainVC: UIViewController {
         self.footerButton.anchor(bottom: self.view.safeAreaLayoutGuide.bottomAnchor, paddingBottom: 10,
                                  centerX: self.view)
         
-        // Fetch_Diary_Data의 시간을 버는 용도
-        UIView.animate(withDuration: 2) {
+        // Main_View_Layout 보이게 하기
+        UIView.animate(withDuration: 1) {
             self.headerView.alpha = 1
             self.footerButton.alpha = 1
         }
@@ -510,6 +544,7 @@ final class MainVC: UIViewController {
             self.user = user
         }
     }
+    
     
     
     // MARK: - Fetcj_Diary_Data
@@ -590,6 +625,25 @@ final class MainVC: UIViewController {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // MARK: - View Transition
 
 extension MainVC {
@@ -599,13 +653,13 @@ extension MainVC {
         // 메뉴 보이게 하기
         if show == true {
             self.view.addSubview(self.blackView)
-            self.view.addSubview(self.menuVC)
+            self.view.addSubview(self.menuView)
             
             UIView.animate(withDuration: 0.3) {
                 // menuBlackView 보이게 하기
                 self.blackView.alpha = 1
-                self.menuVC.alpha = 1
-                self.menuVC.frame.origin.x = 0
+                self.menuView.alpha = 1
+                self.menuView.frame.origin.x = 0
             }
             
             
@@ -613,6 +667,8 @@ extension MainVC {
         } else {
             // 메뉴 -> 메뉴 안의 아이템을 클릭하지 않고 main화면으로 다시 돌아간다면
                 // detail_Black_View 삭제
+                    // 이렇게 한 이유는: 다음 화면(ahieve/shop)에서 detail_Black_View를 사용.
+                        // - 하지만 여기서 뷰를 삭제해버린다면 (ahieve/shop)에서 안 뜸.
             // true: (backButton / Black_View_Tapped)
             // false: (achieve/home/shop/setup)으로 들어가면
             if itemTapped == false { self.blackView.removeFromSuperview() }
@@ -620,21 +676,13 @@ extension MainVC {
             UIView.animate(withDuration: 0.25) {
                 // menuBlackView 숨기기
                 self.blackView.alpha = 0
-                self.menuVC.alpha = 0
-                self.menuVC.frame.origin.x = -82
-                if footerHide == true {
-                    // footer 버튼 숨기기
-                    self.footerButton.alpha = 0
-                }
+                self.menuView.alpha = 0
+                self.menuView.frame.origin.x = -82
+                // footer 버튼 숨기기
+                if footerHide == true { self.footerButton.alpha = 0 }
                 
             } completion: { _ in
-                
-                self.menuVC.removeFromSuperview()
-                // 메뉴의 item을 클릭하여 다음 뷰로 넘어가지 않았다면
-                    // detail_Black_View 를 삭제
-                // 이렇게 한 이유는: 다음 화면(ahieve/shop)에서 detail_Black_View를 사용.
-                    // 하지만 여기서 뷰를 삭제해버린다면 다음 화면에서 안 뜸.
-                
+                self.menuView.removeFromSuperview()
             }
         }
     }
@@ -645,8 +693,8 @@ extension MainVC {
     private func achievementViewHideOrShow(show: Bool) {
         // achievementView 보이게 하기 - CollectionView
         if show == true {
-            self.view.addSubview(self.collectionSegementView)
-            self.view.addSubview(self.detailView)
+            self.view.addSubview(self.achieveView)
+            self.view.addSubview(self.achieveDetailView)
             self.view.bringSubviewToFront(self.blackView)
             
             // menuView 숨기기
@@ -654,7 +702,7 @@ extension MainVC {
             
             UIView.animate(withDuration: 0.7) {
                 // achievementView 보이게 하기
-                self.collectionSegementView.alpha = 1
+                self.achieveView.alpha = 1
             }
             
             
@@ -664,13 +712,36 @@ extension MainVC {
                 // footerButton 보이게 하기
                 self.footerButton.alpha = 1
                 // achievementView 숨기기
-                self.collectionSegementView.alpha = 0
+                self.achieveView.alpha = 0
                 
             } completion: { _ in
+                self.achieveView.resetAchieveView()
                 // remove View
                 self.blackView.removeFromSuperview()
-                self.collectionSegementView.removeFromSuperview()
-                self.detailView.removeFromSuperview()
+                self.achieveView.removeFromSuperview()
+                self.achieveDetailView.removeFromSuperview()
+            }
+        }
+    }
+    // MARK: - Achieve_Detail
+    private func achieveDetailHideOrShow(show: Bool) {
+        // achieve_Detail_View 보이게 하기
+        if show == true {
+            UIView.animate(withDuration: 0.7) {
+                // black_View 보이게 하기
+                self.blackView.alpha = 1
+                // achieve_Detail_View 보이게 하기
+                self.achieveDetailView.alpha = 1
+            }
+            
+            
+        // achieve_Detail_View 숨기기
+        } else {
+            UIView.animate(withDuration: 0.7) {
+                // black_View 숨기기
+                self.blackView.alpha = 0
+                // achieve_Detail_View 숨기기
+                self.achieveDetailView.alpha = 0
             }
         }
     }
@@ -681,17 +752,14 @@ extension MainVC {
     private func HomeViewHideOrShow(show: Bool) {
         // Home_View 보이게 하기
         if show == true {
-            self.view.addSubview(self.collectionSegement)
-            self.view.addSubview(self.homeHeader)
+            self.view.addSubview(self.homeView)
             
             // 메뉴바 숨기기
             self.menuHideOrShow(show: false, itemTapped: true, footerHide: true)
             
             UIView.animate(withDuration: 0.7) {
                 // fontChangeHeader 테이블 보이게 하기
-                self.homeHeader.alpha = 1
-                // collectionSegement 테이블 보이게 하기
-                self.collectionSegement.alpha = 1
+                self.homeView.alpha = 1
             }
             
         // Home_View 숨기기
@@ -700,14 +768,11 @@ extension MainVC {
                 // footerButton 보이게 하기
                 self.footerButton.alpha = 1
                 // fontChangeHeader 숨기기
-                self.homeHeader.alpha = 0
-                // collectionSegement 숨기기
-                self.collectionSegement.alpha = 0
+                self.homeView.alpha = 0
 
             } completion: { _ in
                 // remove View
-                self.homeHeader.removeFromSuperview()
-                self.collectionSegement.removeFromSuperview()
+                self.homeView.removeFromSuperview()
             }
         }
     }
@@ -718,7 +783,7 @@ extension MainVC {
     private func shopViewHideOrShow(show: Bool) {
         // achievementView 보이게 하기 - CollectionView
         if show == true {
-            self.view.addSubview(self.shopCollection)
+            self.view.addSubview(self.shopView)
             self.view.addSubview(self.detailView)
             self.view.bringSubviewToFront(self.blackView)
             
@@ -727,7 +792,7 @@ extension MainVC {
             
             UIView.animate(withDuration: 0.7) {
                 // shopCollection 보이게 하기
-                self.shopCollection.alpha = 1
+                self.shopView.alpha = 1
             }
             
 
@@ -737,13 +802,39 @@ extension MainVC {
                 // footerButton 보이게 하기
                 self.footerButton.alpha = 1
                 // shopCollection 숨기기
-                self.shopCollection.alpha = 0
+                self.shopView.alpha = 0
                 
             } completion: { _ in
                 // remove View
-                self.shopCollection.removeFromSuperview()
+                self.shopView.removeFromSuperview()
                 self.blackView.removeFromSuperview()
                 self.detailView.removeFromSuperview()
+            }
+        }
+    }
+    // MARK: - Shop_Detail
+    private func detailViewHideOrShow(show: Bool) {
+        // detailView 보이게 하기
+        if show == true {
+            UIView.animate(withDuration: 0.7) {
+                // detail_View에 집중할 수 있도록 숨기기
+                self.shopView.alpha = 0
+                // detailBlackView 보이게 하기
+                self.blackView.alpha = 1
+                // detailview 보이게 하기
+                self.detailView.alpha = 1
+            }
+        
+            
+        // detailView 숨기기
+        } else {
+            UIView.animate(withDuration: 0.7) {
+                // shop_View 원상복구
+                self.shopView.alpha = 1
+                // detailBlackView 보이게 하기
+                self.blackView.alpha = 0
+                // detailview 보이게 하기
+                self.detailView.alpha = 0
             }
         }
     }
@@ -754,14 +845,14 @@ extension MainVC {
     private func setupTableHideOrShow(show: Bool) {
         // setup테이블 보이게 하기
         if show == true {
-            self.view.addSubview(self.setupTableView)
+            self.view.addSubview(self.setupView)
             
             // 메뉴뷰 숨기기
             self.menuHideOrShow(show: false, itemTapped: true, footerHide: true)
             
             UIView.animate(withDuration: 0.7) {
                 // setupTable 보이게 하기
-                self.setupTableView.alpha = 1
+                self.setupView.alpha = 1
             }
             
             
@@ -771,11 +862,11 @@ extension MainVC {
                 // footerButton 보이게 하기
                 self.footerButton.alpha = 1
                 // setupTable 숨기기
-                self.setupTableView.alpha = 0
+                self.setupView.alpha = 0
                 
             } completion: { _ in
                 // remove View
-                self.setupTableView.removeFromSuperview()
+                self.setupView.removeFromSuperview()
             }
         }
     }
@@ -787,7 +878,7 @@ extension MainVC {
         if show == true {
             self.view.addSubview(self.diaryTable)
             
-            UIView.animate(withDuration: 0.5) {
+            UIView.animate(withDuration: 0.7) {
                 // footerButton 숨기기
                 self.footerButton.alpha = 0
                 // diary테이블뷰 보이게 하기
@@ -797,7 +888,7 @@ extension MainVC {
             
         // diary테이블뷰 숨기기
         } else {
-            UIView.animate(withDuration: 0.5) {
+            UIView.animate(withDuration: 0.7) {
                 // footerButton 보이게 하기
                 self.footerButton.alpha = 1
                 // diary테이블뷰 숨기기
@@ -814,68 +905,41 @@ extension MainVC {
     
     // MARK: - DiaryVC _ View
     private func DiaryViewHideOrShow(show: Bool) {
-        // DiaryVC 보이게 하기
+        // Diary_View 보이게 하기
         if show == true {
-            self.view.addSubview(self.diaryVC)
+            self.view.addSubview(self.diaryView)
 
             UIView.animate(withDuration: 0.5) {
-                // diarytableView 숨기기
+                // diary_table_View 숨기기
                 self.diaryTable.alpha = 0
-                
                 
             } completion: { _ in
                 UIView.animate(withDuration: 0.5) {
                     // diaryVC 보이게 하기
-                    self.diaryVC.alpha = 1
+                    self.diaryView.alpha = 1
                 }
             }
             
             
-        // DiaryVC 숨기기
+        // Diary_View 숨기기
         } else {
             UIView.animate(withDuration: 0.5) {
                 // diaryVC 숨기기
-                self.diaryVC.alpha = 0
-
+                self.diaryView.alpha = 0
                 
             } completion: { _ in
                 UIView.animate(withDuration: 0.5) {
-                    // diarytableView 보이게 하기
+                    // diary_table_View 보이게 하기
                     self.diaryTable.alpha = 1
-                    
                     
                 } completion: { _ in
                     // remove View
-                    self.diaryVC.removeFromSuperview()
+                    self.diaryView.removeFromSuperview()
                 }
             }
         }
     }
     
-    
-    
-    // MARK: - Detail_View
-    private func detailViewHideOrShow(show: Bool) {
-        // detailView 보이게 하기
-        if show == true {
-            UIView.animate(withDuration: 0.7) {
-                // detailBlackView 보이게 하기
-                self.blackView.alpha = 1
-                // detailview 보이게 하기
-                self.detailView.alpha = 1
-            }
-        
-            
-        // detailView 숨기기
-        } else {
-            UIView.animate(withDuration: 0.7) {
-                // detailBlackView 보이게 하기
-                self.blackView.alpha = 0
-                // detailview 보이게 하기
-                self.detailView.alpha = 0
-            }
-        }
-    }
     
     
     // MARK: - Login_View
@@ -921,7 +985,7 @@ extension MainVC {
             
             UIView.animate(withDuration: 0.5) {
                 // setup_View 숨기기
-                self.setupTableView.alpha = 0.5
+                self.setupView.alpha = 0.3
                 // login_View 보이게 하기
                 self.logoutView.alpha = 1
                 // Black_View 보이게 하기
@@ -932,12 +996,11 @@ extension MainVC {
         } else {
             UIView.animate(withDuration: 0.5) {
                 // setup_View 보이게 하기
-                self.setupTableView.alpha = 1
+                self.setupView.alpha = 1
                 // login_View 숨기기
                 self.logoutView.alpha = 0
                 // Black_View 숨기기
                 self.blackView.alpha = 0
-                
                 
             } completion: { _ in
                 self.logoutView.removeFromSuperview()
@@ -977,12 +1040,31 @@ extension MainVC {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // MARK: - View Config
 // 뷰가 바뀌는 상황 (버튼을 누르는 상황 등)
     // 뷰 전환
     // 왼쪽 버튼의 역할 및 이미지를 바꿈
     // 상황에 따라 필요한 토글 설정
-extension MainVC: LoginMainDelegate, HeaderMainDelegate, MenuMainDelegate, SecondMainDelegate, DiaryTableMainDelegate, ShopMainDelegate, FirstMainDelegate, SetupMainDelegate, LogoutMainDelegate {
+extension MainVC: LoginMainDelegate, HeaderMainDelegate, MenuMainDelegate, SecondMainDelegate, DiaryTableMainDelegate, ShopMainDelegate, SetupMainDelegate, LogoutMainDelegate {
     
     // MARK: - Menu
 // [Left_Button]
@@ -1011,8 +1093,6 @@ extension MainVC: LoginMainDelegate, HeaderMainDelegate, MenuMainDelegate, Secon
     func handleAchievement() {
         // 버튼의 이미지 + 역할을 바꿈
         self.headerView.buttonConfig = .achievementVCButton
-        // collectionView의 토글을 바꿈
-        self.collectionSegementView.collectionToggle = .achieve
         // achievement_View_보이게 하기
         self.achievementViewHideOrShow(show: true)
     }
@@ -1032,11 +1112,9 @@ extension MainVC: LoginMainDelegate, HeaderMainDelegate, MenuMainDelegate, Secon
     // menu -> HomeView
     func handleHome() {
         // user 전달
-        self.homeHeader.user = self.user
+        self.homeView.user = self.user
         // 버튼의 이미지 + 역할을 바꿈
         self.headerView.buttonConfig = .homeViewButton
-        // collectionView의 토글을 바꿈
-        self.collectionSegement.collectionToggle = .home
         // Home_View_보이게 하기
         self.HomeViewHideOrShow(show: true)
     }
@@ -1077,7 +1155,7 @@ extension MainVC: LoginMainDelegate, HeaderMainDelegate, MenuMainDelegate, Secon
 // [Menu - Button]
     // menu -> SetupView
     func handleSetup() {
-        self.setupTableView.user = self.user
+        self.setupView.user = self.user
         // 버튼의 이미지 + 역할을 바꿈
         self.headerView.buttonConfig = .setupVCButton
         // setup_Table_보이게 하기
@@ -1155,16 +1233,19 @@ extension MainVC: LoginMainDelegate, HeaderMainDelegate, MenuMainDelegate, Secon
         // left 버튼의 용도 바꾸기
         self.headerView.buttonConfig = .achieveDetailViewButton
         // detail_View + black_View 보이게 하기
-        self.detailViewHideOrShow(show: true)
+        self.achieveDetailHideOrShow(show: true)
     }
     
+    
+    // MARK: - Fix
+    // 뒤로가기 버튼을 없앴으니 이 함수도 없애야하나?
 // [Left_Button]
     // detailView -> AchieveView
     func handleDetailToAchieve() {
         // left 버튼의 용도 바꾸기
         self.headerView.buttonConfig = .achievementVCButton
         // detail_View + black_View 숨기기
-        self.detailViewHideOrShow(show: false)
+        self.achieveDetailHideOrShow(show: false)
     }
     
     
@@ -1216,7 +1297,7 @@ extension MainVC: LoginMainDelegate, HeaderMainDelegate, MenuMainDelegate, Secon
             
         case .achieve:
             self.headerView.buttonConfig = .achievementVCButton
-            self.detailViewHideOrShow(show: false)
+            self.achieveDetailHideOrShow(show: false)
             break
             
             
@@ -1285,7 +1366,6 @@ extension MainVC: LoginMainDelegate, HeaderMainDelegate, MenuMainDelegate, Secon
             self.headerView.alpha = 0
             self.footerButton.alpha = 0
             
-            
         } completion: { _ in
             UIView.animate(withDuration: 0.3) {
                 do {
@@ -1300,9 +1380,6 @@ extension MainVC: LoginMainDelegate, HeaderMainDelegate, MenuMainDelegate, Secon
                         self.user = nil
                         // login_View 보이게 하기
                         self.loginViewHideOrShow(show: true)
-                        
-                        
-                        
                     }
                 } catch { print("DEBUG: Error signin out") }
             }
@@ -1325,7 +1402,7 @@ extension MainVC: LoginMainDelegate, HeaderMainDelegate, MenuMainDelegate, Secon
 
 
 
-extension MainVC: DiaryVCMainDelegate {
+extension MainVC: DiaryVCMainDelegate, FirstMainDelegate {
     
     // MARK: - FirstMainDelegate
     func monthDiaryTapped() {
@@ -1334,6 +1411,7 @@ extension MainVC: DiaryVCMainDelegate {
     
     
     
+    // MARK: - DiaryVCMainDelegate
     func updateDiaryData() {
         self.fetchDiaryDatas()
     }

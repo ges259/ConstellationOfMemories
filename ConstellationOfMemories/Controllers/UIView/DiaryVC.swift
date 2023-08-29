@@ -41,6 +41,9 @@ final class DiaryVC: UIView {
         return UIView().viewConfig(backgroundColor: UIColor.white)
     }()
     
+    private lazy var diarywhiteView: UIView = {
+        return UIView()
+    }()
     
     
     // MARK: - TextView
@@ -113,13 +116,22 @@ final class DiaryVC: UIView {
                                   leading: self.diaryLabel.leadingAnchor,
                                   trailing: self.diaryLabel.trailingAnchor,
                                   height: 3)
+        // diarywhiteView
+        self.addSubview(self.diarywhiteView)
+        self.diarywhiteView.anchor(top: self.separatorView.bottomAnchor, paddingTop: 10,
+                                   leading: self.diaryLabel.leadingAnchor,
+                                   trailing: self.diaryLabel.trailingAnchor,
+                                   height: 200,
+                                   cornerRadius: 20)
+        
+        
         // diaryTextView
         self.addSubview(self.diaryTextView)
         self.diaryTextView.delegate = self
-        self.diaryTextView.anchor(top: self.separatorView.bottomAnchor, paddingTop: 10,
-                                  leading: self.diaryLabel.leadingAnchor,
-                                  trailing: self.diaryLabel.trailingAnchor,
-                                  height: 200,
+        self.diaryTextView.anchor(top: self.diarywhiteView.topAnchor, paddingTop: 5,
+                                  bottom: self.diarywhiteView.bottomAnchor, paddingBottom: 5,
+                                  leading: self.diarywhiteView.leadingAnchor, paddingLeading: 5,
+                                  trailing: self.diarywhiteView.trailingAnchor, paddingTrailing: 5,
                                   cornerRadius: 20)
         // footerButton
         self.addSubview(self.footerButton)
@@ -190,7 +202,7 @@ extension DiaryVC: HeaderDiaryVCDelegate {
         if fixMode == true {
             UIView.animate(withDuration: 0.3) {
                 self.diaryTextView.isEditable = true
-                self.diaryTextView.backgroundColor = UIColor(white: 1, alpha: 0.4)
+                self.diarywhiteView.backgroundColor = UIColor(white: 1, alpha: 0.4)
                 // share버튼 숨기기
                 self.footerButton.alpha = 0
             }
@@ -207,7 +219,7 @@ extension DiaryVC: HeaderDiaryVCDelegate {
             
             UIView.animate(withDuration: 0.3) {
                 self.diaryTextView.isEditable = false
-                self.diaryTextView.backgroundColor = .clear
+                self.diarywhiteView.backgroundColor = .clear
                 // share버튼 보이게 하기
                 self.footerButton.alpha = 1
             }
