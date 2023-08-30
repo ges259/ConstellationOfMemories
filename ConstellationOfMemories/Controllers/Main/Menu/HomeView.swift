@@ -18,6 +18,11 @@ final class HomeView: UIView {
             self.segmentValue = 0
         }
     }
+    var backgroundData: BackgroundImg? {
+        didSet {
+            homeSecondCollection.backgroundData = self.backgroundData
+        }
+    }
     
     
     
@@ -394,11 +399,25 @@ final class HomeView: UIView {
     // MARK: - Selectors
     @objc private func valueChanged(segment: UISegmentedControl) {
         switch segment.selectedSegmentIndex {
-        case 0: self.segmentValue = 0
-        case 1: self.segmentValue = 1
-        case 2: self.segmentValue = 2
-        case 3: self.segmentValue = 3
-        default: self.segmentValue = 0
+        case 0:
+            self.segmentValue = 0
+            self.homeSecondCollection.currentTime = .dawn
+            
+        case 1:
+            self.segmentValue = 1
+            self.homeSecondCollection.currentTime = .morning
+            
+        case 2:
+            self.segmentValue = 2
+            self.homeSecondCollection.currentTime = .sunset
+            
+        case 3:
+            self.segmentValue = 3
+            self.homeSecondCollection.currentTime = .night
+            
+        default:
+            self.segmentValue = 0
+            self.homeSecondCollection.currentTime = .dawn
         }
     }
     

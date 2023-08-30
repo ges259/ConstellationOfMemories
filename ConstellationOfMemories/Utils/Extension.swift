@@ -49,13 +49,12 @@ extension Date {
 
 // MARK: - UIColor
 extension UIColor {
-    static func rgb(red: CGFloat, green: CGFloat, blue: CGFloat) -> UIColor {
-        return UIColor(red: red/255, green: green/255, blue: blue/255, alpha: 1)
+    static func rgb(r: CGFloat, g: CGFloat, b: CGFloat) -> UIColor {
+        return UIColor(red: r/255, green: g/255, blue: b/255, alpha: 1)
     }
-    static let textFieldGray: UIColor = UIColor.rgb(red: 149, green: 204, blue: 244)
+    static let textFieldGray: UIColor = UIColor.rgb(r: 149, g: 204, b: 244)
     
     static let nightFontColor: UIColor = UIColor(white: 1, alpha: 1)
-    
 }
 
 

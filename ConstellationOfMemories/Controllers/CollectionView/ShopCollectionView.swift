@@ -10,10 +10,26 @@ import UIKit
 final class ShopCollectionView: UIView {
     
     // MARK: - Properties
+    // background_Image_Data
+    var backgroundData: BackgroundImg? {
+        didSet {
+            if let backgroundData = backgroundData {
+                self.dontHaveImage = backgroundData.dontHaveDawnImg()
+                
+                self.shopCollectionView.reloadData()
+            }
+        }
+    }
     
-    private var item = [Int]()
+    private var dontHaveImage = [Int]() {
+        didSet {
+            print("dontHaveImage ---- \(dontHaveImage)")
+            print("dontHaveImage.count ----- \(dontHaveImage.count)")
+        }
+    }
     
     
+    // Delegate
     var mainShopDelgate: ShopMainDelegate?
     
     
@@ -77,7 +93,7 @@ final class ShopCollectionView: UIView {
     // MARK: - Helper Functions
     private func upCollectionView() {
         // item이 항상 맨위로 가도록 설정
-        let indexPath = IndexPath(item: self.item.count - 1, section: 0)
+        let indexPath = IndexPath(item: 0, section: 0)
         self.shopCollectionView.scrollToItem(at: indexPath, at: .top, animated: true)
     }
     
@@ -103,7 +119,7 @@ extension ShopCollectionView: UICollectionViewDelegate, UICollectionViewDataSour
     // MARK: - Item
     // 셀의 개수
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 20
+        return self.dontHaveImage.count
     }
     // 아이템의 크기 설정
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -130,7 +146,7 @@ extension ShopCollectionView: UICollectionViewDelegate, UICollectionViewDataSour
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ReuseIdentifier.shopCollectionCell, for: indexPath) as! ShopCollectionCell
         
         
-//        cell.backgroundColor = .yellow
+        cell.haveImage.image = UIImage(named: "\(self.dontHaveImage[indexPath.row])")
         
         return cell
     }

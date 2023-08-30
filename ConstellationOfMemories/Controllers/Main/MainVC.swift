@@ -30,6 +30,17 @@ final class MainVC: UIViewController {
     private var diaryData: [Diary] = [] {
         didSet { self.diaryTable.diaryData = diaryData }
     }
+    // background
+    var backgroundImg: BackgroundImg? {
+        didSet {
+            self.achieveView.backgroundData = backgroundImg
+            self.homeView.backgroundData = backgroundImg
+            self.shopView.backgroundData = backgroundImg
+            guard let backgroundImg = backgroundImg else { return }
+            dump(backgroundImg)
+            
+        }
+    }
     
     
     
@@ -46,7 +57,7 @@ final class MainVC: UIViewController {
     
 // launch_Screen
     // Background_Image
-    private var backgroundArray: [String] = [DBString.dawn, DBString.morning, DBString.sunset, DBString.night]
+    private var backgroundArray: [String] = ["100", "200", "300", "400"]
     
     
     
@@ -262,8 +273,8 @@ final class MainVC: UIViewController {
                            width: self.width,
                            height: self.height)
         let view = UIView(frame: frame)
-//            view.backgroundColor = .clear
-            view.backgroundColor = .red
+            view.backgroundColor = .clear
+//            view.backgroundColor = .red
             view.alpha = 0
         // blackView - add gesture
         let tap = UITapGestureRecognizer(target: self,
@@ -350,6 +361,10 @@ final class MainVC: UIViewController {
     // MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        
+        
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -371,6 +386,7 @@ final class MainVC: UIViewController {
             // User_Dat와 Diary_Data - 가져오기
             self.fetchUserData()
             self.fetchDiaryDatas()
+            self.fetchBackgroundImg()
             
             // header 및 footer_Button 구현
             self.launchScreen { self.configureMainVC() }
@@ -535,6 +551,15 @@ final class MainVC: UIViewController {
     
     
 // MARK: - API
+    
+    
+    
+    // MARK: - Fetch_Background_Img
+    private func fetchBackgroundImg() {
+        self.service.fetchBackground { [self] array in
+            self.backgroundImg = array
+        }
+    }
     
     
     
@@ -1178,8 +1203,8 @@ extension MainVC: LoginMainDelegate, HeaderMainDelegate, MenuMainDelegate, Secon
     @objc private func starButtonTapped() {
         // 버튼의 이미지 바꾸기
             // header에서 바꾸면 diaryVC -> Diary_Table로 이동할 때도 애니메이션이 작동하므로 여기서 설정
-        self.headerView.animateTime = 0.35
         self.headerView.leftButtonAlpha(.back)
+//        self.headerView.headerTitle(title: "일기 목록")
         // 버튼의 역할을 바꿈
         self.headerView.buttonConfig = .diaryTableViewButton
         // diary_Table_View_보이게 하기
@@ -1189,7 +1214,7 @@ extension MainVC: LoginMainDelegate, HeaderMainDelegate, MenuMainDelegate, Secon
 // [Left_Button]
     // Diary_Table -> MainVC
     func handleTableToMain() {
-        self.headerView.animateTime = 0.7
+//        self.headerView.animateTime = 0.5
         // 버튼의 이미지 + 역할을 바꿈
         self.headerView.buttonConfig = .mainViewButton
         // diary_Table_View_숨기기
@@ -1213,8 +1238,6 @@ extension MainVC: LoginMainDelegate, HeaderMainDelegate, MenuMainDelegate, Secon
     func handleDiaryToTable() {
         // 버튼의 이미지 + 역할을 바꿈
         self.headerView.buttonConfig = .diaryTableViewButton
-        // 일기를 작성 후 Diary_Table로 왔을 때 업데이트를 위한 코드
-//        self.diaryData = self.coreData.readDiaryDatas()
         // diary_View_숨기기
             // didSelect_Row_At()에서 열림
         self.DiaryViewHideOrShow(show: false)

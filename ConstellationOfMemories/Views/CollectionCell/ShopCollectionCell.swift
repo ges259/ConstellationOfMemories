@@ -10,7 +10,9 @@ import UIKit
 final class ShopCollectionCell: UICollectionViewCell {
     
     // MARK: - Propertis
-    
+    lazy var haveImage: UIImageView = {
+        return UIImageView()
+    }()
     
     
     
@@ -20,7 +22,11 @@ final class ShopCollectionCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        self.backgroundColor = .systemGray6
+        self.addSubview(self.haveImage)
+        self.haveImage.anchor(top: self.topAnchor,
+                              bottom: self.bottomAnchor,
+                              leading: self.leadingAnchor,
+                              trailing: self.trailingAnchor)
         
     }
     required init?(coder: NSCoder) {

@@ -12,16 +12,14 @@ struct User {
     let email: String
     // 글자 색상
     let fontColor: Int
-    // 배경 화면
-//    let backgroundUrl: String
     // 알림 설정
     let noti: Int
-    
-    
+    // 배경 화면
     let dawn: String
     let morning: String
     let sunset: String
     let night: String
+    
     
     
     // 생성자
@@ -36,13 +34,12 @@ struct User {
         // font_Color
         self.fontColor = dictionary[DBString.fontColor] as? Int ?? 1
         // background_Image
-//        self.backgroundUrl = dictionary[DBString.backgroundURL] as? String ?? "101"
-        
-        self.dawn = dictionary[DBString.dawn] as? String ?? "dawn1"
-        self.morning = dictionary[DBString.morning] as? String ?? "morning1"
-        self.sunset = dictionary[DBString.sunset] as? String ?? "sunset1"
-        self.night = dictionary[DBString.night] as? String ?? "night1"
+        self.dawn = dictionary[DBString.dawn] as? String ?? "100"
+        self.morning = dictionary[DBString.morning] as? String ?? "200"
+        self.sunset = dictionary[DBString.sunset] as? String ?? "300"
+        self.night = dictionary[DBString.night] as? String ?? "400"
     }
+    
     
     
     // 이니셜

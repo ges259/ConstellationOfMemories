@@ -15,7 +15,7 @@ final class HomeFirstView: UIView {
     
     
     
-    private var item = [Int]()
+    
     
     
     
@@ -79,8 +79,8 @@ final class HomeFirstView: UIView {
     
     private func upCollectionView() {
         // item이 항상 맨위로 가도록 설정
-        let indexPath = IndexPath(item: self.item.count - 1, section: 0)
-        self.firstCollection.scrollToItem(at: indexPath, at: .top, animated: true)
+        self.firstCollection.scrollToItem(at: IndexPath(item: 0, section: 0),
+                                          at: .top, animated: true)
     }
     
     

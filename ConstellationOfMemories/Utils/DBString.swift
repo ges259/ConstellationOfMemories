@@ -15,17 +15,18 @@ struct DBString {
     static let password: String = "password"
         
     static let fontColor: String = "fontColor"
-    static let backgroundURL: String = "backgroundURL"
+//    static let backgroundURL: String = "backgroundURL"
     
     // 알림 설정
     static let noti: String = "noti"
     //
-    static let lastDiary: String = "lastDiary"
+//    static let lastDiary: String = "lastDiary"
     
-    static let dawn: String = "dawn1"
-    static let morning: String = "morning1"
-    static let sunset: String = "sunset1"
-    static let night: String = "night1"
+    // Background_Image
+    static let dawn: String = "dawn"
+    static let morning: String = "morning"
+    static let sunset: String = "sunset"
+    static let night: String = "night"
     
     
     
@@ -43,7 +44,7 @@ let DB_REF: DatabaseReference = Database.database().reference()
 // user
 let Users_REF: DatabaseReference = DB_REF.child("users")
 let Diary_REF: DatabaseReference = DB_REF.child("diarys")
-
+let Image_REF: DatabaseReference = DB_REF.child("background")
 
 
 

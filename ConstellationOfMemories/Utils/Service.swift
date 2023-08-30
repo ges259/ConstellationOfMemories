@@ -98,6 +98,71 @@ struct Service {
     
     
     
+    // MARK: - Update_Background
+    func backgroundBackground(num: Int, completion: @escaping () -> Void) {
+        // uid
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        // create_Dictionary_____background_number
+        let value: [String: Int] = ["\(num)": 0]
+        // create_Background
+        Image_REF.child(uid).updateChildValues(value)
+        // completion
+        completion()
+    }
+    
+    
+    
+    // MARK: - Fetch_Background
+    func fetchBackground(completion: @escaping (BackgroundImg) -> Void) {
+        // uid
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        // return Array
+        var numArray: [Int] = []
+        
+        // fetch_Background
+        Image_REF.child(uid).observeSingleEvent(of: .value) { snapshot in
+            // background_number를 배열로 만들기
+            guard let allObjects = snapshot.children.allObjects as? [DataSnapshot] else { return }
+            
+            allObjects.forEach { snapshot in
+                guard let ddd = Int(snapshot.key) else { return }
+                numArray.append(ddd)
+            }
+            
+            let imageArray = BackgroundImg(dictionary: numArray)
+            
+            completion(imageArray)
+        }
+    }
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     
     
@@ -246,29 +311,5 @@ struct Service {
         } else {
             Users_REF.child(uid).child(DBString.noti).setValue(0)
         }
-    }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    func imageUpload(fileName: String, image: UIImage?) {
-        
-        guard let image = image, let uploadData = image.jpegData(compressionQuality: 1) else { return }
-        
-        
-        
-        let storageREF = Storage.storage().reference().child(DBString.backgroundURL).child(fileName)
-        
-        
-        storageREF.putData(uploadData)
-        
-        
-        
     }
 }

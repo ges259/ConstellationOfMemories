@@ -15,7 +15,20 @@ final class AchieveFirstView: UIView {
     
     
     
+    var backgroundData: BackgroundImg? {
+        didSet {
+            if let backgroundData = backgroundData {
+                var array1: [Int] = backgroundData.havedawn
+                let array2: [Int] = backgroundData.haveMorning
+                let array3: [Int] = backgroundData.haveSunset
+                let array4: [Int] = backgroundData.haveNight
+                
+                self.totalImageInt = array1 + array2 + array3 + array4
+            }
+        }
+    }
     
+    var totalImageInt = [Int]()
     
     
     
@@ -75,8 +88,8 @@ final class AchieveFirstView: UIView {
     
     func upCollectionView() {
         // item이 항상 맨위로 가도록 설정
-        let indexPath = IndexPath(item: 0, section: 0)
-        self.firstCollection.scrollToItem(at: indexPath, at: .top, animated: true)
+        self.firstCollection.scrollToItem(at: IndexPath(item: 0, section: 0),
+                                          at: .top, animated: true)
     }
     
     
@@ -105,6 +118,9 @@ extension AchieveFirstView: UICollectionViewDelegate, UICollectionViewDataSource
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ReuseIdentifier.firstCollectionCell, for: indexPath) as! AchieveFirstCell
         
+        
+        cell.haveImage.image = UIImage(named: "\(self.totalImageInt.randomElement() ?? 101)")
+        
         return cell
     }
     
@@ -115,13 +131,13 @@ extension AchieveFirstView: UICollectionViewDelegate, UICollectionViewDataSource
     
     // 아이템의 크기 설정
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width = (self.frame.width - 40 - 4) / 2
+        let width = (self.frame.width - 40 - 5) / 2
         return CGSize(width: width, height: width)
     }
 
     // 상하 spacing
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return 4
+        return 5
     }
     
     // 좌우 spacing

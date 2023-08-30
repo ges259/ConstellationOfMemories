@@ -115,11 +115,11 @@ enum imageString: CustomStringConvertible {
 //}
 
 
-enum CurrentSetup: Int {
-    case morning
-    case daytime
-    case night
+enum CurrentTime {
     case dawn
+    case morning
+    case sunset
+    case night
 }
 
 enum SegementCollection {
@@ -167,20 +167,73 @@ enum SetupCelltitle: CustomStringConvertible {
 
 func fontColor(index: Int) -> UIColor {
     switch index {
-    case 0: return UIColor.rgb(red: 1, green: 133, blue: 14)
-    case 1: return UIColor.rgb(red: 11, green: 1, blue: 152)
-    case 2: return UIColor.rgb(red: 41, green: 141, blue: 14)
-    case 3: return UIColor.rgb(red: 231, green: 201, blue: 15)
-    case 4: return UIColor.rgb(red: 101, green: 133, blue: 13)
-    case 5: return UIColor.rgb(red: 31, green: 31, blue: 144)
-    case 6: return UIColor.rgb(red: 255, green: 33, blue: 199)
-    case 7: return UIColor.rgb(red: 79, green: 201, blue: 13)
-    case 8: return UIColor.rgb(red: 61, green: 1, blue: 13)
-    case 9: return UIColor.rgb(red: 151, green: 1, blue: 155)
-    case 10: return UIColor.rgb(red: 144, green: 144, blue: 144)
-    case 11: return UIColor.rgb(red: 199, green: 199, blue: 199)
-    case 12: return UIColor.rgb(red: 12, green: 12, blue: 12)
-    default: return UIColor.rgb(red: 158, green: 190, blue: 11)
+    case 0: return UIColor.rgb(r: 1, g: 133, b: 14)
+    case 1: return UIColor.rgb(r: 11, g: 1, b: 152)
+    case 2: return UIColor.rgb(r: 41, g: 141, b: 14)
+    case 3: return UIColor.rgb(r: 231, g: 201, b: 15)
+    case 4: return UIColor.rgb(r: 101, g: 133, b: 13)
+    case 5: return UIColor.rgb(r: 31, g: 31, b: 144)
+    case 6: return UIColor.rgb(r: 255, g: 33, b: 199)
+    case 7: return UIColor.rgb(r: 79, g: 201, b: 13)
+    case 8: return UIColor.rgb(r: 61, g: 1, b: 13)
+    case 9: return UIColor.rgb(r: 151, g: 1, b: 155)
+    case 10: return UIColor.rgb(r: 144, g: 144, b: 144)
+    case 11: return UIColor.rgb(r: 199, g: 199, b: 199)
+    case 12: return UIColor.rgb(r: 12, g: 12, b: 12)
+    default: return UIColor.rgb(r: 158, g: 190, b: 11)
     }
 }
 
+
+
+//func returnImage(index: Int) -> String {
+//    switch index {
+//    case 100: return "dawn1"
+//    case 101: return "dawn2"
+//    case 102: return "dawn3"
+//
+//    case 200: return "morning1"
+//    case 201: return "morning2"
+//    case 202: return "morning3"
+//
+//    case 300: return "sunset1"
+//    case 301: return "sunset2"
+//    case 302: return "sunset3"
+//
+//    case 400: return "night1"
+//    case 401: return "night2"
+//    case 402: return "night3"
+//    default: return "dawn1"
+//    }
+//}
+
+//struct backgroundImg {
+//
+//
+//
+//
+//}
+
+//enum BackgroundImage {
+//    case dawn0
+//    case dawn1
+//    case dawn2
+//
+//    case morning0
+//    case morning1
+//    case morning2
+//
+//    case sunset0
+//    case sunset1
+//    case sunset2
+//
+//    case night0
+//    case night1
+//    case night2
+//
+//
+//
+//
+//
+//
+//}

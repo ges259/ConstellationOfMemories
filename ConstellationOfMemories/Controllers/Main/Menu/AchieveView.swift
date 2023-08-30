@@ -11,7 +11,11 @@ final class AchieveView: UIView {
     
     // MARK: - Properties
     
-    
+    var backgroundData: BackgroundImg? {
+        didSet {
+            self.firstCollection.backgroundData = self.backgroundData
+        }
+    }
     
     
     

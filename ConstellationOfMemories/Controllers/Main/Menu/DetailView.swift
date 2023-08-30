@@ -18,7 +18,7 @@ final class DetailView: UIView {
     
     // MARK: - Layout
     private lazy var detailBackground: UIImageView = {
-        return UIImageView(image: UIImage(named: "blueSky"))
+        return UIImageView(image: UIImage(named: "0"))
     }()
     
     

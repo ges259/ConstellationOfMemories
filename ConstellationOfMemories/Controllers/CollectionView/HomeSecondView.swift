@@ -11,11 +11,31 @@ final class HomeSecondView: UIView {
     
     // MARK: - Properties
     
+    // home_Header의 segemet가 바뀌면 이 변수의 값이 바뀜
+        // dawn / morning / sunset / night
+    var currentTime: CurrentTime = .dawn {
+        didSet {
+            UIView.animate(withDuration: 0.2) {
+                self.secondCollection.alpha = 0
+                
+                
+            } completion: { _ in
+                self.secondCollection.reloadData()
+                
+                
+                UIView.animate(withDuration: 0.5) {
+                    self.secondCollection.alpha = 1
+                }
+            }
+        }
+    }
+    
+    
+    // 셀에 background_image를 표시하기 위한 데이터
+    var backgroundData: BackgroundImg?
     
     
     
-    
-    private var item = [Int]()
     
     
     
@@ -25,7 +45,7 @@ final class HomeSecondView: UIView {
     
     
     // MARK: - Layout
-    lazy var firstCollection: UICollectionView = {
+    lazy var secondCollection: UICollectionView = {
         let firstFrame = CGRect(x: 0,
                                 y: 0,
                                 width: self.frame.width,
@@ -74,13 +94,13 @@ final class HomeSecondView: UIView {
     
     // MARK: - Helper Functions
     private func ConfigureUI() {
-        self.addSubview(self.firstCollection)
+        self.addSubview(self.secondCollection)
     }
     
     private func upCollectionView() {
         // item이 항상 맨위로 가도록 설정
-        let indexPath = IndexPath(item: self.item.count - 1, section: 0)
-        self.firstCollection.scrollToItem(at: indexPath, at: .top, animated: true)
+        self.secondCollection.scrollToItem(at: IndexPath(item: 0, section: 0),
+                                          at: .top, animated: true)
     }
     
     
@@ -104,13 +124,45 @@ final class HomeSecondView: UIView {
 // MARK: - CollectionView
 extension HomeSecondView: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 30
+        switch self.currentTime {
+        case .dawn:
+            return self.backgroundData?.havedawn.count ?? 0
+            
+        case .morning:
+            return self.backgroundData?.haveMorning.count ?? 0
+            
+        case .sunset:
+            return self.backgroundData?.haveSunset.count ?? 0
+            
+        case .night:
+            return self.backgroundData?.haveNight.count ?? 0
+        }
     }
     
     // Cell_For_Row_At
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ReuseIdentifier.homeSecondCollection, for: indexPath) as! HomeSecondCell
         
+        
+        if let backgroundData = backgroundData {
+            switch self.currentTime {
+            case .dawn:
+                cell.haveImage.image = UIImage(named: "\(backgroundData.havedawn[indexPath.row])")
+                break
+                
+            case .morning:
+                cell.haveImage.image = UIImage(named: "\(backgroundData.haveMorning[indexPath.row])")
+                break
+                
+            case .sunset:
+                cell.haveImage.image = UIImage(named: "\(backgroundData.haveSunset[indexPath.row])")
+                break
+                
+            case .night:
+                cell.haveImage.image = UIImage(named: "\(backgroundData.haveNight[indexPath.row])")
+                break
+            }
+        }
         return cell
     }
 

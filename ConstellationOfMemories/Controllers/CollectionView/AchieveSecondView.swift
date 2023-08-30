@@ -70,8 +70,8 @@ final class AchieveSecondView: UIView {
     
     func upCollectionView() {
         // item이 항상 맨위로 가도록 설정
-        let indexPath = IndexPath(item: 0, section: 0)
-        self.secondCollection.scrollToItem(at: indexPath, at: .top, animated: true)
+        self.secondCollection.scrollToItem(at: IndexPath(item: 0, section: 0),
+                                           at: .top, animated: true)
     }
     
     
