@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import FirebaseAuth
 
 final class HomeView: UIView {
     
@@ -13,15 +14,15 @@ final class HomeView: UIView {
     var user : User? {
         didSet {
             guard let user = self.user else { return }
-            self.imgString = [user.dawn, user.morning, user.sunset, user.night]
+            self.imgString = [user.dawnImg, user.morningImg, user.sunsetImg, user.nightImg]
             // 첫 화면을 0으로 설정
-            self.segmentValue = 0
+            self.topSegementValue = 0
+            // font 바꾸기
+            
         }
     }
     var backgroundData: BackgroundImg? {
-        didSet {
-            homeSecondCollection.backgroundData = self.backgroundData
-        }
+        didSet { self.homeSecondCollection.backgroundData = self.backgroundData }
     }
     
     
@@ -29,25 +30,31 @@ final class HomeView: UIView {
     // header_View
     private let headerView = HeaderView.shared
     
-    
+    private let service = Service.shared
     
     // 서버에 저장되어 있는 user의 시간별 background_Image
-    var imgString: [String] = ["blueSky"]
+    private var imgString: [String] = ["0"]
     
     
     
     // segement 선택 시 해당 변수가 바뀜 -> 이미지 바꿈
-    private var segmentValue: Int = 0 {
+    private var topSegementValue: Int = 0 {
         didSet {
-            // Background_Image 바꾸기
-            self.mainImg.image = UIImage(named: self.imgString[self.segmentValue])
-            self.diaryTableImg.image = UIImage(named: self.imgString[self.segmentValue])
-            self.diaryViewImg.image = UIImage(named: self.imgString[self.segmentValue])
+            // Background_Image 바꾸기 (원상복구)
+            self.homeImageChange(indexString: self.imgString[self.topSegementValue])
+            // Font 바꾸기 (원상복구)
+            self.homeFontChange(index: -1)
         }
     }
     
     
+    private var temporaryFont: Int = -1
+    private var temporaryImg: String = "0"
+
     
+    
+    // delegate
+    var homeMainDelegate: HomeMainDelegate?
     
     
 
@@ -386,10 +393,56 @@ final class HomeView: UIView {
     
     
     
-    // MARK: - Helper Functions
+// MARK: - Helper Functions
     
     
     
+    // MARK: - Image
+    private func homeImageChange(indexString: String) {
+        self.mainImg.image = UIImage(named: indexString)
+        self.diaryTableImg.image = UIImage(named: indexString)
+        self.diaryViewImg.image = UIImage(named: indexString)
+        
+        // 이미지 임시저장
+        self.temporaryImg = indexString
+    }
+
+    
+    
+    // MARK: - Font
+    private func homeFontChange(index: Int) {
+        // color
+        let color = fontColor(index: index)
+        
+        // Main_View
+        self.mainLbl.textColor = color
+        self.menuButton.tintColor = color
+        self.moonButton.tintColor = color
+        
+        
+        // Diary_Table
+        self.backButton1.tintColor = color
+        self.diaryTableLbl.textColor = color
+        
+        self.diaryTable1.textColor = color
+        self.diaryTable2.textColor = color
+        self.diaryTable3.textColor = color
+        
+        self.diaryTable1.layer.borderColor = color.cgColor
+        self.diaryTable2.layer.borderColor = color.cgColor
+        self.diaryTable3.layer.borderColor = color.cgColor
+        
+        // Diary_View
+        self.diaryViewLbl.textColor = color
+        self.viewTitleLbl.textColor = color
+        self.separatorView.backgroundColor = color
+        self.textView.textColor = color
+        self.backButton2.tintColor = color
+        self.shareButton.tintColor = color
+        
+        // 폰트 임시저장
+        self.temporaryFont = index
+    }
     
     
     
@@ -409,23 +462,23 @@ final class HomeView: UIView {
     @objc private func valueChanged(segment: UISegmentedControl) {
         switch segment.selectedSegmentIndex {
         case 0:
-            self.segmentValue = 0
+            self.topSegementValue = 0
             self.homeSecondCollection.currentTime = .dawn
             
         case 1:
-            self.segmentValue = 1
+            self.topSegementValue = 1
             self.homeSecondCollection.currentTime = .morning
             
         case 2:
-            self.segmentValue = 2
+            self.topSegementValue = 2
             self.homeSecondCollection.currentTime = .sunset
             
         case 3:
-            self.segmentValue = 3
+            self.topSegementValue = 3
             self.homeSecondCollection.currentTime = .night
             
         default:
-            self.segmentValue = 0
+            self.topSegementValue = 0
             self.homeSecondCollection.currentTime = .dawn
         }
     }
@@ -470,24 +523,61 @@ final class HomeView: UIView {
 // MARK: - Delegate
 extension HomeView: FirstHomeDelegate, SecondHomeDelegate {
     func homeFirstTapped(index: Int) {
-        print("\(#function) ---- \(index)")
         // right_Button 생기게 함
+        self.headerView.rightButtonConfig = .home
         self.headerView.rightButtonShow(.check)
-            // right_Button을 누르면
-                // -> db에 저장
-                // -> user에 저장
-        
-        // 다른 segement를 누르면 초기화
-        
+        // 폰트 바꾸기
+        self.homeFontChange(index: index)
     }
     
-    func homeSecondTapped(index: Int) {
-        print("\(#function) ---- \(index)")
+    func homeSecondTapped(index: Int, backgroundImg: BackgroundImg) {
         // right_Button 생기게 함
-            // right_Button을 누르면
-                // -> db에 저장
-                // -> user에 저장
+        self.headerView.rightButtonConfig = .home
+        self.headerView.rightButtonShow(.check)
         
+        // String
+        var indexString: String = ""
         // 다른 segement를 누르면 초기화
+        switch self.topSegementValue {
+        case 0: indexString = String(backgroundImg.havedawn[index])
+        case 1: indexString = String(backgroundImg.haveMorning[index])
+        case 2: indexString = String(backgroundImg.haveSunset[index])
+        case 3: indexString = String(backgroundImg.haveNight[index])
+            
+        default: indexString = String(backgroundImg.havedawn[index])
+        }
+        // home_Header의 이미지 바꾸기
+        self.homeImageChange(indexString: indexString)
+    }
+}
+
+
+
+// DB업데이트
+extension HomeView: HeaderHomeDelegate {
+    func checkButtonTapped() {
+        // right_Button을 누르면
+            // -> db에 저장
+            // -> user에 저장
+        var currentTime: CurrentTime = .dawn
+        
+        switch self.topSegementValue {
+        case 0: currentTime = .dawn
+        case 1: currentTime = .morning
+        case 2: currentTime = .sunset
+        case 3: currentTime = .night
+        default: currentTime = .dawn
+        }
+        
+        self.service.updateFontImage(currentTime: currentTime,
+                                     font: String(self.temporaryFont),
+                                     img: self.temporaryImg)
+        
+        
+        // Font
+        MainVC.currentFont = fontColor(index: self.temporaryFont)
+        // Image
+        self.homeMainDelegate?.imgChanged(currentTime: currentTime,
+                                          img: self.temporaryImg)
     }
 }

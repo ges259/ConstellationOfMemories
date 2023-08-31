@@ -11,7 +11,7 @@ final class HomeFirstView: UIView {
     
     // MARK: - Properties
     
-    var myFontColor = MyFontColor()
+//    var myFontColor = MyFontColor()
     
     
     var firstHomeDelegate: FirstHomeDelegate?
@@ -97,14 +97,15 @@ final class HomeFirstView: UIView {
 // MARK: - CollectionView
 extension HomeFirstView: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.myFontColor.term9
+        return fontCount
     }
     
     // Cell_For_Row_At
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ReuseIdentifier.homeFirstCollection, for: indexPath) as! HomeFirstCell
         
-            cell.backgroundColor = self.myFontColor.fontColor(index: indexPath.row)
+//            cell.backgroundColor = self.myFontColor.fontColor(index: indexPath.row)
+            cell.backgroundColor = fontColor(index: indexPath.row)
         return cell
     }
 

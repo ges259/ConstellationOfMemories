@@ -18,6 +18,8 @@ final class HeaderView: UIView {
     var mainHeaderDelegate: HeaderMainDelegate?
     // DiaryVC
     var diaryHeaderDelegate: HeaderDiaryVCDelegate?
+    // HomeView
+    var headerHomeDelegate: HeaderHomeDelegate?
     
     // animate_Time
     private var animateTime: Double = 0.7
@@ -206,6 +208,7 @@ extension HeaderView {
             self.headerTitle(title: "추억 일기")
             self.leftButtonAlpha(.menu)
             self.mainHeaderDelegate?.handleHomeToMain()
+            self.rightButtonHide()
             break
             
             
@@ -255,7 +258,7 @@ extension HeaderView {
                     // 이를 방지하기 위해 saveMode로 바꾸고 실행
             self.rightButtonConfig = .saveMode
             // check표시를 클릭하지 않고 왼쪽버튼을 통해 나가도 저장이 될 수 있도록 함
-            self.headerRightButtonTapped()
+//            self.headerRightButtonTapped()
             // right Button 숨기기
             self.rightButton.alpha = 0
             break
@@ -335,7 +338,7 @@ extension HeaderView {
                 // cell을 클릭하면 버튼이 생김
             // 버튼을 누르면
                 // 업데이트
-            
+            self.headerHomeDelegate?.checkButtonTapped()
             
             
             break

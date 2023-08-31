@@ -32,7 +32,25 @@ final class HomeSecondView: UIView {
     
     
     // 셀에 background_image를 표시하기 위한 데이터
-    var backgroundData: BackgroundImg?
+    var backgroundData: BackgroundImg? {
+        didSet {
+//            guard let backgroundData = self.backgroundData else { return }
+//
+//            self.secondDawn = backgroundData.havedawn
+//            self.secondMorning = backgroundData.haveMorning
+//            self.secondSunset = backgroundData.haveSunset
+//            self.secondNight = backgroundData.haveNight
+        }
+    }
+    
+//    private var secondDawn: [Int] = []
+//    private var secondMorning: [Int] = []
+//    private var secondSunset: [Int] = []
+//    private var secondNight: [Int] = []
+    
+    
+    
+    
     
     // Delegate
     var secondHomeDelegate: SecondHomeDelegate?
@@ -170,7 +188,12 @@ extension HomeSecondView: UICollectionViewDelegate, UICollectionViewDataSource, 
 
     // Did_Select_Row_At
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        self.secondHomeDelegate?.homeSecondTapped(index: indexPath.row)
+        
+
+        guard let backgroundData = self.backgroundData else { return }
+        
+        self.secondHomeDelegate?.homeSecondTapped(index: indexPath.row,
+                                                  backgroundImg: backgroundData)
     }
     
     

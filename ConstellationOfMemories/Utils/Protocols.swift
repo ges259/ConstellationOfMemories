@@ -92,8 +92,16 @@ protocol FirstHomeDelegate {
     func homeFirstTapped(index: Int)
 }
 protocol SecondHomeDelegate {
-    func homeSecondTapped(index: Int)
+    func homeSecondTapped(index: Int, backgroundImg: BackgroundImg)
 }
+protocol HeaderHomeDelegate {
+    func checkButtonTapped()
+}
+
+protocol HomeMainDelegate {
+    func imgChanged(currentTime: CurrentTime, img: String)
+}
+
 
 
 protocol SetupCellSetupDelegate {
@@ -125,3 +133,7 @@ protocol DiaryVCMainDelegate {
 protocol SetupInfoHeaderDelegate {
     func configInfoHeader(user: User?)
 }
+
+
+
+

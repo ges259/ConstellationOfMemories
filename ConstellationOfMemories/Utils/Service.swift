@@ -53,8 +53,7 @@ struct Service {
             guard let uid = result?.user.uid else { return }
             // user정보 만들기
             let values = [DBString.fullName: fullName,
-                          DBString.email: email,
-                          DBString.password: password] as [String: Any]
+                          DBString.email: email] as [String: Any]
             
             // Create_User_Data
                 // user정보를 uid를 통해 DB에 저장
@@ -88,17 +87,38 @@ struct Service {
     
     
     
-    // MARK: - Update_Font
-    
-    
-    
-    
-    
-    
-    
-    
-    // MARK: - Update_Background
-    
+    // MARK: - Update_Font & Image
+    func updateFontImage(currentTime: CurrentTime, font: String, img: String) {
+        // uid
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        
+        var fontString: String = ""
+        var imgString: String = ""
+        
+        switch currentTime {
+        case .dawn:
+            fontString = DBString.dawnFont
+            imgString = DBString.dawnImg
+            
+        case .morning:
+            fontString = DBString.morningFont
+            imgString = DBString.morningImg
+            
+        case .sunset:
+            fontString = DBString.sunsetFont
+            imgString = DBString.sunsetImg
+            
+        case .night:
+            fontString = DBString.nightFont
+            imgString = DBString.nightImg
+        }
+        
+        
+        // Font
+        Users_REF.child(uid).child(fontString).setValue(font)
+        // Background_Image
+        Users_REF.child(uid).child(imgString).setValue(img)
+    }
     
     
     
@@ -199,19 +219,14 @@ struct Service {
         
         // 배열에 데이터 넣기
             // uid + diaryText + date
-        let value: [String: Any] = [DBString.month: month,
-                                     DBString.day: day,
-                                     DBString.diaryText: diaryText]
-        
+        let value: [String: Any] = [DBString.diaryText: diaryText]
         
         // Diariy_Id 만들기 (childByAutoId()를 통해서 랜덤의 Id 만들기
 //        let diaryId = Diary_REF.child(uid).childByAutoId()
-        let diaryId = Diary_REF.child(uid).child("\(month)\(day)")
+        let diaryRef = Diary_REF.child(uid).child(month)
 
-        
-        
         // realTime_DB에 데이터를 저장
-        diaryId.updateChildValues(value) { error, ref in
+        diaryRef.child(day).updateChildValues(value) { error, ref in
             if let error = error {
                 print("***** Create Error *****, \(error.localizedDescription)")
                 return
@@ -230,22 +245,57 @@ struct Service {
         // uid
         guard let uid = Auth.auth().currentUser?.uid else { return }
         // update_Diary
-        Diary_REF.child(uid).child("\(diary.month)\(diary.day)").child(DBString.diaryText).setValue(diaryText)
+        Diary_REF.child(uid).child(diary.month).child(diary.day).child(DBString.diaryText).setValue(diaryText)
     }
     
     
     
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    // MARK: - Fetcch_Month
+    // 몇월이 있는지 (예시: 7월 8월 9월)
+    func fetchDiaryMonth(completion: @escaping ([String]) -> Void) {
+        
+        var monthArray = [String]()
+        
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        
+        Diary_REF.child(uid).observeSingleEvent(of: .value) { snapshot in
+            
+            guard let allObjeccts = snapshot.children.allObjects as? [DataSnapshot] else { return }
+            
+            allObjeccts.forEach { snapshot in
+                monthArray.append(snapshot.key)
+            }
+            completion(monthArray)
+        }
+    }
+    
+    
+    
+    
+    
+    
+    
+    
     // MARK: - Fetch_Diary_Data
-    func fetchDiaryDatas(completion: @escaping ([Diary]?) -> Void) {
+    func fetchDiaryDatas(month: String, completion: @escaping ([Diary]?) -> Void) {
         var diaryDatas: [Diary] = []
         
-        self.fetchDiaryData { data, num in
+        self.fetchDiaryData(targetMonth: month) { data, num in
             // 데이터가 없다면 nil 반환(completion)
             guard let data = data else {
                 completion(nil)
                 return
             }
-            
             // diaryDatas - 데이터 추가
             diaryDatas.append(data)
             
@@ -260,34 +310,32 @@ struct Service {
             }
         }
     }
-    
-    private func fetchDiaryData(completion: @escaping (Diary?, Int) -> Void) {
-        // diary 배열 생성
-        var diaryArray = [String]()
+    private func fetchDiaryData(targetMonth: String, completion: @escaping (Diary?, Int) -> Void) {
         // uid
         guard let uid = Auth.auth().currentUser?.uid else { return }
         
         // diarys에 들어있는 데이터들을 가져옴
-        Diary_REF.child(uid).observeSingleEvent(of: .value) { snapshot in
+        Diary_REF.child(uid).child(targetMonth).observeSingleEvent(of: .value) { snapshot in
             // Diary의 uid
             guard let allObjects = snapshot.children.allObjects as? [DataSnapshot] else { return }
+            
             // 데이터가 없다면 nil 반환(completion)
             if allObjects.count == 0 { completion(nil, 0) }
-
+            
             // 데이터 가져오기
             allObjects.forEach { snapshot in
                 // diaryId를 가져옴
-                let diaryId = snapshot.key
-                // 배열에 넣기
-                diaryArray.append(diaryId)
-
+                let day = snapshot.key
+                
+                
                 // 배열의 diaryId를 통해서 diaryId에 있는 정보들을 가져옴
                     // 이렇게 가져온 정보들은 completion.(~~~)을 통해 정보를 얻을 수 있음
-                Diary_REF.child(uid).child(diaryId).observeSingleEvent(of: .value) { snapshot in
+                Diary_REF.child(uid).child(targetMonth).child(day).observeSingleEvent(of: .value) { snapshot in
+                    
                     // dictionary 값으로 만들기
                     guard let dictionary = snapshot.value as? Dictionary<String, AnyObject> else { return }
                     // Diary 객체 생성
-                    let diary = Diary(diaryId: diaryId,uid: uid, dictionary: dictionary)
+                    let diary = Diary(month: targetMonth,day: day, dictionary: dictionary)
                     // completion()
                     completion(diary, allObjects.count)
                 }
@@ -318,13 +366,11 @@ struct Service {
     func fetchInfo(on: Bool) {
         // uid
         guard let uid = Auth.auth().currentUser?.uid else { return }
-        
-        // 알람 켜기
-        if on == true {
-            Users_REF.child(uid).child(DBString.noti).setValue(1)
-        // 알람 끄기
-        } else {
-            Users_REF.child(uid).child(DBString.noti).setValue(0)
-        }
+        // on이 true라면
+        on == true
+            // 알람 켜기
+            ? Users_REF.child(uid).child(DBString.noti).setValue(1)
+            // 알람 끄기
+            : Users_REF.child(uid).child(DBString.noti).setValue(0)
     }
 }

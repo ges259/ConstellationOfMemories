@@ -200,7 +200,14 @@ extension DiaryVC: HeaderDiaryVCDelegate {
     func diaryFixMode(_ fixMode: Bool) {
         // 수정뷰로 진입
         if fixMode == true {
+            if self.diaryTextView.text == "" {
+                self.diaryTextView.text = "텍스트를 여기에 입력하세요."
+            }
+            
+            
             UIView.animate(withDuration: 0.3) {
+                self.diarywhiteView.alpha = 1
+                
                 self.diaryTextView.isEditable = true
                 self.diarywhiteView.backgroundColor = UIColor(white: 1, alpha: 0.4)
                 // share버튼 숨기기
@@ -215,9 +222,13 @@ extension DiaryVC: HeaderDiaryVCDelegate {
                 && self.diaryData?.diaryText != self.diaryTextView.text {
                 // Update_OR_Create
                 self.saveOrUpdate()
+                
+            } else if self.diaryTextView.text == "텍스트를 여기에 입력하세요." {
+                self.diaryTextView.text = ""
             }
             
             UIView.animate(withDuration: 0.3) {
+                self.diarywhiteView.alpha = 0
                 self.diaryTextView.isEditable = false
                 self.diarywhiteView.backgroundColor = .clear
                 // share버튼 보이게 하기

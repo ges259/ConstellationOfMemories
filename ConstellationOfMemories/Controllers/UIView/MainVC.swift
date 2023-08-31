@@ -10,25 +10,36 @@ import FirebaseAuth
 
 final class MainVC: UIViewController {
     
-    // MARK: - Properties
-// Singleton
+// MARK: - Properties
+    
+    
+    
+    // MARK: - Singleton
     // header View 싱글톤
     private let headerView: HeaderView = HeaderView.shared
     // Service 싱글톤
     private let service = Service.shared
     
     
-    
-// Data
+
+    // MARK: - Data
     // User
     private var user: User? {
         // launch_Screen의 이미지 바꾸기
-        didSet { self.settinglaunchImg() }
+        didSet {
+            // launch_Screen - String 배열 바꾸기
+            self.settinglaunchImg()
+            
+            // backgroundImage 이미지 바꾸기
+            self.backgroundImage.image = UIImage(named: self.backgroundArray[3])
+        }
     }
     // Diary_Data
         // Diary_Table로   [Diary] 데이터 보내기
     private var diaryData: [Diary] = [] {
-        didSet { self.diaryTable.diaryData = diaryData }
+        didSet {
+            self.diaryTable.diaryData = diaryData
+        }
     }
     // background
     private var backgroundImg: BackgroundImg? {
@@ -40,47 +51,40 @@ final class MainVC: UIViewController {
     }
     
     
-    
-// Toggle
+
+    // MARK: - Toggle
     // Black_View_Toggle
-    private var blackViewToggle: BlackViewToggle = .menu {
-        didSet { print(blackViewToggle) }
-    }
+    private var blackViewToggle: BlackViewToggle = .menu 
     
     
     
-    
-// launch_Screen
-    // Background_Image
-    private var backgroundArray: [String] = ["100", "200", "300", "400"]
-    
-    
-    
-    // 편의성
-    private lazy var width = self.view.frame.width
-    private lazy var height = self.view.frame.height
-    
-    
-    
-    
-    
-    
+    // MARK: - Time
+    // 현재 시간( 새벽 / 아침 / 노을 / 밤 )
+    private var currentTime: CurrentTime?
     
     
     
     // MARK: - Static_Properties
     // Today_Diary_Toggle
         // 오늘 일기를 썻는지
-    static var todayDiaryToggle: Bool = false
+    static var todayDiaryToggle: Bool = false {
+        didSet {
+            print(MainVC.todayDiaryToggle)
+        }
+    }
     // Font
-    static var currentFont: Int = -1
-    // Background
-    static var currentBackground: String = "0"
+    static var currentFont: UIColor = fontColor(index: -1)
     
     
     
+    // MARK: - Disposable_Properties
+    // launch_Screen
+        // Background_Image
+    private var backgroundArray: [String] = ["100", "200", "300", "400"]
     
-    
+    // Frame - (편의성)
+    private lazy var width = self.view.frame.width
+    private lazy var height = self.view.frame.height
     
     
     
@@ -206,7 +210,9 @@ final class MainVC: UIViewController {
                                  y: 150,
                                  width: self.width,
                                  height: self.height)
-        return HomeView(frame: headerFrame)
+        let view = HomeView(frame: headerFrame)
+            view.homeMainDelegate = self
+        return  view
     }()
     
     
@@ -466,8 +472,6 @@ final class MainVC: UIViewController {
                         
 // backgroundArray[3]
                     } completion: { _ in
-                        // backgroundImage 이미지 바꾸기
-                        self.backgroundImage.image = UIImage(named: self.backgroundArray[3])
                         // launchScreen1 이미지 바꾸기
                         self.launchScreen2.imageView.image = UIImage(named: self.backgroundArray[3])
                         // launchScreen1 위치 바꾸기
@@ -510,18 +514,20 @@ final class MainVC: UIViewController {
               let user = self.user
         else { return }
         if hour < 7 {
-            self.backgroundArray = [user.morning, user.sunset, user.night, user.dawn]
+            self.backgroundArray = [user.morningImg, user.sunsetImg, user.nightImg, user.dawnImg]
+            self.currentTime = .dawn
             
         } else if 7 <= hour && hour < 18 {
-            self.backgroundArray = [user.sunset, user.night, user.dawn, user.morning]
-            
+            self.backgroundArray = [user.sunsetImg, user.nightImg, user.dawnImg, user.morningImg]
+            self.currentTime = .morning
             
         } else if 18 <= hour && hour < 19 {
-            self.backgroundArray = [user.night, user.dawn, user.morning, user.sunset]
-            
+            self.backgroundArray = [user.nightImg, user.dawnImg, user.morningImg, user.sunsetImg]
+            self.currentTime = .sunset
             
         } else if 19 <= hour && hour <= 24 {
-            self.backgroundArray = [user.dawn, user.morning, user.sunset, user.night]
+            self.backgroundArray = [user.dawnImg, user.morningImg, user.sunsetImg, user.nightImg]
+            self.currentTime = .night
         }
     }
     
@@ -533,6 +539,7 @@ final class MainVC: UIViewController {
         self.view.addSubview(self.headerView)
         self.headerView.mainHeaderDelegate = self
         self.headerView.diaryHeaderDelegate = self.diaryView
+        self.headerView.headerHomeDelegate = self.homeView
         self.headerView.alpha = 0
         self.headerView.frame = CGRect(x: 0,
                                        y: 0,
@@ -577,10 +584,21 @@ final class MainVC: UIViewController {
     
     // MARK: - Fetcj_Diary_Data
     private func fetchDiaryDatas() {
+        // Today
+        let dateFormatter = DateFormatter()
+            // day
+            dateFormatter.dateFormat = "d"
+        let today = dateFormatter.string(from: Date())
+            // month
+            dateFormatter.dateFormat = "M"
+        let month = dateFormatter.string(from: Date())
+        
+        
+        
         // Diary_Data를 가져오기
             // 로그아웃 -> 다른 아이디로 로그인 시 버그,
                 // 좀 어지럽네
-        self.service.fetchDiaryDatas { datas in
+        self.service.fetchDiaryDatas(month: month) { datas in
             // 일기를 하나도 안 쓴 사람.
             if datas == nil {
                 MainVC.todayDiaryToggle = false
@@ -592,7 +610,7 @@ final class MainVC: UIViewController {
             } else {
                 guard let datas = datas else { return }
                 // 오늘 일기를 썻는지 안 썻는지 확인
-                self.today(datas: datas)
+                self.today(today: today, datas: datas)
             }
         }
     }
@@ -600,21 +618,17 @@ final class MainVC: UIViewController {
     
     
     // MARK: - Today_Diary_Toggle
-    private func today(datas: [Diary]) {
-        // Today
-        let dateFormatter = DateFormatter()
-            // day
-            dateFormatter.dateFormat = "d"
-        let today = dateFormatter.string(from: Date())
-        
+    private func today(today: String, datas: [Diary]) {
+        // First_Day
+        guard let diaryfirstDay = datas.first?.day else { return }
         // Last_Day
-        guard let diaryLastDay = datas.first?.day else { return }
+//        guard let diaryLastDay = datas.last?.day else { return }
         
         // todayDairyToggle 설정
             // Today와 Last_Day를 비교
                 // -> 같으면 true
                 // -> 다르면 false
-        MainVC.todayDiaryToggle = today == diaryLastDay
+        MainVC.todayDiaryToggle = "3" == diaryfirstDay
             ? true
             : false
         
@@ -1440,5 +1454,20 @@ extension MainVC: DiaryVCMainDelegate, FirstMainDelegate {
     // MARK: - DiaryVCMainDelegate
     func updateDiaryData() {
         self.fetchDiaryDatas()
+    }
+}
+
+
+
+
+
+// MARK: - HomeMainDelegate
+// Home_View에서 이미지 -> check버튼 누름
+    // -> 현재 시간대가 맞다면 이미지가 바뀜
+extension MainVC: HomeMainDelegate {
+    func imgChanged(currentTime: CurrentTime, img: String) {
+        if self.currentTime == currentTime {
+            self.backgroundImage.image = UIImage(named: img)
+        }
     }
 }

@@ -20,10 +20,10 @@ struct User {
     let nightFont: Int
     
     // 배경 화면
-    let dawn: String
-    let morning: String
-    let sunset: String
-    let night: String
+    let dawnImg: String
+    let morningImg: String
+    let sunsetImg: String
+    let nightImg: String
     
     
     
@@ -43,10 +43,10 @@ struct User {
         self.nightFont = dictionary[DBString.nightFont] as? Int ?? -4
         
         // background_Image
-        self.dawn = dictionary[DBString.dawn] as? String ?? "100"
-        self.morning = dictionary[DBString.morning] as? String ?? "200"
-        self.sunset = dictionary[DBString.sunset] as? String ?? "300"
-        self.night = dictionary[DBString.night] as? String ?? "400"
+        self.dawnImg = dictionary[DBString.dawnImg] as? String ?? "100"
+        self.morningImg = dictionary[DBString.morningImg] as? String ?? "200"
+        self.sunsetImg = dictionary[DBString.sunsetImg] as? String ?? "300"
+        self.nightImg = dictionary[DBString.nightImg] as? String ?? "400"
     }
     
     

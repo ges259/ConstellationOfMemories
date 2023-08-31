@@ -163,7 +163,6 @@ extension DiaryTableView: UITableViewDelegate, UITableViewDataSource {
                 self.diaryTableDiaryDelegate?.todayDiaryFalse()
                 // fix모드로 diaryVC진입
                 self.headerView.rightButtonConfig = .fixMode
-                
 
             // 오늘 일기를 적었다면
             } else {
@@ -171,6 +170,7 @@ extension DiaryTableView: UITableViewDelegate, UITableViewDataSource {
                 self.headerView.rightButtonConfig = .saveMode
                 // DiaryVC로 데이터 보내기
                 self.diaryTableDiaryDelegate?.todayDiaryTrue(diaryData: self.diaryData[indexPath.row])
+                dump(self.diaryData[indexPath.row])
             }
             
             

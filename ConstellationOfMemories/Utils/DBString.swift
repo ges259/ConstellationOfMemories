@@ -28,10 +28,10 @@ struct DBString {
     
     
     // Background_Image
-    static let dawn: String = "dawn"
-    static let morning: String = "morning"
-    static let sunset: String = "sunset"
-    static let night: String = "night"
+    static let dawnImg: String = "dawnImg"
+    static let morningImg: String = "morningImg"
+    static let sunsetImg: String = "sunsetImg"
+    static let nightImg: String = "nightImg"
     
     
     
