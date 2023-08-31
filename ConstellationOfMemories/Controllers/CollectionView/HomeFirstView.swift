@@ -11,10 +11,10 @@ final class HomeFirstView: UIView {
     
     // MARK: - Properties
     
+    var myFontColor = MyFontColor()
     
     
-    
-    
+    var firstHomeDelegate: FirstHomeDelegate?
     
     
     
@@ -82,13 +82,6 @@ final class HomeFirstView: UIView {
         self.firstCollection.scrollToItem(at: IndexPath(item: 0, section: 0),
                                           at: .top, animated: true)
     }
-    
-    
-    // MARK: - API
-    
-    
-    
-    
 }
 
 
@@ -104,28 +97,27 @@ final class HomeFirstView: UIView {
 // MARK: - CollectionView
 extension HomeFirstView: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 12
+        return self.myFontColor.term9
     }
     
     // Cell_For_Row_At
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ReuseIdentifier.homeFirstCollection, for: indexPath) as! HomeFirstCell
         
-        cell.backgroundColor = fontColor(index: indexPath.row)
-        
+            cell.backgroundColor = self.myFontColor.fontColor(index: indexPath.row)
         return cell
     }
 
 
     // Did_Select_Row_At
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print(indexPath.row)
+        self.firstHomeDelegate?.homeFirstTapped(index: indexPath.row)
     }
     
     
     // 아이템의 크기 설정
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width = (self.frame.width - 40) / 3
+        let width = (self.frame.width - 40) / 4
         return CGSize(width: width, height: width)
     }
 

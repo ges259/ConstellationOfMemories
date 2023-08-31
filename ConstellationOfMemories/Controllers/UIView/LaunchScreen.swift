@@ -11,7 +11,7 @@ final class LaounchSccreen: UIView {
     
     // MARK: - Properties
     lazy var imageView: UIImageView = {
-        return UIImageView(image: UIImage(named: "blueSky"))
+        return UIImageView(image: UIImage(named: "0"))
     }()
     
     

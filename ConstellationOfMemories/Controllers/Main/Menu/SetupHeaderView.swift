@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class UserInfoTableHeader: UIView {
+final class SetupHeaderView: UIView {
     
     // MARK: - View
     private lazy var profileView: UILabel = {
@@ -95,7 +95,7 @@ final class UserInfoTableHeader: UIView {
 
 
 // MARK: - SetupInfoHeaderDelegate
-extension UserInfoTableHeader: SetupInfoHeaderDelegate {
+extension SetupHeaderView: SetupInfoHeaderDelegate {
     func configInfoHeader(user: User?) {
         guard let user = user else { return }
         

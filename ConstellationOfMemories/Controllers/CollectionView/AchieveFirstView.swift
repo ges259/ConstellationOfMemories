@@ -18,15 +18,19 @@ final class AchieveFirstView: UIView {
     var backgroundData: BackgroundImg? {
         didSet {
             if let backgroundData = backgroundData {
-                var array1: [Int] = backgroundData.havedawn
+                let array1: [Int] = backgroundData.havedawn
                 let array2: [Int] = backgroundData.haveMorning
                 let array3: [Int] = backgroundData.haveSunset
                 let array4: [Int] = backgroundData.haveNight
                 
-                self.totalImageInt = array1 + array2 + array3 + array4
+                self.totalImageInt = (array1 + array2 + array3 + array4).shuffled()
+                
             }
         }
     }
+    
+    // MARK: - Fix
+//    var month: Int?
     
     var totalImageInt = [Int]()
     
@@ -111,7 +115,7 @@ final class AchieveFirstView: UIView {
 // MARK: - CollectionView
 extension AchieveFirstView: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 30
+        return self.totalImageInt.count
     }
 
     // Cell_For_Row_At
@@ -119,7 +123,10 @@ extension AchieveFirstView: UICollectionViewDelegate, UICollectionViewDataSource
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ReuseIdentifier.firstCollectionCell, for: indexPath) as! AchieveFirstCell
         
         
-        cell.haveImage.image = UIImage(named: "\(self.totalImageInt.randomElement() ?? 101)")
+        
+        
+        
+        cell.haveImage.image = UIImage(named: "\(self.totalImageInt[indexPath.row])")
         
         return cell
     }

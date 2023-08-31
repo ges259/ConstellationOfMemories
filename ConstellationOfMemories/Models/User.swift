@@ -10,10 +10,15 @@ struct User {
     let uid: String
     let fullName: String
     let email: String
-    // 글자 색상
-    let fontColor: Int
     // 알림 설정
     let noti: Int
+    
+    // 글자 색상
+    let dawnFont: Int
+    let morningFont: Int
+    let sunsetFont: Int
+    let nightFont: Int
+    
     // 배경 화면
     let dawn: String
     let morning: String
@@ -32,7 +37,11 @@ struct User {
         // info(알림)
         self.noti = dictionary[DBString.noti] as? Int ?? 0
         // font_Color
-        self.fontColor = dictionary[DBString.fontColor] as? Int ?? 1
+        self.dawnFont = dictionary[DBString.dawnFont] as? Int ?? -1
+        self.morningFont = dictionary[DBString.morningFont] as? Int ?? -2
+        self.sunsetFont = dictionary[DBString.sunsetFont] as? Int ?? -3
+        self.nightFont = dictionary[DBString.nightFont] as? Int ?? -4
+        
         // background_Image
         self.dawn = dictionary[DBString.dawn] as? String ?? "100"
         self.morning = dictionary[DBString.morning] as? String ?? "200"

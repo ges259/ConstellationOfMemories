@@ -328,6 +328,17 @@ extension HeaderView {
             
         case .shopDetail:
             self.mainHeaderDelegate?.handleDetailToShop()
+            break
+            
+        case .home:
+            // 버튼은 처음에 숨겨져 있음
+                // cell을 클릭하면 버튼이 생김
+            // 버튼을 누르면
+                // 업데이트
+            
+            
+            
+            break
         }
     }
     
@@ -487,7 +498,7 @@ extension HeaderView {
     
 // [Right_Button]
     // right 버튼 보이게 하기 + 이미지 바꾸기
-    private func rightButtonShow(_ imageString: imageString = .back) {
+    func rightButtonShow(_ imageString: imageString = .back) {
         self.rightButton.alpha = 0
         self.rightButton.setImage(.setImg(imageString), for: .normal)
         
@@ -496,7 +507,7 @@ extension HeaderView {
         }
     }
     // right 버튼 숨기기
-    private func rightButtonHide(completion: (() -> Void)? = nil ) {
+    func rightButtonHide(completion: (() -> Void)? = nil ) {
         UIView.animate(withDuration: self.animateTime) {
             self.rightButton.alpha = 0
         }

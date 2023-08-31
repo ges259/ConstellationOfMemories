@@ -26,6 +26,11 @@ final class HomeView: UIView {
     
     
     
+    // header_View
+    private let headerView = HeaderView.shared
+    
+    
+    
     // 서버에 저장되어 있는 user의 시간별 background_Image
     var imgString: [String] = ["blueSky"]
     
@@ -182,15 +187,19 @@ final class HomeView: UIView {
         let frame = CGRect(x: 0,
                            y: 305,
                            width: self.frame.width,
-                           height: self.frame.height - 305)
-        return HomeFirstView(frame: frame)
+                           height: self.frame.height - 455)
+        let view = HomeFirstView(frame: frame)
+            view.firstHomeDelegate = self
+        return view
     }()
     lazy var homeSecondCollection: HomeSecondView = {
         let frame = CGRect(x: self.frame.width,
                            y: 305,
                            width: self.frame.width,
-                           height: self.frame.height - 305)
-        return HomeSecondView(frame: frame)
+                           height: self.frame.height - 455)
+        let view = HomeSecondView(frame: frame)
+            view.secondHomeDelegate = self
+        return view
     }()
     
     
@@ -444,5 +453,41 @@ final class HomeView: UIView {
                 self.homeSecondCollection.frame.origin.x = 0
             }
         }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+// MARK: - Delegate
+extension HomeView: FirstHomeDelegate, SecondHomeDelegate {
+    func homeFirstTapped(index: Int) {
+        print("\(#function) ---- \(index)")
+        // right_Button 생기게 함
+        self.headerView.rightButtonShow(.check)
+            // right_Button을 누르면
+                // -> db에 저장
+                // -> user에 저장
+        
+        // 다른 segement를 누르면 초기화
+        
+    }
+    
+    func homeSecondTapped(index: Int) {
+        print("\(#function) ---- \(index)")
+        // right_Button 생기게 함
+            // right_Button을 누르면
+                // -> db에 저장
+                // -> user에 저장
+        
+        // 다른 segement를 누르면 초기화
     }
 }

@@ -42,11 +42,12 @@ final class AchieveView: UIView {
     // UISegmentedControl
     private lazy var segmentedControl: UISegmentedControl = {
         let control = UISegmentedControl(items: ["별자리 컬렉션", "일기 컬렉션"])
-            // segment 배경색 (비 선택창)
-            control.backgroundColor = .clear
+            
             // segement 선택창 배경 색
             control.setTitleTextAttributes([NSAttributedString.Key.font : UIFont.systemFont(ofSize: 14), NSAttributedString.Key.foregroundColor : UIColor.white], for: .normal)
-        
+            // segment 배경색 (비 선택창)
+            control.backgroundColor = .clear
+            // segment 배경색 (선택창)
             control.selectedSegmentTintColor = UIColor(white: 1, alpha: 0.3)
         
             control.selectedSegmentIndex = 0

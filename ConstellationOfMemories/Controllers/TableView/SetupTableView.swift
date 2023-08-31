@@ -44,7 +44,7 @@ final class SetupTableView: UIView {
                           forCellReuseIdentifier: ReuseIdentifier.setupTableViewCell)
         
             // setupTableview - headerView 추가
-        let header = UserInfoTableHeader(frame: headerFrame)
+        let header = SetupHeaderView(frame: headerFrame)
         self.setupinfoHeaderDelegate = header
             view.tableHeaderView = header
             view.isScrollEnabled = false

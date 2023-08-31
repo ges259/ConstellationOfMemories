@@ -31,14 +31,11 @@ final class MainVC: UIViewController {
         didSet { self.diaryTable.diaryData = diaryData }
     }
     // background
-    var backgroundImg: BackgroundImg? {
+    private var backgroundImg: BackgroundImg? {
         didSet {
             self.achieveView.backgroundData = backgroundImg
             self.homeView.backgroundData = backgroundImg
             self.shopView.backgroundData = backgroundImg
-            guard let backgroundImg = backgroundImg else { return }
-            dump(backgroundImg)
-            
         }
     }
     
@@ -49,9 +46,7 @@ final class MainVC: UIViewController {
     private var blackViewToggle: BlackViewToggle = .menu {
         didSet { print(blackViewToggle) }
     }
-    // Today_Diary_Toggle
-        // 오늘 일기를 썻는지
-    static var todayDiaryToggle: Bool = false
+    
     
     
     
@@ -69,6 +64,18 @@ final class MainVC: UIViewController {
     
     
     
+    
+    
+    
+    
+    // MARK: - Static_Properties
+    // Today_Diary_Toggle
+        // 오늘 일기를 썻는지
+    static var todayDiaryToggle: Bool = false
+    // Font
+    static var currentFont: Int = -1
+    // Background
+    static var currentBackground: String = "0"
     
     
     
@@ -361,10 +368,6 @@ final class MainVC: UIViewController {
     // MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        
-        
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {

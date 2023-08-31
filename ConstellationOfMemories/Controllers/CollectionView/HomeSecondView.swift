@@ -34,8 +34,9 @@ final class HomeSecondView: UIView {
     // 셀에 background_image를 표시하기 위한 데이터
     var backgroundData: BackgroundImg?
     
-    
-    
+    // Delegate
+    var secondHomeDelegate: SecondHomeDelegate?
+
     
     
     
@@ -169,7 +170,7 @@ extension HomeSecondView: UICollectionViewDelegate, UICollectionViewDataSource, 
 
     // Did_Select_Row_At
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print(indexPath.row)
+        self.secondHomeDelegate?.homeSecondTapped(index: indexPath.row)
     }
     
     

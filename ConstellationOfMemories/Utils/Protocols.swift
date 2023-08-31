@@ -88,12 +88,12 @@ protocol ShopMainDelegate {
 
 
 // MARK: - Home_View
-//protocol FirstHomeHeaderDelegate {
-//    func fontColor()
-//}
-//protocol SecondHomeHeaderDelegate {
-//    func backgroundColr()
-//}
+protocol FirstHomeDelegate {
+    func homeFirstTapped(index: Int)
+}
+protocol SecondHomeDelegate {
+    func homeSecondTapped(index: Int)
+}
 
 
 protocol SetupCellSetupDelegate {

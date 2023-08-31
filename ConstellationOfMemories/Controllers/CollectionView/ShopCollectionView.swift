@@ -15,18 +15,11 @@ final class ShopCollectionView: UIView {
         didSet {
             if let backgroundData = backgroundData {
                 self.dontHaveImage = backgroundData.dontHaveDawnImg()
-                
-                self.shopCollectionView.reloadData()
             }
         }
     }
     
-    private var dontHaveImage = [Int]() {
-        didSet {
-            print("dontHaveImage ---- \(dontHaveImage)")
-            print("dontHaveImage.count ----- \(dontHaveImage.count)")
-        }
-    }
+    private var dontHaveImage = [Int]()
     
     
     // Delegate
