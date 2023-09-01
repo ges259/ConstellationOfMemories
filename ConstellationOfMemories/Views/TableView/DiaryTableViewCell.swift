@@ -10,11 +10,8 @@ import UIKit
 final class DiaryTableViewCell: UITableViewCell {
     
     // MARK: - Properties
-    
     var diaryString: String? {
-        didSet {
-            self.stringLabel.text = diaryString
-        }
+        didSet { self.stringLabel.text = diaryString }
     }
     
     
@@ -32,10 +29,9 @@ final class DiaryTableViewCell: UITableViewCell {
     }()
     // 오늘의 추억 쓰러가기"
     private lazy var stringLabel: UILabel = {
-        return UILabel().labelConfig(labelText: "8월 6일에 떠올린 추억",
-                               LabelTextColor: .white,
-                               fontName: .bold,
-                               fontSize: 27)
+        return UILabel().labelConfig(LabelTextColor: .white,
+                                     fontName: .bold,
+                                     fontSize: 27)
     }()
     
     
@@ -64,7 +60,6 @@ final class DiaryTableViewCell: UITableViewCell {
         // selection Style
         self.selectionStyle = .none
         
-        
         // UI - AutoLayout
         self.addSubview(self.borderView)
         self.borderView.anchor(top: self.topAnchor, paddingTop: 5,
@@ -73,26 +68,4 @@ final class DiaryTableViewCell: UITableViewCell {
                                trailing: self.trailingAnchor, paddingTrailing: 20,
                                cornerRadius: 20)
     }
-    
-    
-//    private func configureStringLabel() {
-//
-//    }
-    
-    
-    
-    
-    
-    
-    // MARK: - Selectors
-    
-    
-    
-    
-    
-    
-    
-    // MARK: - API
-    
-    
 }

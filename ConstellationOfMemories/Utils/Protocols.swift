@@ -42,7 +42,7 @@ protocol HeaderMainDelegate {
     func handleHomeToMain()
     
     // [Detail]_Achieve -> Achieve
-    func handleDetailToAchieve()
+//    func handleDetailToAchieve()
     // [Detail]_Shop -> Shop
     func handleDetailToShop()
     
@@ -66,9 +66,9 @@ protocol FirstMainDelegate {
     func monthDiaryTapped()
 }
 
-protocol SecondMainDelegate {
-    func secondTapped()
-}
+//protocol SecondMainDelegate {
+//    func secondTapped()
+//}
 
 
 protocol DiaryTableMainDelegate {
@@ -83,7 +83,7 @@ protocol DiaryTableDiaryDelegate {
 
 
 protocol ShopMainDelegate {
-    func shopCellTapped()
+    func shopCellTapped(index: String)
 }
 
 
@@ -133,6 +133,11 @@ protocol DiaryVCMainDelegate {
 
 protocol SetupInfoHeaderDelegate {
     func configInfoHeader(user: User?)
+}
+
+
+protocol AchieveTableMianDelegate {
+    func achieveTableCellTapped()
 }
 
 

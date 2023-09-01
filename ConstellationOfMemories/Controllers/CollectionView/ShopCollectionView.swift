@@ -147,6 +147,6 @@ extension ShopCollectionView: UICollectionViewDelegate, UICollectionViewDataSour
     // MARK: - Did_Select_Row_At
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
-        self.mainShopDelgate?.shopCellTapped()
+        self.mainShopDelgate?.shopCellTapped(index: "\(self.dontHaveImage[indexPath.row])")
     }
 }

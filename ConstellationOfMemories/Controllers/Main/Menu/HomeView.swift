@@ -175,7 +175,7 @@ final class HomeView: UIView {
     
 // MARK: - Bottom
     lazy var bottomsegement: UISegmentedControl = {
-        let control = UISegmentedControl(items: ["글자 색상", "배경 화면"])
+        let control = UISegmentedControl(items: ["배경 화면", "글자 색상"])
             // segment 배경색 (비 선택창)
             control.backgroundColor = .clear
             // segement 선택창 배경 색

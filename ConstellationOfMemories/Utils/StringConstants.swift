@@ -18,7 +18,7 @@ struct ReuseIdentifier {
     
     
     static let collectionHeader: String = "collectionHeader"
-    static let firstCollectionCell: String = "firstCell"
+    static let achieveCell: String = "firstCell"
     static let secondCollectionCell: String = "secondCell"
     static let homeCollectionCell: String = "homeCell"
     static let shopCollectionCell: String = "shopCell"

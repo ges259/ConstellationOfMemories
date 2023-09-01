@@ -199,7 +199,7 @@ extension HeaderView {
             
             
         case .achieveDetailViewButton:
-            self.mainHeaderDelegate?.handleDetailToAchieve()
+//            self.mainHeaderDelegate?.handleDetailToAchieve()
             break
             
             
@@ -391,7 +391,7 @@ extension HeaderView {
             
             
         case .achievementVCButton:
-            self.headerTitle(title: "달성률")
+            self.headerTitle(title: "일기 모음")
             self.leftButtonAlpha(.back)
             self.rightButtonHide()
             break

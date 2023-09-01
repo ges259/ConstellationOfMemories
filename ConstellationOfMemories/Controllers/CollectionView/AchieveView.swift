@@ -1,19 +1,17 @@
 //
-//  FirstCollectionView.swift
+//  AchievementView.swift
 //  ConstellationOfMemories
 //
-//  Created by 계은성 on 2023/08/17.
+//  Created by 계은성 on 2023/08/12.
 //
 
 import UIKit
 
-final class AchieveFirstView: UIView {
+final class AchieveView: UIView {
     
     // MARK: - Properties
     // Delegate
-    var firstMainDelegate: FirstMainDelegate?
-    
-    
+    var achieveMainDelegate: FirstMainDelegate?
     
     var backgroundData: BackgroundImg? {
         didSet {
@@ -24,21 +22,37 @@ final class AchieveFirstView: UIView {
                 let array4: [Int] = backgroundData.haveNight
                 
                 self.totalImageInt = (array1 + array2 + array3 + array4).shuffled()
-                
             }
         }
     }
     
-    // MARK: - Fix
-//    var month: Int?
+    // 가지고 있지 않은 이미지 배열
+    private var totalImageInt = [Int]()
     
-    var totalImageInt = [Int]()
+    // 일기를 쓴 달 배열
+    var everyMonth: [String] = [] {
+        didSet {
+            self.achieveCollection.reloadData()
+        }
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     
     
     
     // MARK: - Layout
-    lazy var firstCollection: UICollectionView = {
+    private lazy var achieveCollection: UICollectionView = {
         let firstFrame = CGRect(x: 0,
                                 y: 0,
                                 width: self.frame.width,
@@ -60,9 +74,35 @@ final class AchieveFirstView: UIView {
             view.alwaysBounceVertical = true
             view.backgroundColor = .clear
         
-            view.register(AchieveFirstCell.self, forCellWithReuseIdentifier: ReuseIdentifier.firstCollectionCell)
+            view.register(AchieveCell.self, forCellWithReuseIdentifier: ReuseIdentifier.achieveCell)
         return view
     }()
+    
+    
+    
+    
+    
+    
+    
+
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     
     
@@ -74,8 +114,9 @@ final class AchieveFirstView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        self.ConfigureUI()
+        self.configureView()
     }
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -84,22 +125,23 @@ final class AchieveFirstView: UIView {
     
     
     
-    
     // MARK: - Helper Functions
-    private func ConfigureUI() {
-        self.addSubview(self.firstCollection)
+    
+    private func configureView() {
+        // background Color
+        self.backgroundColor = .clear
+        // alpha
+        self.alpha = 0
+        // firstCollection
+        self.addSubview(self.achieveCollection)
     }
     
-    func upCollectionView() {
+    
+    func resetAchieveView() {
         // item이 항상 맨위로 가도록 설정
-        self.firstCollection.scrollToItem(at: IndexPath(item: 0, section: 0),
-                                          at: .top, animated: true)
+        self.achieveCollection.scrollToItem(at: IndexPath(item: 0, section: 0),
+                                            at: .top, animated: true)
     }
-    
-    
-    // MARK: - API
-    
-    
 }
 
 
@@ -112,28 +154,46 @@ final class AchieveFirstView: UIView {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // MARK: - CollectionView
-extension AchieveFirstView: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+extension AchieveView: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    // item의 개수
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.totalImageInt.count
+        return self.everyMonth.count
     }
 
     // Cell_For_Row_At
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ReuseIdentifier.firstCollectionCell, for: indexPath) as! AchieveFirstCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ReuseIdentifier.achieveCell, for: indexPath) as! AchieveCell
         
+            cell.haveImage.image = UIImage(named: "\(self.totalImageInt[indexPath.row])")
         
-        
-        
-        
-        cell.haveImage.image = UIImage(named: "\(self.totalImageInt[indexPath.row])")
+        cell.monthString.text = "\(self.everyMonth[indexPath.row])월"
         
         return cell
     }
     
     // Did_Select_Row_At
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        self.firstMainDelegate?.monthDiaryTapped()
+        self.achieveMainDelegate?.monthDiaryTapped()
     }
     
     // 아이템의 크기 설정

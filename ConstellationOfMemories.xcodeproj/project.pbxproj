@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5F07745E2AA260C6005C2942 /* AchieveDiaryTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F07745D2AA260C6005C2942 /* AchieveDiaryTable.swift */; };
 		5F0BE8182A8664D40090AC1F /* SetupTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F0BE8172A8664D40090AC1F /* SetupTableViewCell.swift */; };
 		5F0CA46C2A9FE89F00177570 /* MyFontColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F0CA46B2A9FE89F00177570 /* MyFontColor.swift */; };
 		5F15D1AF2A812768005A00E1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F15D1AE2A812768005A00E1 /* AppDelegate.swift */; };
@@ -33,10 +34,7 @@
 		5F6D99F02A9FA9F70072E2FD /* DetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F6D99EF2A9FA9F70072E2FD /* DetailView.swift */; };
 		5F6D99F22A9FAA210072E2FD /* SetupHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F6D99F12A9FAA210072E2FD /* SetupHeaderView.swift */; };
 		5F6D99F42A9FAA370072E2FD /* LogoutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F6D99F32A9FAA370072E2FD /* LogoutView.swift */; };
-		5F8200BC2A8D3FEF0068345B /* AchieveFirstCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F8200BB2A8D3FEF0068345B /* AchieveFirstCell.swift */; };
-		5F8200BE2A8D5B380068345B /* AchieveSecondView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F8200BD2A8D5B380068345B /* AchieveSecondView.swift */; };
-		5F8200C02A8D5CBB0068345B /* AchieveFirstView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F8200BF2A8D5CBB0068345B /* AchieveFirstView.swift */; };
-		5F82C9252A852CDC00AAB0FA /* AchieveSecondCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F82C9242A852CDC00AAB0FA /* AchieveSecondCell.swift */; };
+		5F8200BC2A8D3FEF0068345B /* AchieveCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F8200BB2A8D3FEF0068345B /* AchieveCell.swift */; };
 		5FA855712A8FDB750020F8C4 /* SetupTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FA855702A8FDB750020F8C4 /* SetupTableView.swift */; };
 		5FA855732A8FE7AC0020F8C4 /* ShopCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FA855722A8FE7AC0020F8C4 /* ShopCollectionView.swift */; };
 		5FA855752A8FE8000020F8C4 /* ShopCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FA855742A8FE8000020F8C4 /* ShopCollectionCell.swift */; };
@@ -54,6 +52,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		5F07745D2AA260C6005C2942 /* AchieveDiaryTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AchieveDiaryTable.swift; sourceTree = "<group>"; };
 		5F0BE8172A8664D40090AC1F /* SetupTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupTableViewCell.swift; sourceTree = "<group>"; };
 		5F0CA46B2A9FE89F00177570 /* MyFontColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyFontColor.swift; sourceTree = "<group>"; };
 		5F15D1AB2A812768005A00E1 /* ConstellationOfMemories.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ConstellationOfMemories.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -82,10 +81,7 @@
 		5F6D99EF2A9FA9F70072E2FD /* DetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailView.swift; sourceTree = "<group>"; };
 		5F6D99F12A9FAA210072E2FD /* SetupHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupHeaderView.swift; sourceTree = "<group>"; };
 		5F6D99F32A9FAA370072E2FD /* LogoutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogoutView.swift; sourceTree = "<group>"; };
-		5F8200BB2A8D3FEF0068345B /* AchieveFirstCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AchieveFirstCell.swift; sourceTree = "<group>"; };
-		5F8200BD2A8D5B380068345B /* AchieveSecondView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AchieveSecondView.swift; sourceTree = "<group>"; };
-		5F8200BF2A8D5CBB0068345B /* AchieveFirstView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AchieveFirstView.swift; sourceTree = "<group>"; };
-		5F82C9242A852CDC00AAB0FA /* AchieveSecondCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AchieveSecondCell.swift; sourceTree = "<group>"; };
+		5F8200BB2A8D3FEF0068345B /* AchieveCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AchieveCell.swift; sourceTree = "<group>"; };
 		5FA855702A8FDB750020F8C4 /* SetupTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupTableView.swift; sourceTree = "<group>"; };
 		5FA855722A8FE7AC0020F8C4 /* ShopCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopCollectionView.swift; sourceTree = "<group>"; };
 		5FA855742A8FE8000020F8C4 /* ShopCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopCollectionCell.swift; sourceTree = "<group>"; };
@@ -117,6 +113,7 @@
 			isa = PBXGroup;
 			children = (
 				5F15D1C92A81330D005A00E1 /* MainVC.swift */,
+				5F6D99E92A9FA9250072E2FD /* MenuView.swift */,
 				5FFB1C4A2A9A7AF00044CDAE /* LaunchScreen.swift */,
 				5F15D1E22A817765005A00E1 /* HeaderView.swift */,
 				5F15D1DE2A815C0E005A00E1 /* DiaryVC.swift */,
@@ -214,8 +211,6 @@
 		5F6D99E82A9FA9120072E2FD /* Menu */ = {
 			isa = PBXGroup;
 			children = (
-				5F6D99E92A9FA9250072E2FD /* MenuView.swift */,
-				5F6D99EB2A9FA99E0072E2FD /* AchieveView.swift */,
 				5F6D99ED2A9FA9D60072E2FD /* HomeView.swift */,
 				5F6D99EF2A9FA9F70072E2FD /* DetailView.swift */,
 				5F6D99F12A9FAA210072E2FD /* SetupHeaderView.swift */,
@@ -228,11 +223,11 @@
 		5F726B932A8E9AA50039A20F /* CollectionView */ = {
 			isa = PBXGroup;
 			children = (
-				5F8200BF2A8D5CBB0068345B /* AchieveFirstView.swift */,
-				5F8200BD2A8D5B380068345B /* AchieveSecondView.swift */,
+				5F6D99EB2A9FA99E0072E2FD /* AchieveView.swift */,
 				5F2E70602A9D3B6300D0BFE0 /* HomeFirstView.swift */,
 				5F2E705C2A9D3A3500D0BFE0 /* HomeSecondView.swift */,
 				5FA855722A8FE7AC0020F8C4 /* ShopCollectionView.swift */,
+				5F07745D2AA260C6005C2942 /* AchieveDiaryTable.swift */,
 			);
 			path = CollectionView;
 			sourceTree = "<group>";
@@ -240,8 +235,7 @@
 		5F917AC52A8B8E2E00F8FC53 /* CollectionCell */ = {
 			isa = PBXGroup;
 			children = (
-				5F8200BB2A8D3FEF0068345B /* AchieveFirstCell.swift */,
-				5F82C9242A852CDC00AAB0FA /* AchieveSecondCell.swift */,
+				5F8200BB2A8D3FEF0068345B /* AchieveCell.swift */,
 				5F2E70622A9D3C0300D0BFE0 /* HomeFirstCell.swift */,
 				5F2E705E2A9D3B0200D0BFE0 /* HomeSecondCell.swift */,
 				5FA855742A8FE8000020F8C4 /* ShopCollectionCell.swift */,
@@ -355,11 +349,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				5F2E705D2A9D3A3500D0BFE0 /* HomeSecondView.swift in Sources */,
-				5F8200BC2A8D3FEF0068345B /* AchieveFirstCell.swift in Sources */,
+				5F8200BC2A8D3FEF0068345B /* AchieveCell.swift in Sources */,
 				5FCDDA402A8FAABE0040D126 /* DiaryTableView.swift in Sources */,
 				5F6D99EA2A9FA9250072E2FD /* MenuView.swift in Sources */,
 				5F15D1AF2A812768005A00E1 /* AppDelegate.swift in Sources */,
-				5F8200BE2A8D5B380068345B /* AchieveSecondView.swift in Sources */,
 				5F6D99F42A9FAA370072E2FD /* LogoutView.swift in Sources */,
 				5F6D99F02A9FA9F70072E2FD /* DetailView.swift in Sources */,
 				5FA855752A8FE8000020F8C4 /* ShopCollectionCell.swift in Sources */,
@@ -371,13 +364,12 @@
 				5F15D1D22A81390F005A00E1 /* DBString.swift in Sources */,
 				5FEB58F62A93A7B600F62205 /* LoginVC.swift in Sources */,
 				5F15D1D42A813917005A00E1 /* Protocols.swift in Sources */,
-				5F8200C02A8D5CBB0068345B /* AchieveFirstView.swift in Sources */,
 				5FFB1C4B2A9A7AF00044CDAE /* LaunchScreen.swift in Sources */,
 				5F15D1D02A813905005A00E1 /* StringConstants.swift in Sources */,
 				5FEB58F82A93A7D000F62205 /* SignUpVC.swift in Sources */,
 				5F2E70612A9D3B6300D0BFE0 /* HomeFirstView.swift in Sources */,
+				5F07745E2AA260C6005C2942 /* AchieveDiaryTable.swift in Sources */,
 				5F0BE8182A8664D40090AC1F /* SetupTableViewCell.swift in Sources */,
-				5F82C9252A852CDC00AAB0FA /* AchieveSecondCell.swift in Sources */,
 				5FEB58F12A9388DB00F62205 /* User.swift in Sources */,
 				5FA855712A8FDB750020F8C4 /* SetupTableView.swift in Sources */,
 				5F15D1CE2A813746005A00E1 /* Enum.swift in Sources */,
