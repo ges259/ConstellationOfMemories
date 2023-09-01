@@ -8,42 +8,42 @@
 import UIKit
 
 // MARK: - Date
-extension Date {
-    func timeAgoToDisplay() -> String {
-        let secondsAgo = Int(Date().timeIntervalSince(self))
-        
-        let minute: Int = 60
-        let hour: Int = 60 * minute
-        let day: Int = 24 * hour
-        let week: Int = 7 * day
-        let month: Int = 4 * week
-        
-        let quotient: Int // 몫
-        let unit: String
-        
-        if secondsAgo < minute {
-            quotient = secondsAgo
-            unit = "SECOND"
-        } else if secondsAgo < hour {
-            quotient = secondsAgo / minute
-            unit = "MIN"
-        } else if secondsAgo < day {
-            quotient = secondsAgo / hour
-            unit = "HOUR"
-        } else if secondsAgo < week {
-            quotient = secondsAgo / day
-            unit = "DAY"
-        } else if secondsAgo < month {
-            quotient = secondsAgo / week
-            unit = "WEEK"
-        } else {
-            quotient = secondsAgo / month
-            unit = "MONTH"
-        }
-        
-        return "\(quotient) \(unit)\(quotient == 1 ? "" : "S" ) AGO"
-    }
-}
+//extension Date {
+//    func timeAgoToDisplay() -> String {
+//        let secondsAgo = Int(Date().timeIntervalSince(self))
+//
+//        let minute: Int = 60
+//        let hour: Int = 60 * minute
+//        let day: Int = 24 * hour
+//        let week: Int = 7 * day
+//        let month: Int = 4 * week
+//
+//        let quotient: Int // 몫
+//        let unit: String
+//
+//        if secondsAgo < minute {
+//            quotient = secondsAgo
+//            unit = "SECOND"
+//        } else if secondsAgo < hour {
+//            quotient = secondsAgo / minute
+//            unit = "MIN"
+//        } else if secondsAgo < day {
+//            quotient = secondsAgo / hour
+//            unit = "HOUR"
+//        } else if secondsAgo < week {
+//            quotient = secondsAgo / day
+//            unit = "DAY"
+//        } else if secondsAgo < month {
+//            quotient = secondsAgo / week
+//            unit = "WEEK"
+//        } else {
+//            quotient = secondsAgo / month
+//            unit = "MONTH"
+//        }
+//
+//        return "\(quotient) \(unit)\(quotient == 1 ? "" : "S" ) AGO"
+//    }
+//}
 
 
 

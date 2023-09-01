@@ -22,7 +22,7 @@ final class HomeView: UIView {
         }
     }
     var backgroundData: BackgroundImg? {
-        didSet { self.homeSecondCollection.backgroundData = self.backgroundData }
+        didSet { self.homeFirstView.backgroundData = self.backgroundData }
     }
     
     
@@ -44,6 +44,8 @@ final class HomeView: UIView {
             self.homeImageChange(indexString: self.imgString[self.topSegementValue])
             // Font 바꾸기 (원상복구)
             self.homeFontChange(index: -1)
+            // right_Button 숨기기
+            self.headerView.rightButtonHide()
         }
     }
     
@@ -57,7 +59,7 @@ final class HomeView: UIView {
     var homeMainDelegate: HomeMainDelegate?
     
     
-
+    
     
     
     
@@ -74,7 +76,7 @@ final class HomeView: UIView {
     
 // MARK: - Header
     // UISegmentedControl
-    lazy var headerSegment: UISegmentedControl = {
+    private lazy var headerSegment: UISegmentedControl = {
         let control = UISegmentedControl(items: ["새벽", "아침", "노을", "밤"])
             // segment 배경색 (비 선택창)
             control.backgroundColor = .clear
@@ -190,22 +192,22 @@ final class HomeView: UIView {
     
     
     // MARK: - Collection_View
-    lazy var homeFirstcollection: HomeFirstView = {
-        let frame = CGRect(x: 0,
-                           y: 305,
-                           width: self.frame.width,
-                           height: self.frame.height - 455)
-        let view = HomeFirstView(frame: frame)
-            view.firstHomeDelegate = self
-        return view
-    }()
-    lazy var homeSecondCollection: HomeSecondView = {
+    private lazy var homeSecondView: HomeSecondView = {
         let frame = CGRect(x: self.frame.width,
                            y: 305,
                            width: self.frame.width,
                            height: self.frame.height - 455)
         let view = HomeSecondView(frame: frame)
             view.secondHomeDelegate = self
+        return view
+    }()
+    private lazy var homeFirstView: HomeFirstView = {
+        let frame = CGRect(x: 0,
+                           y: 305,
+                           width: self.frame.width,
+                           height: self.frame.height - 455)
+        let view = HomeFirstView(frame: frame)
+            view.firstHomeDelegate = self
         return view
     }()
     
@@ -261,9 +263,9 @@ final class HomeView: UIView {
                                    trailing: self.trailingAnchor,
                                    height: 40)
         // homeFirstcollection
-        self.addSubview(self.homeFirstcollection)
+        self.addSubview(self.homeSecondView)
         // homeSecondCollection
-        self.addSubview(self.homeSecondCollection)
+        self.addSubview(self.homeFirstView)
         
         
         
@@ -394,6 +396,9 @@ final class HomeView: UIView {
     
     
 // MARK: - Helper Functions
+    func resetHomeView() {
+        self.headerSegment.selectedSegmentIndex = 0
+    }
     
     
     
@@ -463,23 +468,23 @@ final class HomeView: UIView {
         switch segment.selectedSegmentIndex {
         case 0:
             self.topSegementValue = 0
-            self.homeSecondCollection.currentTime = .dawn
+            self.homeFirstView.currentTime = .dawn
             
         case 1:
             self.topSegementValue = 1
-            self.homeSecondCollection.currentTime = .morning
+            self.homeFirstView.currentTime = .morning
             
         case 2:
             self.topSegementValue = 2
-            self.homeSecondCollection.currentTime = .sunset
+            self.homeFirstView.currentTime = .sunset
             
         case 3:
             self.topSegementValue = 3
-            self.homeSecondCollection.currentTime = .night
+            self.homeFirstView.currentTime = .night
             
         default:
             self.topSegementValue = 0
-            self.homeSecondCollection.currentTime = .dawn
+            self.homeFirstView.currentTime = .dawn
         }
     }
     
@@ -488,22 +493,22 @@ final class HomeView: UIView {
         if segment.selectedSegmentIndex == 0 {
             UIView.animate(withDuration: 0.5) {
                 // first 보이게 하기
-                self.homeFirstcollection.alpha = 1
-                self.homeFirstcollection.frame.origin.x = 0
+                self.homeFirstView.alpha = 1
+                self.homeFirstView.frame.origin.x = 0
                 // second 숨기기
-                self.homeSecondCollection.alpha = 0
-                self.homeSecondCollection.frame.origin.x = self.frame.width
+                self.homeSecondView.alpha = 0
+                self.homeSecondView.frame.origin.x = self.frame.width
             }
             
             
         } else {
             UIView.animate(withDuration: 0.5) {
                 // first 숨기기
-                self.homeFirstcollection.alpha = 0
-                self.homeFirstcollection.frame.origin.x = -self.frame.width * 2
+                self.homeFirstView.alpha = 0
+                self.homeFirstView.frame.origin.x = -self.frame.width
                 // second 보이게 하기
-                self.homeSecondCollection.alpha = 1
-                self.homeSecondCollection.frame.origin.x = 0
+                self.homeSecondView.alpha = 1
+                self.homeSecondView.frame.origin.x = 0
             }
         }
     }
@@ -521,8 +526,8 @@ final class HomeView: UIView {
 
 
 // MARK: - Delegate
-extension HomeView: FirstHomeDelegate, SecondHomeDelegate {
-    func homeFirstTapped(index: Int) {
+extension HomeView: SecondHomeDelegate, FirstHomeDelegate {
+    func homeSecondTapped(index: Int) {
         // right_Button 생기게 함
         self.headerView.rightButtonConfig = .home
         self.headerView.rightButtonShow(.check)
@@ -530,7 +535,7 @@ extension HomeView: FirstHomeDelegate, SecondHomeDelegate {
         self.homeFontChange(index: index)
     }
     
-    func homeSecondTapped(index: Int, backgroundImg: BackgroundImg) {
+    func homeFirstTapped(index: Int, backgroundImg: BackgroundImg) {
         // right_Button 생기게 함
         self.headerView.rightButtonConfig = .home
         self.headerView.rightButtonShow(.check)
@@ -569,15 +574,20 @@ extension HomeView: HeaderHomeDelegate {
         default: currentTime = .dawn
         }
         
+        // DB_Update -Font & Image
         self.service.updateFontImage(currentTime: currentTime,
                                      font: String(self.temporaryFont),
                                      img: self.temporaryImg)
         
-        
-        // Font
-        MainVC.currentFont = fontColor(index: self.temporaryFont)
-        // Image
+        // Delegate
+        // Font_Change
+        self.homeMainDelegate?.fontChanged(currentTime: currentTime,
+                                           fontInt: self.temporaryFont)
+        // Image_Change
         self.homeMainDelegate?.imgChanged(currentTime: currentTime,
                                           img: self.temporaryImg)
+        
+        // right_Button 숨기기
+        self.headerView.rightButtonHide()
     }
 }

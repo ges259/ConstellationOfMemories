@@ -138,17 +138,17 @@ extension AchieveFirstView: UICollectionViewDelegate, UICollectionViewDataSource
     
     // 아이템의 크기 설정
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width = (self.frame.width - 40 - 5) / 2
+        let width = (self.frame.width - 40 - 10) / 2
         return CGSize(width: width, height: width)
     }
 
     // 상하 spacing
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return 5
+        return 10
     }
     
     // 좌우 spacing
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 0
+        return 10
     }
 }

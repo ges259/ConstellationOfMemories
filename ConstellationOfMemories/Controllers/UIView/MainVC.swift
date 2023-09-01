@@ -24,22 +24,11 @@ final class MainVC: UIViewController {
 
     // MARK: - Data
     // User
-    private var user: User? {
-        // launch_Screen의 이미지 바꾸기
-        didSet {
-            // launch_Screen - String 배열 바꾸기
-            self.settinglaunchImg()
-            
-            // backgroundImage 이미지 바꾸기
-            self.backgroundImage.image = UIImage(named: self.backgroundArray[3])
-        }
-    }
+    private var user: User?
     // Diary_Data
         // Diary_Table로   [Diary] 데이터 보내기
     private var diaryData: [Diary] = [] {
-        didSet {
-            self.diaryTable.diaryData = diaryData
-        }
+        didSet { self.diaryTable.diaryData = diaryData }
     }
     // background
     private var backgroundImg: BackgroundImg? {
@@ -60,20 +49,28 @@ final class MainVC: UIViewController {
     
     // MARK: - Time
     // 현재 시간( 새벽 / 아침 / 노을 / 밤 )
-    private var currentTime: CurrentTime?
+    private var currentTime: CurrentTime? {
+        didSet {
+            // MARK: - Fix
+            // Timer
+            
+        }
+    }
+    
+    
+    
     
     
     
     // MARK: - Static_Properties
     // Today_Diary_Toggle
         // 오늘 일기를 썻는지
-    static var todayDiaryToggle: Bool = false {
-        didSet {
-            print(MainVC.todayDiaryToggle)
-        }
-    }
+    static var todayDiaryToggle: Bool = false
     // Font
     static var currentFont: UIColor = fontColor(index: -1)
+    
+    
+    
     
     
     
@@ -189,7 +186,7 @@ final class MainVC: UIViewController {
                            height: self.height - 150)
         let view = AchieveView(frame: frame)
             view.firstCollection.firstMainDelegate = self
-            view.secondCollection.secondMainDelegate = self
+//            view.secondCollection.secondMainDelegate = self
         return view
     }()
     
@@ -513,6 +510,7 @@ final class MainVC: UIViewController {
         guard let hour = Int(dateFormatter.string(from: Date())),
               let user = self.user
         else { return }
+        
         if hour < 7 {
             self.backgroundArray = [user.morningImg, user.sunsetImg, user.nightImg, user.dawnImg]
             self.currentTime = .dawn
@@ -577,6 +575,13 @@ final class MainVC: UIViewController {
     private func fetchUserData() {
         self.service.fetchUserData() { user in
             self.user = user
+            // launch_Screen의 이미지 바꾸기
+                // launch_Screen - String 배열 바꾸기
+            self.settinglaunchImg()
+            
+            // MARK: - Fix
+            // backgroundImage 이미지 바꾸기
+            self.backgroundImage.image = UIImage(named: self.backgroundArray[3])
         }
     }
     
@@ -813,6 +818,8 @@ extension MainVC {
                 self.homeView.alpha = 0
 
             } completion: { _ in
+                // reset Home_View
+                self.homeView.resetHomeView()
                 // remove View
                 self.homeView.removeFromSuperview()
             }
@@ -1468,6 +1475,11 @@ extension MainVC: HomeMainDelegate {
     func imgChanged(currentTime: CurrentTime, img: String) {
         if self.currentTime == currentTime {
             self.backgroundImage.image = UIImage(named: img)
+        }
+    }
+    func fontChanged(currentTime: CurrentTime, fontInt: Int) {
+        if self.currentTime == currentTime {
+            MainVC.currentFont = fontColor(index: fontInt)
         }
     }
 }

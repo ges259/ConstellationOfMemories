@@ -88,11 +88,11 @@ protocol ShopMainDelegate {
 
 
 // MARK: - Home_View
-protocol FirstHomeDelegate {
-    func homeFirstTapped(index: Int)
-}
 protocol SecondHomeDelegate {
-    func homeSecondTapped(index: Int, backgroundImg: BackgroundImg)
+    func homeSecondTapped(index: Int)
+}
+protocol FirstHomeDelegate {
+    func homeFirstTapped(index: Int, backgroundImg: BackgroundImg)
 }
 protocol HeaderHomeDelegate {
     func checkButtonTapped()
@@ -100,6 +100,7 @@ protocol HeaderHomeDelegate {
 
 protocol HomeMainDelegate {
     func imgChanged(currentTime: CurrentTime, img: String)
+    func fontChanged(currentTime: CurrentTime, fontInt: Int)
 }
 
 

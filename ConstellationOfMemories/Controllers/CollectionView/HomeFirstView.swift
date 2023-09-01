@@ -1,5 +1,5 @@
 //
-//  HomeFirstCollection.swift
+//  HomeSecondCollection.swift
 //  ConstellationOfMemories
 //
 //  Created by 계은성 on 2023/08/29.
@@ -11,11 +11,50 @@ final class HomeFirstView: UIView {
     
     // MARK: - Properties
     
-//    var myFontColor = MyFontColor()
+    // home_Header의 segemet가 바뀌면 이 변수의 값이 바뀜
+        // dawn / morning / sunset / night
+    var currentTime: CurrentTime = .dawn {
+        didSet {
+            UIView.animate(withDuration: 0.2) {
+                self.firstCollection.alpha = 0
+                
+                
+            } completion: { _ in
+                self.firstCollection.reloadData()
+                
+                
+                UIView.animate(withDuration: 0.5) {
+                    self.firstCollection.alpha = 1
+                }
+            }
+        }
+    }
     
     
+    // 셀에 background_image를 표시하기 위한 데이터
+    var backgroundData: BackgroundImg? {
+        didSet {
+//            guard let backgroundData = self.backgroundData else { return }
+//
+//            self.secondDawn = backgroundData.havedawn
+//            self.secondMorning = backgroundData.haveMorning
+//            self.secondSunset = backgroundData.haveSunset
+//            self.secondNight = backgroundData.haveNight
+        }
+    }
+    
+//    private var secondDawn: [Int] = []
+//    private var secondMorning: [Int] = []
+//    private var secondSunset: [Int] = []
+//    private var secondNight: [Int] = []
+    
+    
+    
+    
+    
+    // Delegate
     var firstHomeDelegate: FirstHomeDelegate?
-    
+
     
     
     
@@ -82,6 +121,13 @@ final class HomeFirstView: UIView {
         self.firstCollection.scrollToItem(at: IndexPath(item: 0, section: 0),
                                           at: .top, animated: true)
     }
+    
+    
+    // MARK: - API
+    
+    
+    
+    
 }
 
 
@@ -97,39 +143,77 @@ final class HomeFirstView: UIView {
 // MARK: - CollectionView
 extension HomeFirstView: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return fontCount
+        switch self.currentTime {
+        case .dawn:
+            return self.backgroundData?.havedawn.count ?? 0
+            
+        case .morning:
+            return self.backgroundData?.haveMorning.count ?? 0
+            
+        case .sunset:
+            return self.backgroundData?.haveSunset.count ?? 0
+            
+        case .night:
+            return self.backgroundData?.haveNight.count ?? 0
+        }
     }
     
     // Cell_For_Row_At
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ReuseIdentifier.homeFirstCollection, for: indexPath) as! HomeFirstCell
         
-//            cell.backgroundColor = self.myFontColor.fontColor(index: indexPath.row)
-            cell.backgroundColor = fontColor(index: indexPath.row)
+        
+        if let backgroundData = backgroundData {
+            switch self.currentTime {
+            case .dawn:
+                cell.haveImage.image = UIImage(named: "\(backgroundData.havedawn[indexPath.row])")
+                break
+                
+            case .morning:
+                cell.haveImage.image = UIImage(named: "\(backgroundData.haveMorning[indexPath.row])")
+                break
+                
+            case .sunset:
+                cell.haveImage.image = UIImage(named: "\(backgroundData.haveSunset[indexPath.row])")
+                break
+                
+            case .night:
+                cell.haveImage.image = UIImage(named: "\(backgroundData.haveNight[indexPath.row])")
+                break
+            }
+        }
         return cell
     }
 
 
     // Did_Select_Row_At
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        self.firstHomeDelegate?.homeFirstTapped(index: indexPath.row)
+        
+
+        guard let backgroundData = self.backgroundData else { return }
+        
+        self.firstHomeDelegate?.homeFirstTapped(index: indexPath.row,
+                                                  backgroundImg: backgroundData)
     }
     
     
     // 아이템의 크기 설정
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width = (self.frame.width - 40) / 4
-        return CGSize(width: width, height: width)
+        // 좌우 패딩 30 = 60
+        // spacing = 30
+        let width = (self.frame.width - 8 - 40 - 1) / 3
+        let height = width / 10 * 16
+        return CGSize(width: width, height: height)
     }
 
     
     // 상하 spacing
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return 0
+        return 4
     }
     
     // 좌우 spacing
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 0
+        return 4
     }
 }

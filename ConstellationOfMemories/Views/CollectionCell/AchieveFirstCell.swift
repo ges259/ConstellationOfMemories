@@ -24,7 +24,8 @@ final class AchieveFirstCell: UICollectionViewCell {
         self.haveImage.anchor(top: self.topAnchor,
                               bottom: self.bottomAnchor,
                               leading: self.leadingAnchor,
-                              trailing: self.trailingAnchor)
+                              trailing: self.trailingAnchor,
+                              cornerRadius: 20)
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

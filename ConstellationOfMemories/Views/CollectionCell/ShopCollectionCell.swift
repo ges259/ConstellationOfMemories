@@ -26,7 +26,8 @@ final class ShopCollectionCell: UICollectionViewCell {
         self.haveImage.anchor(top: self.topAnchor,
                               bottom: self.bottomAnchor,
                               leading: self.leadingAnchor,
-                              trailing: self.trailingAnchor)
+                              trailing: self.trailingAnchor,
+                              cornerRadius: 10)
         
     }
     required init?(coder: NSCoder) {
