@@ -88,7 +88,7 @@ final class SetupTableviewCell: UITableViewCell {
                 // ON -> OFF
                 if self.cellButton.titleLabel?.text == "ON" {
                     print("ON")
-                    Service.shared.fetchInfo(on: false)
+                    Service.shared.updateInfo(on: false)
                     
                     self.cellButton.setTitle("OFF", for: .normal)
                     self.cellButton.backgroundColor = UIColor(white: 1, alpha: 0.3)
@@ -98,7 +98,7 @@ final class SetupTableviewCell: UITableViewCell {
                 // OFF -> ON
                 } else {
                     print("OFF")
-                    Service.shared.fetchInfo(on: true)
+                    Service.shared.updateInfo(on: true)
                     
                     self.cellButton.setTitle("ON", for: .normal)
                     self.cellButton.backgroundColor = UIColor(white: 1, alpha: 0.5)

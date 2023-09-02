@@ -193,7 +193,7 @@ extension AchieveView: UICollectionViewDelegate, UICollectionViewDataSource, UIC
     
     // Did_Select_Row_At
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        self.achieveMainDelegate?.monthDiaryTapped()
+        self.achieveMainDelegate?.monthDiaryTapped(month: self.everyMonth[indexPath.row])
     }
     
     // 아이템의 크기 설정

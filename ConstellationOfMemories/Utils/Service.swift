@@ -250,42 +250,6 @@ struct Service {
     
     
     
-    
-    
-    
-    
-    
-    
-
-    
-    
-    
-    // MARK: - Fetcch_Month
-    // 몇월이 있는지 (예시: 7월 8월 9월)
-    func fetchDiaryMonth(completion: @escaping ([String]) -> Void) {
-        
-        var monthArray = [String]()
-        
-        guard let uid = Auth.auth().currentUser?.uid else { return }
-        
-        Diary_REF.child(uid).observeSingleEvent(of: .value) { snapshot in
-            
-            guard let allObjeccts = snapshot.children.allObjects as? [DataSnapshot] else { return }
-            
-            allObjeccts.forEach { snapshot in
-                monthArray.append(snapshot.key)
-            }
-            completion(monthArray)
-        }
-    }
-    
-    
-    
-    
-    
-    
-    
-    
     // MARK: - Fetch_Diary_Data
     func fetchDiaryDatas(month: String, completion: @escaping ([Diary]?) -> Void) {
         var diaryDatas: [Diary] = []
@@ -345,9 +309,24 @@ struct Service {
     
     
     
-    
-    
-    
+    // MARK: - Fetcch_Month
+    // 몇월이 있는지 (예시: 7월 8월 9월)
+    func fetchDiaryMonth(completion: @escaping ([String]) -> Void) {
+        
+        var monthArray = [String]()
+        
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        
+        Diary_REF.child(uid).observeSingleEvent(of: .value) { snapshot in
+            
+            guard let allObjeccts = snapshot.children.allObjects as? [DataSnapshot] else { return }
+            
+            allObjeccts.forEach { snapshot in
+                monthArray.append(snapshot.key)
+            }
+            completion(monthArray)
+        }
+    }
     
     
     
@@ -363,7 +342,7 @@ struct Service {
     
     
     // MARK: - Info
-    func fetchInfo(on: Bool) {
+    func updateInfo(on: Bool) {
         // uid
         guard let uid = Auth.auth().currentUser?.uid else { return }
         // on이 true라면

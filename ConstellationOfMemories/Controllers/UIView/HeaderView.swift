@@ -22,7 +22,7 @@ final class HeaderView: UIView {
     var headerHomeDelegate: HeaderHomeDelegate?
     
     // animate_Time
-    private var animateTime: Double = 0.7
+    private var animateTime: Double = 0.5
 
     
     /*
@@ -189,7 +189,7 @@ extension HeaderView {
             break
             
             
-        case .achievementVCButton:
+        case .achieveViewButton:
             self.headerTitle(title: "추억 일기")
             self.leftButtonAlpha(.menu)
             // 뒤로가기
@@ -198,8 +198,15 @@ extension HeaderView {
             
             
             
-        case .achieveDetailViewButton:
+//        case .achieveDetailViewButton:
 //            self.mainHeaderDelegate?.handleDetailToAchieve()
+//            break
+        case .achieveTableButton:
+            self.mainHeaderDelegate?.achieveTableToAchieve()
+            break
+            
+        case .achieveDiaryVeiwButton:
+            self.mainHeaderDelegate?.achieveDiaryToTable()
             break
             
             
@@ -318,6 +325,9 @@ extension HeaderView {
             self.rightButtonConfig = .fixMode
             break
             
+        case .cannotBeModified:
+            break
+            
             
         case .coin:
             self.rightButtonShow(.coin)
@@ -325,11 +335,12 @@ extension HeaderView {
             break
             
             
-        case .achieveDetail:
-            break
+//        case .achieveDetail:
+//            break
             
             
         case .shopDetail:
+            print("Right_Button_Tapped ----- Shop_Detail")
             self.mainHeaderDelegate?.handleDetailToShop()
             break
             
@@ -390,15 +401,21 @@ extension HeaderView {
             
             
             
-        case .achievementVCButton:
+        case .achieveViewButton:
             self.headerTitle(title: "일기 모음")
             self.leftButtonAlpha(.back)
             self.rightButtonHide()
             break
-        case .achieveDetailViewButton:
-            self.rightButtonConfig = .achieveDetail
+//        case .achieveDetailViewButton:
+//            self.rightButtonConfig = .achieveDetail
+//            break
+        case .achieveTableButton:
+//            self.headerTitle(title: "월의 일기장")
             break
             
+            
+        case .achieveDiaryVeiwButton:
+            break
             
             
         case .homeViewButton:
@@ -410,8 +427,6 @@ extension HeaderView {
             
         // shopVC 화면들어오면 -> 버튼 이미지 및 텍스트 설정
         case .shopVCButton:
-            // titleLabel 바꾸기
-            self.headerTitle(title: "상점")
             self.leftButtonAlpha(.back)
             self.rightButtonHide()
             break
@@ -439,7 +454,6 @@ extension HeaderView {
         // DiaryVC 화면들어오면 -> 버튼 설정
         case .diaryViewButton:
             self.headerTitle(title: "일기 작성")
-            self.leftButtonAlpha(.back)
             // MainVC - tableToDiary()를 통해
                 // -> rightbuttonConfig를 설정
                 // -> 설정값에 따라 headerRightButtonTapped()를 하여 뷰를 바꿈

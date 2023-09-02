@@ -318,4 +318,8 @@ extension DiaryVC: DiaryTableDiaryDelegate {
         self.diaryTextView.text = "텍스트를 여기에 입력하세요."
         self.diaryData = nil
     }
+    
+    func achieveDiary(diaryString: String) {
+        self.diaryTextView.text = diaryString
+    }
 }

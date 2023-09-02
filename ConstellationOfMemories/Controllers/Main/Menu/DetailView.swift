@@ -63,7 +63,8 @@ final class DetailView: UIView {
         // background_Image
         self.addSubview(self.detailBackground)
         self.detailBackground.anchor(width: self.frame.width, height: self.frame.height,
-                                    centerX: self, centerY: self)
+                                     centerX: self, centerY: self,
+                                     cornerRadius: 12)
         // titleLabel
         self.addSubview(self.detailTitle)
         self.detailTitle.anchor(top: self.detailBackground.topAnchor, paddingTop: 20,

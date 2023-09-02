@@ -27,9 +27,7 @@ final class MainVC: UIViewController {
     private var user: User?
     // Diary_Data
         // Diary_Table로   [Diary] 데이터 보내기
-    private var diaryData: [Diary] = [] {
-        didSet { self.diaryTable.diaryData = diaryData }
-    }
+    private var diaryData: [Diary] = []
     // background
     private var backgroundImg: BackgroundImg? {
         didSet {
@@ -91,7 +89,7 @@ final class MainVC: UIViewController {
     private lazy var height = self.view.frame.height
     
     
-    
+    private var animateTime: Double = 0.5
     
     
     
@@ -196,19 +194,6 @@ final class MainVC: UIViewController {
         let view = AchieveView(frame: frame)
             view.achieveMainDelegate = self
 //            view.secondCollection.secondMainDelegate = self
-        return view
-    }()
-    
-    // MARK: - Achieve_Detail
-    private lazy var achieveDiaryTable: AchieveDiaryTable = {
-        let frame = CGRect(x: 150,
-                           y: 0,
-                           width: self.width,
-                           height: self.height)
-        let view = AchieveDiaryTable(frame: frame)
-        
-        view.achieveTableMainDelegate = self
-        
         return view
     }()
     
@@ -712,6 +697,8 @@ final class MainVC: UIViewController {
                 guard let datas = datas else { return }
                 // 오늘 일기를 썻는지 안 썻는지 확인
                 self.todayDiaryWritten(datas: datas)
+                
+                self.diaryTable.diaryData = self.diaryData
             }
         }
     }
@@ -817,12 +804,10 @@ extension MainVC {
         if show == true {
             self.view.addSubview(self.achieveView)
             
-            self.view.bringSubviewToFront(self.blackView)
-            
             // menuView 숨기기
             self.menuShow(false, itemTapped: true, footerHide: true)
             
-            UIView.animate(withDuration: 0.7) {
+            UIView.animate(withDuration: self.animateTime * 2) {
                 // achievementView 보이게 하기
                 self.achieveView.alpha = 1
             }
@@ -830,7 +815,7 @@ extension MainVC {
             
         // achievementView 숨기기 - CollectionView
         } else {
-            UIView.animate(withDuration: 0.7) {
+            UIView.animate(withDuration: self.animateTime) {
                 // footerButton 보이게 하기
                 self.footerButton.alpha = 1
                 // achievementView 숨기기
@@ -839,7 +824,7 @@ extension MainVC {
             } completion: { _ in
                 self.achieveView.resetAchieveView()
                 // remove View
-                self.blackView.removeFromSuperview()
+                
                 self.achieveView.removeFromSuperview()
             }
         }
@@ -848,25 +833,69 @@ extension MainVC {
     private func achieveTableShow(_ show: Bool) {
         // achieve_Table_View 보이게 하기
         if show == true {
-            self.view.addSubview(self.achieveDiaryTable)
+            self.view.addSubview(self.diaryTable)
+            self.view.addSubview(self.diaryView)
             
-            UIView.animate(withDuration: 0.7) {
-                <#code#>
+            UIView.animate(withDuration: self.animateTime) {
+                // achieve_View 숨기기
+                self.achieveView.alpha = 0
+                
+            } completion: { _ in
+                UIView.animate(withDuration: self.animateTime) {
+                    // diary_Table 보이게 하기
+                    self.diaryTable.alpha = 1
+                }
             }
+            
             
         // achieve_Table_View 숨기기
         } else {
-            
-            
-            
+            UIView.animate(withDuration: self.animateTime) {
+                // diary_Table 숨기기
+                self.diaryTable.alpha = 0
+                
+            } completion: { _ in
+                
+                UIView.animate(withDuration: self.animateTime) {
+                    // achieve_View 보이게 하기
+                    self.achieveView.alpha = 1
+                    
+                } completion: { _ in
+                    self.diaryTable.removeFromSuperview()
+                    self.diaryView.removeFromSuperview()
+                }
+            }
         }
     }
     
     
     
     // MARK: - Ahieve_Diary_View
-    private func ahieveDiaryViewShow(_ show: Bool) {
-        
+    private func achieveDiaryViewShow(_ show: Bool) {
+        if show == true {
+            UIView.animate(withDuration: self.animateTime) {
+                // diaryTable 숨기기
+                self.diaryTable.alpha = 0
+                
+            } completion: { _ in
+                UIView.animate(withDuration: self.animateTime) {
+                    // diaryView 보이게 하기
+                    self.diaryView.alpha = 1
+                }
+            }
+
+        } else {
+            UIView.animate(withDuration: self.animateTime) {
+                // diaryView 숨기기
+                self.diaryView.alpha = 0
+                
+            } completion: { _ in
+                UIView.animate(withDuration: self.animateTime) {
+                    // diaryTable 보이게 하기
+                    self.diaryTable.alpha = 1
+                }
+            }
+        }
     }
     
     
@@ -886,14 +915,14 @@ extension MainVC {
             // 메뉴바 숨기기
             self.menuShow(false, itemTapped: true, footerHide: true)
             
-            UIView.animate(withDuration: 0.7) {
+            UIView.animate(withDuration: self.animateTime * 2) {
                 // fontChangeHeader 테이블 보이게 하기
                 self.homeView.alpha = 1
             }
             
         // Home_View 숨기기
         } else {
-            UIView.animate(withDuration: 0.7) {
+            UIView.animate(withDuration: self.animateTime) {
                 // footerButton 보이게 하기
                 self.footerButton.alpha = 1
                 // fontChangeHeader 숨기기
@@ -921,7 +950,7 @@ extension MainVC {
             // menuView 숨기기
             self.menuShow(false, itemTapped: true, footerHide: true)
             
-            UIView.animate(withDuration: 0.7) {
+            UIView.animate(withDuration: self.animateTime * 2) {
                 // shopCollection 보이게 하기
                 self.shopView.alpha = 1
             }
@@ -929,7 +958,7 @@ extension MainVC {
 
         // achievementView 숨기기 - CollectionView
         } else {
-            UIView.animate(withDuration: 0.7) {
+            UIView.animate(withDuration: self.animateTime) {
                 // footerButton 보이게 하기
                 self.footerButton.alpha = 1
                 // shopCollection 숨기기
@@ -947,7 +976,7 @@ extension MainVC {
     private func detailViewShow(_ show: Bool) {
         // detailView 보이게 하기
         if show == true {
-            UIView.animate(withDuration: 0.7) {
+            UIView.animate(withDuration: self.animateTime) {
                 // detail_View에 집중할 수 있도록 숨기기
                 self.shopView.alpha = 0
                 // detailBlackView 보이게 하기
@@ -959,7 +988,7 @@ extension MainVC {
             
         // detailView 숨기기
         } else {
-            UIView.animate(withDuration: 0.7) {
+            UIView.animate(withDuration: self.animateTime) {
                 // shop_View 원상복구
                 self.shopView.alpha = 1
                 // detailBlackView 보이게 하기
@@ -981,7 +1010,7 @@ extension MainVC {
             // 메뉴뷰 숨기기
             self.menuShow(false, itemTapped: true, footerHide: true)
             
-            UIView.animate(withDuration: 0.7) {
+            UIView.animate(withDuration: self.animateTime * 2) {
                 // setupTable 보이게 하기
                 self.setupView.alpha = 1
             }
@@ -989,7 +1018,7 @@ extension MainVC {
             
         // setup테이블 숨기기
         } else {
-            UIView.animate(withDuration: 0.7) {
+            UIView.animate(withDuration: self.animateTime) {
                 // footerButton 보이게 하기
                 self.footerButton.alpha = 1
                 // setupTable 숨기기
@@ -1009,25 +1038,33 @@ extension MainVC {
         if show == true {
             self.view.addSubview(self.diaryTable)
             
-            UIView.animate(withDuration: 0.7) {
+            UIView.animate(withDuration: self.animateTime) {
                 // footerButton 숨기기
                 self.footerButton.alpha = 0
-                // diary테이블뷰 보이게 하기
-                self.diaryTable.alpha = 1
+                
+            } completion: { _ in
+                UIView.animate(withDuration: self.animateTime) {
+                    // diary테이블뷰 보이게 하기
+                    self.diaryTable.alpha = 1
+                }
             }
             
             
         // diary테이블뷰 숨기기
         } else {
-            UIView.animate(withDuration: 0.7) {
-                // footerButton 보이게 하기
-                self.footerButton.alpha = 1
+            UIView.animate(withDuration: self.animateTime) {
                 // diary테이블뷰 숨기기
                 self.diaryTable.alpha = 0
 
             } completion: { _ in
-                // remove View
-                self.diaryTable.removeFromSuperview()
+                UIView.animate(withDuration: self.animateTime) {
+                    // footerButton 보이게 하기
+                    self.footerButton.alpha = 1
+                    
+                } completion: { _ in
+                    // remove View
+                    self.diaryTable.removeFromSuperview()
+                }
             }
         }
     }
@@ -1040,12 +1077,12 @@ extension MainVC {
         if show == true {
             self.view.addSubview(self.diaryView)
 
-            UIView.animate(withDuration: 0.5) {
+            UIView.animate(withDuration: self.animateTime) {
                 // diary_table_View 숨기기
                 self.diaryTable.alpha = 0
                 
             } completion: { _ in
-                UIView.animate(withDuration: 0.5) {
+                UIView.animate(withDuration: self.animateTime) {
                     // diaryVC 보이게 하기
                     self.diaryView.alpha = 1
                 }
@@ -1054,12 +1091,12 @@ extension MainVC {
             
         // Diary_View 숨기기
         } else {
-            UIView.animate(withDuration: 0.5) {
+            UIView.animate(withDuration: self.animateTime) {
                 // diaryVC 숨기기
                 self.diaryView.alpha = 0
                 
             } completion: { _ in
-                UIView.animate(withDuration: 0.5) {
+                UIView.animate(withDuration: self.animateTime) {
                     // diary_table_View 보이게 하기
                     self.diaryTable.alpha = 1
                     
@@ -1114,7 +1151,7 @@ extension MainVC {
             self.view.addSubview(self.blackView)
             self.view.addSubview(self.logoutView)
             
-            UIView.animate(withDuration: 0.5) {
+            UIView.animate(withDuration: self.animateTime) {
                 // setup_View 숨기기
                 self.setupView.alpha = 0.3
                 // login_View 보이게 하기
@@ -1125,7 +1162,7 @@ extension MainVC {
             
             
         } else {
-            UIView.animate(withDuration: 0.5) {
+            UIView.animate(withDuration: self.animateTime) {
                 // setup_View 보이게 하기
                 self.setupView.alpha = 1
                 // login_View 숨기기
@@ -1195,7 +1232,7 @@ extension MainVC {
     // 뷰 전환
     // 왼쪽 버튼의 역할 및 이미지를 바꿈
     // 상황에 따라 필요한 토글 설정
-extension MainVC: LoginMainDelegate, HeaderMainDelegate, MenuMainDelegate, AchieveTableMianDelegate, FirstMainDelegate, DiaryTableMainDelegate, ShopMainDelegate, SetupMainDelegate, LogoutMainDelegate {
+extension MainVC: LoginMainDelegate, HeaderMainDelegate, MenuMainDelegate, FirstMainDelegate, DiaryTableMainDelegate, ShopMainDelegate, SetupMainDelegate, LogoutMainDelegate {
     
     // MARK: - Menu
 // [Left_Button]
@@ -1226,7 +1263,7 @@ extension MainVC: LoginMainDelegate, HeaderMainDelegate, MenuMainDelegate, Achie
             self.achieveView.everyMonth = months
         })
         // 버튼의 이미지 + 역할을 바꿈
-        self.headerView.buttonConfig = .achievementVCButton
+        self.headerView.buttonConfig = .achieveViewButton
         // achievement_View_보이게 하기
         self.achievementViewShow(true)
     }
@@ -1242,21 +1279,57 @@ extension MainVC: LoginMainDelegate, HeaderMainDelegate, MenuMainDelegate, Achie
     
     
     // MARK: - Achieve_Dairy_Table
-    func monthDiaryTapped() {
-        print(#function)
+// [Collection_Cell]
+    // Achieve_View -> Achieve_Table
+    func monthDiaryTapped(month: String) {
+        self.diaryTable.diaryTableEnum = .achieve
         
-        
-        
+        self.service.fetchDiaryDatas(month: month) { datas in
+            if let datas = datas { self.diaryTable.diaryData = datas }
+            // 버튼의 역할을 바꿈
+            self.headerView.buttonConfig = .achieveTableButton
+            self.headerView.headerTitle(title: "\(month)월의 일기장")
+            // achieve_Table 보이게 하기
+            self.achieveTableShow(true)
+        }
+    }
+// [Left_Button]
+    // Achieve_Table -> Achieve_View
+    func achieveTableToAchieve() {
+        // 버튼의 역할을 바꿈
+        self.headerView.buttonConfig = .achieveViewButton
+        // achieve_Table 보이게 하기
+        self.achieveTableShow(false)
     }
     
     
     
     
-    // MARK: - Achieve_Table
-    func achieveTableCellTapped() {
-        print(#function)
-    }
     
+    
+    
+    // MARK: - Achieve_Diary_View
+// [Table_Cell]
+    // Achieve_Diary_TAble -> Diary_View
+    func achieveDiaryView(month: String, day: String) {
+        self.headerView.headerTitle(title: "\(month)월 \(day)일의 일기장")
+        // 버튼의 역할 바꾸기
+        self.headerView.buttonConfig = .achieveDiaryVeiwButton
+        // achieve_Diary_View 숨기기
+        self.achieveDiaryViewShow(true)
+    }
+// [Left_Button]
+    // Achieve_Diary_View -> Achieve_Diary_Table
+    func achieveDiaryToTable() {
+        // MARK: - Fix
+        // 이거보다 더 좋은 방법이 있지 않을까?????
+        let month = self.diaryTable.diaryData[0].month
+        self.headerView.headerTitle(title: "\(month)월의 일기장")
+        // 버튼의 역할 바꾸기
+        self.headerView.buttonConfig = .achieveTableButton
+        // achieve_Diary_View 숨기기
+        self.achieveDiaryViewShow(false)
+    }
     
     
     
@@ -1299,6 +1372,8 @@ extension MainVC: LoginMainDelegate, HeaderMainDelegate, MenuMainDelegate, Achie
 // [Left_Button]
     // ShopVC -> MainVC
     func handleShopToMain() {
+        // titleLabel 바꾸기
+        self.headerView.headerTitle(title: "상점")
         // 버튼의 이미지 + 역할을 바꿈
         self.headerView.buttonConfig = .mainViewButton
         // shop_View_숨기기
@@ -1357,6 +1432,10 @@ extension MainVC: LoginMainDelegate, HeaderMainDelegate, MenuMainDelegate, Achie
 // [Footer_Button]
     // MainVC -> Diary_Table
     @objc private func starButtonTapped() {
+        // diary_Toggle을 바꿈
+        self.diaryTable.diaryTableEnum = .dirayTable
+        // diaryData를 옮기기
+        self.diaryTable.diaryData = self.diaryData
         // 버튼의 이미지 바꾸기
             // header에서 바꾸면 diaryVC -> Diary_Table로 이동할 때도 애니메이션이 작동하므로 여기서 설정
         self.headerView.leftButtonAlpha(.back)
@@ -1379,7 +1458,7 @@ extension MainVC: LoginMainDelegate, HeaderMainDelegate, MenuMainDelegate, Achie
     
     
     
-    // MARK: - DiaryVC
+    // MARK: - DiaryView
 // [Cell]
     // Diary_Table -> DiaryVC
     func handleTableToDiaryVC() {
@@ -1428,7 +1507,7 @@ extension MainVC: LoginMainDelegate, HeaderMainDelegate, MenuMainDelegate, Achie
             
             
         case .achieve:
-            self.headerView.buttonConfig = .achievementVCButton
+            self.headerView.buttonConfig = .achieveViewButton
 //            self.achieveDetailHideOrShow(show: false)
             break
             

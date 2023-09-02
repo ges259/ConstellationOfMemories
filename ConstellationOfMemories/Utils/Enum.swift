@@ -18,37 +18,48 @@ enum FontStyle {
 // Header
 enum LeftBtnTapImgChange {
     case menuViewButton
+    
     case mainViewButton
+    
     case diaryTableViewButton
     case diaryViewButton
+    
     case homeViewButton
+    
+// [Achieve]
+    case achieveViewButton
+    case achieveTableButton
+    case achieveDiaryVeiwButton
+// [Shop]
     case shopVCButton
-    case achieveDetailViewButton
     case shopDetailViewButton
+// [Setup]
     case setupVCButton
     case logoutSetupButton
-    case achievementVCButton
+    
 }
 
 enum RightBtnTapImgChange {
     case fixMode
     case saveMode
+    case cannotBeModified
+    
     case coin
-    case achieveDetail
+//    case achieveDetail
     case shopDetail
     case home
 }
 // Table_View
-enum TableViewEnum {
-    case diary
-    case setup
-}
+//enum TableViewEnum {
+//    case diary
+//    case setup
+//}
 
 // Collection_View
-enum SegementToggle {
-    case home
-    case achieve
-}
+//enum SegementToggle {
+//    case home
+//    case achieve
+//}
 
 enum imageString: CustomStringConvertible {
     case back
@@ -113,4 +124,9 @@ enum SetupCelltitle: CustomStringConvertible {
         case .logout: return "로그아웃"
         }
     }
+}
+
+enum DiaryTableEnum {
+    case achieve
+    case dirayTable
 }
