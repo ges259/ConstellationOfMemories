@@ -15,8 +15,6 @@ final class MainVC: UIViewController {
     
     
     // MARK: - Singleton
-    // header View 싱글톤
-    private let headerView: HeaderView = HeaderView.shared
     // Service 싱글톤
     private let service = Service.shared
     
@@ -171,6 +169,17 @@ final class MainVC: UIViewController {
     
     
     
+    // MARK: - Header_View
+    private lazy var headerView: HeaderView = {
+        let frame = CGRect(x: 0,
+                           y: 0,
+                           width: self.width,
+                           height: 150)
+        return HeaderView(frame: frame)
+    }()
+    
+    
+    
     // MARK: - Menu
     private lazy var menuView: MenuVC = {
         let frame = CGRect(x: -82,
@@ -185,7 +194,6 @@ final class MainVC: UIViewController {
     
     
     // MARK: - Achievement
-        // 상점 뷰 및 achivementVC
     private lazy var achieveView: AchieveView = {
         let frame = CGRect(x: 0,
                            y: 150,
@@ -193,7 +201,6 @@ final class MainVC: UIViewController {
                            height: self.height - 150)
         let view = AchieveView(frame: frame)
             view.achieveMainDelegate = self
-//            view.secondCollection.secondMainDelegate = self
         return view
     }()
     
@@ -207,6 +214,7 @@ final class MainVC: UIViewController {
                                  height: self.height)
         let view = HomeView(frame: headerFrame)
             view.homeMainDelegate = self
+            view.homeHeaderDelegaet = self.headerView
         return  view
     }()
     
@@ -253,7 +261,7 @@ final class MainVC: UIViewController {
                            width: self.width,
                            height: self.height - 150)
         let view = DiaryTableView(frame: frame)
-            view.mainDiaryTableDelegate = self
+            view.diaryTableMainDelegate = self
             view.diaryTableDiaryDelegate = diaryView
         return view
     }()
@@ -478,6 +486,8 @@ final class MainVC: UIViewController {
         }
     }
     
+    
+    
     // MARK: - launch_Image
     private func settinglaunchImg() {
         guard let hour = Int(self.todayArray[2]),
@@ -540,7 +550,6 @@ final class MainVC: UIViewController {
     private func checkLogin() {
         // user가 있다면 -> MainVC 로 이동
         if Auth.auth().currentUser?.uid != nil {
-            print("login")
             // header 및 footer_Button 구현
             self.launchScreen { self.configureMainVC() }
             // 시간 업데이트
@@ -552,11 +561,8 @@ final class MainVC: UIViewController {
             
             
         // user가 없다면 -> Login_View 로 이동
-        } else {
-            print("user is nil")
             // Login_View 보이게 하기
-            self.launchScreen { self.loginViewShow(true) }
-        }
+        } else { self.launchScreen { self.loginViewShow(true) } }
     }
     
     
@@ -586,8 +592,6 @@ final class MainVC: UIViewController {
     private func todayDiaryWritten(datas: [Diary]) {
         // First_Day
         guard let diaryfirstDay = datas.first?.day else { return }
-        // Last_Day
-//        guard let diaryLastDay = datas.last?.day else { return }
         
         // todayDairyToggle 설정
             // Today와 Last_Day를 비교
@@ -596,7 +600,6 @@ final class MainVC: UIViewController {
         MainVC.todayDiaryToggle = self.todayArray[1] == diaryfirstDay
             ? true
             : false
-        
         // Diary_Data에 데이터 저장
         self.diaryData = datas
     }
@@ -610,16 +613,16 @@ final class MainVC: UIViewController {
         self.headerView.mainHeaderDelegate = self
         self.headerView.diaryHeaderDelegate = self.diaryView
         self.headerView.headerHomeDelegate = self.homeView
-        self.headerView.alpha = 0
-        self.headerView.frame = CGRect(x: 0,
-                                       y: 0,
-                                       width: self.width,
-                                       height: 150)
+        
+        
+        
         // footer_Button
         self.view.addSubview(self.footerButton)
-        self.footerButton.alpha = 0
         self.footerButton.anchor(bottom: self.view.safeAreaLayoutGuide.bottomAnchor, paddingBottom: 10,
                                  centerX: self.view)
+        
+        
+        
         // Main_View_Layout 보이게 하기
         UIView.animate(withDuration: 1) {
             self.headerView.alpha = 1
@@ -807,7 +810,7 @@ extension MainVC {
             // menuView 숨기기
             self.menuShow(false, itemTapped: true, footerHide: true)
             
-            UIView.animate(withDuration: self.animateTime * 2) {
+            UIView.animate(withDuration: self.animateTime) {
                 // achievementView 보이게 하기
                 self.achieveView.alpha = 1
             }
@@ -1461,7 +1464,8 @@ extension MainVC: LoginMainDelegate, HeaderMainDelegate, MenuMainDelegate, First
     // MARK: - DiaryView
 // [Cell]
     // Diary_Table -> DiaryVC
-    func handleTableToDiaryVC() {
+    func handleTableToDiaryVC(rightBtnConfig: RightBtnTapImgChange) {
+        self.headerView.rightButtonConfig = rightBtnConfig
         // 버튼의 이미지 + 역할을 바꿈 (위에서 바꾼 Toggle을 통해 right버튼도 바뀜)
         self.headerView.buttonConfig = .diaryViewButton
         // diary_View_보이게 하기

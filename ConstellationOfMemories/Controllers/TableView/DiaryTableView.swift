@@ -10,35 +10,27 @@ import UIKit
 final class DiaryTableView: UIView {
     
     // MARK: - Properties
-    // header View 싱글톤
-    private let headerView: HeaderView = HeaderView.shared
-    
+// [Delegate]
+    // DiaryTable_Diary_Delegate
     var diaryTableDiaryDelegate: DiaryTableDiaryDelegate?
-    
-    var mainDiaryTableDelegate: DiaryTableMainDelegate?
+    // DiaryTable_Main_Delegate
+    var diaryTableMainDelegate: DiaryTableMainDelegate?
     
     
     
     
     
 // [Data]
-    // coreData를 담을 배열 생성
     var diaryData: [Diary] = [] {
         // table_View_Reload
-        didSet { self.diaryTableView.reloadData()
-            dump(diaryData)
-        }
+        didSet { self.diaryTableView.reloadData() }
     }
     
     
     
 // [Toggle]
     var diaryTableEnum: DiaryTableEnum = .dirayTable {
-        didSet {
-            print(diaryTableEnum)
-            self.diaryTableView.reloadData()
-            
-        }
+        didSet { self.diaryTableView.reloadData() }
     }
     
     
@@ -195,15 +187,17 @@ extension DiaryTableView: UITableViewDelegate, UITableViewDataSource {
                 if MainVC.todayDiaryToggle == false {
 
                     self.diaryTableDiaryDelegate?.todayDiaryFalse()
-                    // fix모드로 diaryVC진입
-                    self.headerView.rightButtonConfig = .fixMode
+                    // 뷰 전환
+                        // dairy_Table -> DiaryVC(fixMode)
+                    self.diaryTableMainDelegate?.handleTableToDiaryVC(rightBtnConfig: .fixMode)
 
                 // 오늘 일기를 적었다면
                 } else {
-                    // save모드로 diaryVC진입
-                    self.headerView.rightButtonConfig = .saveMode
                     // DiaryVC로 데이터 보내기
                     self.diaryTableDiaryDelegate?.todayDiaryTrue(diaryData: self.diaryData[indexPath.row])
+                    // 뷰 전환
+                        // dairy_Table -> DiaryVC(.saveMode)
+                    self.diaryTableMainDelegate?.handleTableToDiaryVC(rightBtnConfig: .saveMode)
                 }
                 
 
@@ -218,13 +212,11 @@ extension DiaryTableView: UITableViewDelegate, UITableViewDataSource {
                 } else {
                     self.diaryTableDiaryDelegate?.todayDiaryTrue(diaryData: self.diaryData[indexPath.row])
                 }
-                
-                // save모드로 diaryVC진입
-                self.headerView.rightButtonConfig = .cannotBeModified
+                // 뷰 전환
+                    // dairy_Table -> DiaryVC(.cannotBeModified)
+                self.diaryTableMainDelegate?.handleTableToDiaryVC(rightBtnConfig: .cannotBeModified)
             }
-            // 뷰 전환
-                // dairy_Table -> DiaryVC
-            self.mainDiaryTableDelegate?.handleTableToDiaryVC()
+            
             
             
         // Achieve_Table_View
@@ -233,7 +225,7 @@ extension DiaryTableView: UITableViewDelegate, UITableViewDataSource {
             self.diaryTableDiaryDelegate?.achieveDiary(diaryString: self.diaryData[indexPath.row].diaryText)
             
             // 뷰 전환
-            self.mainDiaryTableDelegate?.achieveDiaryView(month: self.diaryData[indexPath.row].month, day: self.diaryData[indexPath.row].day)
+            self.diaryTableMainDelegate?.achieveDiaryView(month: self.diaryData[indexPath.row].month, day: self.diaryData[indexPath.row].day)
         }
     }
 }

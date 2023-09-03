@@ -11,8 +11,6 @@ import FirebaseAuth
 final class DiaryVC: UIView {
     
     // MARK: - Properties
-    // 헤더뷰 싱글톤
-    private let headerView = HeaderView.shared
     // service 싱글톤
     private let service: Service = Service.shared
     

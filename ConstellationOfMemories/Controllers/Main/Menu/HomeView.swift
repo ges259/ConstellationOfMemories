@@ -11,6 +11,7 @@ import FirebaseAuth
 final class HomeView: UIView {
     
     // MARK: - Properties
+// [DB_Data]
     var user : User? {
         didSet {
             guard let user = self.user else { return }
@@ -26,11 +27,10 @@ final class HomeView: UIView {
     }
     
     
-    
-    // header_View
-    private let headerView = HeaderView.shared
-    
+// [Singleton]
     private let service = Service.shared
+    
+    
     
     // 서버에 저장되어 있는 user의 시간별 background_Image
     private var imgString: [String] = ["0"]
@@ -45,7 +45,7 @@ final class HomeView: UIView {
             // Font 바꾸기 (원상복구)
             self.homeFontChange(index: -1)
             // right_Button 숨기기
-            self.headerView.rightButtonHide()
+            self.homeHeaderDelegaet?.hideRightBtn()
         }
     }
     
@@ -55,11 +55,11 @@ final class HomeView: UIView {
 
     
     
-    // delegate
+// [Delegate]
+    // Home_Main_Delegate
     var homeMainDelegate: HomeMainDelegate?
-    
-    
-    
+    // home_HeaderView_Delegate
+    var homeHeaderDelegaet: homeHeaderViewDelegate?
     
     
     
@@ -86,7 +86,7 @@ final class HomeView: UIView {
             control.selectedSegmentTintColor = UIColor(white: 1, alpha: 0.3)
         
             control.selectedSegmentIndex = 0
-            control.addTarget(self, action: #selector(valueChanged(segment:)), for: .valueChanged)
+            control.addTarget(self, action: #selector(self.valueChanged(segment:)), for: .valueChanged)
             
         return control
     }()
@@ -184,7 +184,7 @@ final class HomeView: UIView {
             control.selectedSegmentTintColor = UIColor(white: 1, alpha: 0.3)
         
             control.selectedSegmentIndex = 0
-            control.addTarget(self, action: #selector(homeSegmentedChanged(segment:)), for: .valueChanged)
+            control.addTarget(self, action: #selector(self.homeSegmentedChanged(segment:)), for: .valueChanged)
             
         return control
     }()
@@ -528,17 +528,16 @@ final class HomeView: UIView {
 // MARK: - Delegate
 extension HomeView: SecondHomeDelegate, FirstHomeDelegate {
     func homeSecondTapped(index: Int) {
+        // MARK: - Fix
         // right_Button 생기게 함
-        self.headerView.rightButtonConfig = .home
-        self.headerView.rightButtonShow(.check)
+        self.homeHeaderDelegaet?.showCheckRightBtn()
         // 폰트 바꾸기
         self.homeFontChange(index: index)
     }
     
     func homeFirstTapped(index: Int, backgroundImg: BackgroundImg) {
         // right_Button 생기게 함
-        self.headerView.rightButtonConfig = .home
-        self.headerView.rightButtonShow(.check)
+        self.homeHeaderDelegaet?.showCheckRightBtn()
         
         // String
         var indexString: String = ""
@@ -586,8 +585,7 @@ extension HomeView: HeaderHomeDelegate {
         // Image_Change
         self.homeMainDelegate?.imgChanged(currentTime: currentTime,
                                           img: self.temporaryImg)
-        
         // right_Button 숨기기
-        self.headerView.rightButtonHide()
+        self.homeHeaderDelegaet?.hideRightBtn()
     }
 }

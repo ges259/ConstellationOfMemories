@@ -76,7 +76,7 @@ protocol FirstMainDelegate {
 
 
 protocol DiaryTableMainDelegate {
-    func handleTableToDiaryVC()
+    func handleTableToDiaryVC(rightBtnConfig: RightBtnTapImgChange)
     // Achieve -> Diary_View
     func achieveDiaryView(month: String, day: String)
 }
@@ -150,3 +150,7 @@ protocol SetupInfoHeaderDelegate {
 
 
 
+protocol homeHeaderViewDelegate {
+    func showCheckRightBtn()
+    func hideRightBtn()
+}

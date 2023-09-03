@@ -11,7 +11,7 @@ final class HeaderView: UIView {
     
     // MARK: - Properties
     // 싱글톤
-    static let shared = HeaderView()
+//    static let shared = HeaderView()
     
     
     // MainVC
@@ -124,7 +124,7 @@ final class HeaderView: UIView {
     // MARK: - HelperFunctions
     private func configureHeaderView() {
         // background Color
-        self.backgroundColor = .clear
+        self.alpha = 0
         // UI - AutoLayout
         // titleLabel
         self.addSubview(self.titleLabel)
@@ -529,6 +529,7 @@ extension HeaderView {
             self.rightButton.alpha = 0
         }
     }
+// [Title_Text]
     // header 버튼 텍스트 바꾸기
     func headerTitle(title: String) {
         UIView.animate(withDuration: self.animateTime) {
@@ -541,5 +542,19 @@ extension HeaderView {
                 self.titleLabel.alpha = 1
             }
         }
+    }
+}
+
+
+
+
+extension HeaderView: homeHeaderViewDelegate {
+    func showCheckRightBtn() {
+        self.rightButtonConfig = .home
+        self.rightButtonShow(.check)
+    }
+    
+    func hideRightBtn() {
+        self.rightButtonHide()
     }
 }
