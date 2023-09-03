@@ -19,6 +19,17 @@ final class SetupTableviewCell: UITableViewCell {
     
     
     
+    var fontColor: UIColor? {
+        didSet {
+            if let fontColor = self.fontColor {
+                self.titleLabel.textColor = fontColor
+                self.cellButton.tintColor = fontColor
+                self.cellButton.setTitleColor(fontColor, for: .normal)
+            }
+        }
+    }
+    
+    
     
     // MARK: - Layout
     lazy var titleLabel: UILabel = {

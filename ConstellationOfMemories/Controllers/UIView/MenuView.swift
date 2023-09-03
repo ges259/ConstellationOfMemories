@@ -105,6 +105,16 @@ final class MenuVC: UIView {
     }
     
     
+    // MARK: - Font_Color
+    func menuColor(_ color: UIColor) {
+        self.achievementButton.tintColor = color
+        self.homeButton.tintColor = color
+        self.shopButton.tintColor = color
+        self.setupButton.tintColor = color
+    }
+    
+    
+    
     
     // MARK: - Selectors
     @objc private func achievementButtonTapped() {

@@ -9,6 +9,18 @@ import UIKit
 
 final class SetupHeaderView: UIView {
     
+    // MARK: - Properties
+    var fontColor: UIColor? {
+        didSet {
+            if let color = self.fontColor {
+                self.profileView.textColor = color
+                self.fullNameLabel.textColor = color
+                self.emailLabel.textColor = color
+            }
+        }
+    }
+    
+    
     // MARK: - View
     private lazy var profileView: UILabel = {
         return UILabel().labelConfig(LabelTextColor: .white,

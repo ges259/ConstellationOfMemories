@@ -78,4 +78,12 @@ final class DetailView: UIView {
         self.footerButton.anchor(bottom: self.detailBackground.bottomAnchor, paddingBottom: 20,
                                  centerX: self)
     }
+    
+    
+    // MARK: - Font_Color
+    func detailColor(_ color: UIColor) {
+        self.detailTitle.textColor = color
+        self.menuButton.tintColor = color
+        self.footerButton.tintColor = color
+    }
 }

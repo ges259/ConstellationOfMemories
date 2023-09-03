@@ -21,6 +21,25 @@ final class SetupTableView: UIView {
     var setupinfoHeaderDelegate: SetupInfoHeaderDelegate?
     
     
+    private var fontColor: UIColor = .white
+    
+    
+    
+    
+    
+    
+    // MARK: - Setup_Header
+    private lazy var setupHeader: SetupHeaderView = {
+        let headerFrame = CGRect(x: 0,
+                           y: 0,
+                           width: self.frame.width,
+                           height: 80)
+        let header = SetupHeaderView(frame: headerFrame)
+        
+        
+        return header
+    }()
+    
     
     
     // MARK: - Setup_Table
@@ -29,10 +48,6 @@ final class SetupTableView: UIView {
                                      y: 0,
                                      width: self.frame.width,
                                      height: self.frame.height)
-        let headerFrame = CGRect(x: 0,
-                           y: 0,
-                           width: self.frame.width,
-                           height: 80)
         let view = UITableView(frame: setupTableFrame)
             view.delegate = self
             view.dataSource = self
@@ -44,9 +59,9 @@ final class SetupTableView: UIView {
                           forCellReuseIdentifier: ReuseIdentifier.setupTableViewCell)
         
             // setupTableview - headerView 추가
-        let header = SetupHeaderView(frame: headerFrame)
-        self.setupinfoHeaderDelegate = header
-            view.tableHeaderView = header
+//        let header = SetupHeaderView(frame: headerFrame)
+        self.setupinfoHeaderDelegate = self.setupHeader
+            view.tableHeaderView = self.setupHeader
             view.isScrollEnabled = false
         return view
     }()
@@ -90,6 +105,12 @@ final class SetupTableView: UIView {
         self.backgroundColor = .clear
         
         self.alpha = 0
+    }
+    
+    func setupColor(_ color: UIColor) {
+        self.setupHeader.fontColor = color
+        self.fontColor = color
+        self.setupTableView.reloadData()
     }
 }
 
@@ -168,7 +189,7 @@ extension SetupTableView: UITableViewDelegate, UITableViewDataSource {
             // background Color
             headerView.contentView.backgroundColor = UIColor(white: 1, alpha: 0.2)
             // section 헤더의 글자색 바꾸기
-            headerView.textLabel?.textColor = .nightFontColor
+            headerView.textLabel?.textColor = self.fontColor
         }
     }
     
@@ -206,6 +227,7 @@ extension SetupTableView: UITableViewDelegate, UITableViewDataSource {
         }
         
         cell.setupCellSetupDelegate = self
+        cell.fontColor = self.fontColor
         return cell
     }
 }

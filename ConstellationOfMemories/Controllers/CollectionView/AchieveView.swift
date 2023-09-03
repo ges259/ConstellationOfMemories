@@ -39,7 +39,7 @@ final class AchieveView: UIView {
     
     
     
-    
+    private var fontColor: UIColor = .white
     
     
     
@@ -135,7 +135,10 @@ final class AchieveView: UIView {
         // firstCollection
         self.addSubview(self.achieveCollection)
     }
-    
+    func achieveColor(_ color: UIColor) {
+        self.fontColor = color
+        self.achieveCollection.reloadData()
+    }
     
     func resetAchieveView() {
         // item이 항상 맨위로 가도록 설정
@@ -187,6 +190,7 @@ extension AchieveView: UICollectionViewDelegate, UICollectionViewDataSource, UIC
             cell.haveImage.image = UIImage(named: "\(self.totalImageInt[indexPath.row])")
         
         cell.monthString.text = "\(self.everyMonth[indexPath.row])월"
+        cell.monthString.textColor = self.fontColor
         
         return cell
     }

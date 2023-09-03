@@ -34,7 +34,7 @@ final class DiaryTableView: UIView {
     }
     
     
-    
+    private var fontColor: UIColor = .white
     
     
     
@@ -96,6 +96,13 @@ final class DiaryTableView: UIView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    
+    // MARK: - Font_Color
+    func diaryTableColor(_ color: UIColor) {
+        self.fontColor = color
+        self.diaryTableView.reloadData()
+    }
 }
 
 
@@ -148,6 +155,11 @@ extension DiaryTableView: UITableViewDelegate, UITableViewDataSource {
     // MARK: - Cell_For_Row_At
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: ReuseIdentifier.diaryTableViewCell, for: indexPath) as! DiaryTableViewCell
+        
+        // cell의 색깔 바꾸기
+        cell.cellColor(self.fontColor)
+        
+        
         
         // Diary_Table_View
         if self.diaryTableEnum == .dirayTable {

@@ -19,7 +19,7 @@ final class HomeView: UIView {
             // 첫 화면을 0으로 설정
             self.topSegementValue = 0
             // font 바꾸기
-            
+            self.fontInt = [user.dawnFont, user.morningFont, user.sunsetFont, user.nightFont]
         }
     }
     var backgroundData: BackgroundImg? {
@@ -36,14 +36,19 @@ final class HomeView: UIView {
     private var imgString: [String] = ["0"]
     
     
+    private var fontInt: [Int] = [0]
+    
     
     // segement 선택 시 해당 변수가 바뀜 -> 이미지 바꿈
     private var topSegementValue: Int = 0 {
         didSet {
             // Background_Image 바꾸기 (원상복구)
             self.homeImageChange(indexString: self.imgString[self.topSegementValue])
+            
+            // MARK: - Fix
             // Font 바꾸기 (원상복구)
-            self.homeFontChange(index: -1)
+//            self.homeFontChange(index: -1)
+            self.homeFontChange(Int_index: self.fontInt[self.topSegementValue])
             // right_Button 숨기기
             self.homeHeaderDelegaet?.hideRightBtn()
         }
@@ -395,6 +400,12 @@ final class HomeView: UIView {
     
     
     
+    
+    
+    
+    
+    
+    
 // MARK: - Helper Functions
     func resetHomeView() {
         self.headerSegment.selectedSegmentIndex = 0
@@ -415,9 +426,12 @@ final class HomeView: UIView {
     
     
     // MARK: - Font
-    private func homeFontChange(index: Int) {
-        // color
-        let color = fontColor(index: index)
+    private func homeFontChange(Int_index: Int = 1, UI_color: UIColor? = nil) {
+        
+        let color = UI_color != nil
+        ? UI_color ?? .white
+        : fontColor(index: Int_index)
+        
         
         // Main_View
         self.mainLbl.textColor = color
@@ -446,10 +460,16 @@ final class HomeView: UIView {
         self.shareButton.tintColor = color
         
         // 폰트 임시저장
-        self.temporaryFont = index
+        self.temporaryFont = Int_index
     }
     
-    
+    // MARK: - Font_DB
+    func homeColor(_ color: UIColor) {
+        self.headerSegment.setTitleTextAttributes([NSAttributedString.Key.font : UIFont.systemFont(ofSize: 14), NSAttributedString.Key.foregroundColor : color], for: .normal)
+        self.bottomsegement.setTitleTextAttributes([NSAttributedString.Key.font : UIFont.systemFont(ofSize: 14), NSAttributedString.Key.foregroundColor : color], for: .normal)
+        
+        self.homeFontChange(UI_color: color)
+    }
     
     
     
@@ -532,7 +552,7 @@ extension HomeView: SecondHomeDelegate, FirstHomeDelegate {
         // right_Button 생기게 함
         self.homeHeaderDelegaet?.showCheckRightBtn()
         // 폰트 바꾸기
-        self.homeFontChange(index: index)
+        self.homeFontChange(Int_index: index)
     }
     
     func homeFirstTapped(index: Int, backgroundImg: BackgroundImg) {
@@ -543,10 +563,18 @@ extension HomeView: SecondHomeDelegate, FirstHomeDelegate {
         var indexString: String = ""
         // 다른 segement를 누르면 초기화
         switch self.topSegementValue {
-        case 0: indexString = String(backgroundImg.havedawn[index])
-        case 1: indexString = String(backgroundImg.haveMorning[index])
-        case 2: indexString = String(backgroundImg.haveSunset[index])
-        case 3: indexString = String(backgroundImg.haveNight[index])
+        case 0:
+            indexString = String(backgroundImg.havedawn[index])
+            self.imgString[0] = indexString
+        case 1:
+            indexString = String(backgroundImg.haveMorning[index])
+            self.imgString[1] = indexString
+        case 2:
+            indexString = String(backgroundImg.haveSunset[index])
+            self.imgString[2] = indexString
+        case 3:
+            indexString = String(backgroundImg.haveNight[index])
+            self.imgString[3] = indexString
             
         default: indexString = String(backgroundImg.havedawn[index])
         }
@@ -566,16 +594,26 @@ extension HomeView: HeaderHomeDelegate {
         var currentTime: CurrentTime = .dawn
         
         switch self.topSegementValue {
-        case 0: currentTime = .dawn
-        case 1: currentTime = .morning
-        case 2: currentTime = .sunset
-        case 3: currentTime = .night
-        default: currentTime = .dawn
+        case 0:
+            currentTime = .dawn
+            self.fontInt[0] = self.temporaryFont
+        case 1:
+            currentTime = .morning
+            self.fontInt[1] = self.temporaryFont
+        case 2:
+            currentTime = .sunset
+            self.fontInt[2] = self.temporaryFont
+        case 3:
+            currentTime = .night
+            self.fontInt[3] = self.temporaryFont
+        default:
+            currentTime = .dawn
+            self.fontInt[0] = self.temporaryFont
         }
         
         // DB_Update -Font & Image
         self.service.updateFontImage(currentTime: currentTime,
-                                     font: String(self.temporaryFont),
+                                     font: self.temporaryFont,
                                      img: self.temporaryImg)
         
         // Delegate

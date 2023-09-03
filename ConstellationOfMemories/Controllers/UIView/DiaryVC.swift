@@ -33,6 +33,8 @@ final class DiaryVC: UIView {
     
     
     
+    
+    
     // MARK: - View
         // separator_View
     private lazy var separatorView: UIView = {
@@ -50,7 +52,7 @@ final class DiaryVC: UIView {
             tv.backgroundColor = UIColor.clear
             tv.font = UIFont.systemFont(ofSize: 16)
             tv.text = "텍스트를 여기에 입력하세요."
-            tv.textColor = .white
+            tv.textColor = UIColor.white
             tv.isEditable = false
         return tv
     }()
@@ -60,7 +62,7 @@ final class DiaryVC: UIView {
     // MARK: - Label
     private lazy var diaryLabel: UILabel = {
         return UILabel().labelConfig(labelText: "오늘의 하루는 어땠나요?",
-                                     LabelTextColor: .white,
+                                     LabelTextColor: UIColor.white,
                                      fontName: .bold,
                                      fontSize: 25,
                                      numberOfLines: 0,
@@ -136,11 +138,19 @@ final class DiaryVC: UIView {
         self.footerButton.anchor(bottom: self.safeAreaLayoutGuide.bottomAnchor, paddingBottom: 10,
                                    centerX: self)
     }
-    
     // 화면터치하면 키보드가 내려가도록
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
 //        diaryTextView.endEditing(true)
         self.diaryTextView.resignFirstResponder()
+    }
+    
+    
+    // MARK: - Font_Color
+    func diaryColor(_ color: UIColor) {
+        self.diaryTextView.textColor = color
+        self.diaryLabel.textColor = color
+        self.separatorView.backgroundColor = color
+        self.footerButton.tintColor = color
     }
     
     

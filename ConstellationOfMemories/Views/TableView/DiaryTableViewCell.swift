@@ -15,6 +15,11 @@ final class DiaryTableViewCell: UITableViewCell {
     }
     
     
+    func cellColor(_ color: UIColor) {
+        self.borderView.layer.borderColor = color.cgColor
+        self.stringLabel.textColor = color
+    }
+    
     
     
     // MARK: - UIView

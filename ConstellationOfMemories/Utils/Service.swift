@@ -76,6 +76,7 @@ struct Service {
             let uid = snapshot.key
             
             let user = User(uid: uid,dictionary: dictionary)
+            dump(user)
             // completion
             completion(user)
         }
@@ -88,7 +89,7 @@ struct Service {
     
     
     // MARK: - Update_Font & Image
-    func updateFontImage(currentTime: CurrentTime, font: String, img: String) {
+    func updateFontImage(currentTime: CurrentTime, font: Int, img: String) {
         // uid
         guard let uid = Auth.auth().currentUser?.uid else { return }
         

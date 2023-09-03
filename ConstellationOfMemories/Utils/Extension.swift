@@ -54,7 +54,11 @@ extension UIColor {
     }
     static let textFieldGray: UIColor = UIColor.rgb(r: 149, g: 204, b: 244)
     
-    static let nightFontColor: UIColor = UIColor(white: 1, alpha: 1)
+    static var nightFontColor: UIColor = UIColor(white: 1, alpha: 1) {
+        didSet {
+            print(UIColor.nightFontColor)
+        }
+    }
 }
 
 

@@ -139,6 +139,12 @@ final class HeaderView: UIView {
         self.rightButton.anchor(trailing: self.trailingAnchor, paddingTrailing: 20,
                                 centerY: self.titleLabel)
     }
+    // MARK: - Font_Color
+    func headerColor(_ color: UIColor) {
+        self.titleLabel.textColor = color
+        self.leftButton.tintColor = color
+        self.rightButton.tintColor = color
+    }
 }
 
 

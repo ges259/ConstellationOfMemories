@@ -64,7 +64,34 @@ final class MainVC: UIViewController {
         // 오늘 일기를 썻는지
     static var todayDiaryToggle: Bool = false
     // Font
-    static var currentFont: UIColor = fontColor(index: -1)
+    var currentFont: UIColor? {
+        didSet {
+            if let currentFont = currentFont {
+                // Header_View
+                self.headerView.headerColor(currentFont)
+                // Main_View
+                self.footerButton.tintColor = currentFont
+                // Menu_View
+                self.menuView.menuColor(currentFont)
+                // Achieve_View
+                self.achieveView.achieveColor(currentFont)
+                // Home_View
+                self.homeView.homeColor(currentFont)
+                // shop_View
+                
+                // setup_View
+                self.setupView.setupColor(currentFont)
+                // Diary_Table
+                self.diaryTable.diaryTableColor(currentFont)
+                // Diary_View
+                self.diaryView.diaryColor(currentFont)
+                // Detail_View
+                self.detailView.detailColor(currentFont)
+                // Logout_View
+                
+            }
+        }
+    }
     
     
     
@@ -76,9 +103,9 @@ final class MainVC: UIViewController {
 //            let backgroundArray: [String] = self.settinglaunchImg()
 //            self.backgroundImage.image = UIImage(named: backgroundArray[3])
     // Background
-    lazy var backgroundArray: [String] = ["100", "200", "300", "400"] {
+    var backgroundArray: [String]? {
         didSet {
-            self.backgroundImage.image = UIImage(named: backgroundArray[3])
+            
         }
     }
             
@@ -220,7 +247,7 @@ final class MainVC: UIViewController {
     
     
     
-    // MARK: - ShopCollection_View
+    // MARK: - Shop_View
     private lazy var shopView: ShopCollectionView = {
         let frame = CGRect(x: 0,
                            y: 150,
@@ -262,7 +289,7 @@ final class MainVC: UIViewController {
                            height: self.height - 150)
         let view = DiaryTableView(frame: frame)
             view.diaryTableMainDelegate = self
-            view.diaryTableDiaryDelegate = diaryView
+            view.diaryTableDiaryDelegate = self.diaryView
         return view
     }()
     
@@ -411,11 +438,11 @@ final class MainVC: UIViewController {
                     // 아무 것도 없으면 animate가 안 되더라구........
             self.launchScreen1.frame.origin.x = self.width
             
-            
+            //  = ["100", "200", "300", "400"]
 // backgroundArray[0]
         } completion: { _ in
             // launchScreen1 이미지 바꾸기
-            self.launchScreen1.imageView.image = UIImage(named: self.backgroundArray[0])
+            self.launchScreen1.imageView.image = UIImage(named: self.backgroundArray?[0] ?? "100")
             
             UIView.animate(withDuration: 0.5) {
                 // launchScreen1 보이게 하기
@@ -427,7 +454,7 @@ final class MainVC: UIViewController {
 // backgroundArray[1]
             } completion: { _ in
                 // launchScreen2 이미지 바꾸기
-                self.launchScreen2.imageView.image = UIImage(named: self.backgroundArray[1])
+                self.launchScreen2.imageView.image = UIImage(named: self.backgroundArray?[1] ?? "200")
                 // launchScreen2 위치 바꾸기
                 self.launchScreen2.frame.origin.x = self.width
 
@@ -441,7 +468,7 @@ final class MainVC: UIViewController {
 // backgroundArray[2]
                 } completion: { _ in
                     // launchScreen1 이미지 바꾸기
-                    self.launchScreen1.imageView.image = UIImage(named: self.backgroundArray[2])
+                    self.launchScreen1.imageView.image = UIImage(named: self.backgroundArray?[2] ?? "300")
                     // launchScreen1 위치 바꾸기
                     self.launchScreen1.frame.origin.x = self.width
                     
@@ -454,8 +481,12 @@ final class MainVC: UIViewController {
                         
 // backgroundArray[3]
                     } completion: { _ in
+                        if self.backgroundArray == nil { sleep(3) }
+                        
+                        self.backgroundImage.image = UIImage(named: self.backgroundArray?[3] ?? "400")
+                        
                         // launchScreen1 이미지 바꾸기
-                        self.launchScreen2.imageView.image = UIImage(named: self.backgroundArray[3])
+                        self.launchScreen2.imageView.image = UIImage(named: self.backgroundArray?[3] ?? "400")
                         // launchScreen1 위치 바꾸기
                         self.launchScreen2.frame.origin.x = self.width
                         
@@ -494,21 +525,26 @@ final class MainVC: UIViewController {
               let user = self.user
         else { return }
         
+        // MARK: - Fix
         if hour < 7 {
             self.backgroundArray = [user.morningImg, user.sunsetImg, user.nightImg, user.dawnImg]
             self.currentTime = .dawn
+            self.currentFont = fontColor(index: user.dawnFont)
             
         } else if 7 <= hour && hour < 18 {
             self.backgroundArray = [user.sunsetImg, user.nightImg, user.dawnImg, user.morningImg]
             self.currentTime = .morning
+            self.currentFont = fontColor(index: user.dawnFont)
             
         } else if 18 <= hour && hour < 19 {
             self.backgroundArray = [user.nightImg, user.dawnImg, user.morningImg, user.sunsetImg]
             self.currentTime = .sunset
+            self.currentFont = fontColor(index: user.dawnFont)
             
         } else if 19 <= hour && hour <= 24 {
             self.backgroundArray = [user.dawnImg, user.morningImg, user.sunsetImg, user.nightImg]
             self.currentTime = .night
+            self.currentFont = fontColor(index: user.dawnFont)
         }
     }
     
@@ -676,7 +712,8 @@ final class MainVC: UIViewController {
         self.service.fetchUserData() { user in
             self.user = user
             
-            self.settinglaunchImg()
+            // 첫 fetch_User에서만 작동
+            if self.backgroundArray == nil { self.settinglaunchImg() }
         }
     }
     
@@ -886,6 +923,7 @@ extension MainVC {
                     self.diaryView.alpha = 1
                 }
             }
+            
 
         } else {
             UIView.animate(withDuration: self.animateTime) {
@@ -1358,6 +1396,8 @@ extension MainVC: LoginMainDelegate, HeaderMainDelegate, MenuMainDelegate, First
         self.headerView.buttonConfig = .mainViewButton
         // home_View_숨기기
         self.HomeViewShow(false)
+        // fetch_User
+        self.fetchUserData()
     }
     
     
@@ -1636,7 +1676,7 @@ extension MainVC: HomeMainDelegate {
     }
     func fontChanged(currentTime: CurrentTime, fontInt: Int) {
         if self.currentTime == currentTime {
-            MainVC.currentFont = fontColor(index: fontInt)
+            self.currentFont = fontColor(index: fontInt)
         }
     }
 }
