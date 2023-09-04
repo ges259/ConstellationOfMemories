@@ -5,7 +5,7 @@
 //  Created by 계은성 on 2023/08/30.
 //
 
-struct BackgroundImg {
+struct HaveImg {
     
     // MARK: - Properties
     // dawn
@@ -118,24 +118,3 @@ struct BackgroundImg {
         return haveArray
     }
 }
-
-
-
-//        switch currentTime {
-//        case .dawn:
-//            dontHave = [100, 101, 102]
-//            have = backImg.havedawn
-//
-//        case .morning:
-//            dontHave = [200, 201, 202]
-//            have = backImg.haveMorning
-//
-//        case .sunset:
-//            dontHave = [300, 301, 302]
-//            have = backImg.haveSunset
-//        case .night:
-//            dontHave = [400, 401, 402]
-//            have = backImg.haveNight
-//        }
-
-

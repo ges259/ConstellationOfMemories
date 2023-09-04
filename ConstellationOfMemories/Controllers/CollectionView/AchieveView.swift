@@ -13,7 +13,7 @@ final class AchieveView: UIView {
     // Delegate
     var achieveMainDelegate: FirstMainDelegate?
     
-    var backgroundData: BackgroundImg? {
+    var backgroundData: HaveImg? {
         didSet {
             if let backgroundData = backgroundData {
                 let array1: [Int] = backgroundData.havedawn

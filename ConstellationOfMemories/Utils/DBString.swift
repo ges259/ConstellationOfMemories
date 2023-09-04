@@ -13,20 +13,18 @@ struct DBString {
     static let fullName: String = "fullName"
     static let email: String = "email"
     static let password: String = "password"
-        
-    
-
-    
-    // 알림 설정
     static let noti: String = "noti"
+    static let coin: String = "coin"
     
+    
+    
+    
+    // MARK: - User_Img_Font
     // Font
     static let dawnFont: String = "dawnFont"
     static let morningFont: String = "morningFont"
     static let sunsetFont: String = "sunsetFont"
     static let nightFont: String = "nightFont"
-    
-    
     // Background_Image
     static let dawnImg: String = "dawnImg"
     static let morningImg: String = "morningImg"
@@ -36,7 +34,6 @@ struct DBString {
     
     
     // MARK: - Diary
-    static let uid: String = "userId"
     static let month: String = "month"
     static let day: String = "day"
     static let diaryText: String = "diaryText"
@@ -44,12 +41,16 @@ struct DBString {
 
 
 
+
+
+
+// MARK: - DB
 let DB_REF: DatabaseReference = Database.database().reference()
 
-// user
 let Users_REF: DatabaseReference = DB_REF.child("users")
 let Diary_REF: DatabaseReference = DB_REF.child("diarys")
-let Image_REF: DatabaseReference = DB_REF.child("background")
+let Image_REF: DatabaseReference = DB_REF.child("haveImg")
+let imgFont_REF: DatabaseReference = DB_REF.child("current-ImgFont")
 
 
 

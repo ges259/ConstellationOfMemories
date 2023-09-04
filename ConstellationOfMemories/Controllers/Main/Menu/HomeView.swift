@@ -12,31 +12,33 @@ final class HomeView: UIView {
     
     // MARK: - Properties
 // [DB_Data]
-    var user : User? {
+    var imageFont : UserImgFont? {
         didSet {
-            guard let user = self.user else { return }
-            self.imgString = [user.dawnImg, user.morningImg, user.sunsetImg, user.nightImg]
-            // 첫 화면을 0으로 설정
-            self.topSegementValue = 0
-            // font 바꾸기
-            self.fontInt = [user.dawnFont, user.morningFont, user.sunsetFont, user.nightFont]
+            if let user = self.imageFont {
+                // img 바꾸기
+                self.imgString = [user.dawnImg, user.morningImg, user.sunsetImg, user.nightImg]
+                // font 바꾸기
+                self.fontInt = [user.dawnFont, user.morningFont, user.sunsetFont, user.nightFont]
+                // 첫 화면을 0으로 설정
+                self.topSegementValue = 0
+                
+                self.homeFirstView.firstCollection.reloadData()
+            }
         }
     }
-    var backgroundData: BackgroundImg? {
+    // 서버에 저장되어 있는 user의 시간별 Image_String
+    private var imgString: [String] = ["100", "200", "300", "400"]
+    // 서버에 저장되어 있는 user의 시간별 Font_Int
+    private var fontInt: [Int] = [-1, -1, -1, -1]
+    
+    
+    
+    var backgroundData: HaveImg? {
         didSet { self.homeFirstView.backgroundData = self.backgroundData }
     }
     
     
-// [Singleton]
-    private let service = Service.shared
     
-    
-    
-    // 서버에 저장되어 있는 user의 시간별 background_Image
-    private var imgString: [String] = ["0"]
-    
-    
-    private var fontInt: [Int] = [0]
     
     
     // segement 선택 시 해당 변수가 바뀜 -> 이미지 바꿈
@@ -44,10 +46,7 @@ final class HomeView: UIView {
         didSet {
             // Background_Image 바꾸기 (원상복구)
             self.homeImageChange(indexString: self.imgString[self.topSegementValue])
-            
-            // MARK: - Fix
-            // Font 바꾸기 (원상복구)
-//            self.homeFontChange(index: -1)
+            // Font_Color 바꾸기
             self.homeFontChange(Int_index: self.fontInt[self.topSegementValue])
             // right_Button 숨기기
             self.homeHeaderDelegaet?.hideRightBtn()
@@ -56,7 +55,7 @@ final class HomeView: UIView {
     
     
     private var temporaryFont: Int = -1
-    private var temporaryImg: String = "0"
+    private var temporaryImg: String = "100"
 
     
     
@@ -104,7 +103,7 @@ final class HomeView: UIView {
     
     // MARK: - Main_View
     private lazy var mainImg: UIImageView = {
-        return UIImageView(image: UIImage(named: "dawn1"))
+        return UIImageView(image: UIImage(named: "100"))
     }()
     private lazy var mainLbl: UILabel = {
         return UILabel().labelConfig(labelText: "추억 일기",
@@ -123,7 +122,7 @@ final class HomeView: UIView {
     
     // MARK: - Diary_Table
     private lazy var diaryTableImg: UIImageView = {
-        return UIImageView(image: UIImage(named: "dawn1"))
+        return UIImageView(image: UIImage(named: "100"))
     }()
     private lazy var backButton1: UIButton = {
         return UIButton().buttonSustemImage(btnSize: 10, imageString: .back)
@@ -148,7 +147,7 @@ final class HomeView: UIView {
     
     // MARK: - Diary_View
     private lazy var diaryViewImg: UIImageView = {
-        return UIImageView(image: UIImage(named: "dawn1"))
+        return UIImageView(image: UIImage(named: "100"))
     }()
     private lazy var diaryViewLbl: UILabel = {
         return UILabel().labelConfig(labelText: "일기 작성",
@@ -415,6 +414,7 @@ final class HomeView: UIView {
     
     // MARK: - Image
     private func homeImageChange(indexString: String) {
+        // 이미지 바꾸기
         self.mainImg.image = UIImage(named: indexString)
         self.diaryTableImg.image = UIImage(named: indexString)
         self.diaryViewImg.image = UIImage(named: indexString)
@@ -555,7 +555,7 @@ extension HomeView: SecondHomeDelegate, FirstHomeDelegate {
         self.homeFontChange(Int_index: index)
     }
     
-    func homeFirstTapped(index: Int, backgroundImg: BackgroundImg) {
+    func homeFirstTapped(index: Int, backgroundImg: HaveImg) {
         // right_Button 생기게 함
         self.homeHeaderDelegaet?.showCheckRightBtn()
         
@@ -563,18 +563,10 @@ extension HomeView: SecondHomeDelegate, FirstHomeDelegate {
         var indexString: String = ""
         // 다른 segement를 누르면 초기화
         switch self.topSegementValue {
-        case 0:
-            indexString = String(backgroundImg.havedawn[index])
-            self.imgString[0] = indexString
-        case 1:
-            indexString = String(backgroundImg.haveMorning[index])
-            self.imgString[1] = indexString
-        case 2:
-            indexString = String(backgroundImg.haveSunset[index])
-            self.imgString[2] = indexString
-        case 3:
-            indexString = String(backgroundImg.haveNight[index])
-            self.imgString[3] = indexString
+        case 0: indexString = String(backgroundImg.havedawn[index])
+        case 1: indexString = String(backgroundImg.haveMorning[index])
+        case 2: indexString = String(backgroundImg.haveSunset[index])
+        case 3: indexString = String(backgroundImg.haveNight[index])
             
         default: indexString = String(backgroundImg.havedawn[index])
         }
@@ -597,32 +589,32 @@ extension HomeView: HeaderHomeDelegate {
         case 0:
             currentTime = .dawn
             self.fontInt[0] = self.temporaryFont
+            self.imgString[0] = self.temporaryImg
         case 1:
             currentTime = .morning
             self.fontInt[1] = self.temporaryFont
+            self.imgString[1] = self.temporaryImg
         case 2:
             currentTime = .sunset
             self.fontInt[2] = self.temporaryFont
+            self.imgString[2] = self.temporaryImg
         case 3:
             currentTime = .night
             self.fontInt[3] = self.temporaryFont
+            self.imgString[3] = self.temporaryImg
         default:
             currentTime = .dawn
             self.fontInt[0] = self.temporaryFont
+            self.imgString[0] = self.temporaryImg
         }
         
-        // DB_Update -Font & Image
-        self.service.updateFontImage(currentTime: currentTime,
-                                     font: self.temporaryFont,
-                                     img: self.temporaryImg)
         
-        // Delegate
-        // Font_Change
-        self.homeMainDelegate?.fontChanged(currentTime: currentTime,
-                                           fontInt: self.temporaryFont)
-        // Image_Change
+        // Delegate + DB_Update
+            // Font / Image - Change
+            // DB_Update -Font & Image
         self.homeMainDelegate?.imgChanged(currentTime: currentTime,
-                                          img: self.temporaryImg)
+                                          img: self.temporaryImg,
+                                          font: self.temporaryFont)
         // right_Button 숨기기
         self.homeHeaderDelegaet?.hideRightBtn()
     }

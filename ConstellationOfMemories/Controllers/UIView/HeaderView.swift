@@ -15,9 +15,9 @@ final class HeaderView: UIView {
     
     
     // MainVC
-    var mainHeaderDelegate: HeaderMainDelegate?
+    var headerMainDelegate: HeaderMainDelegate?
     // DiaryVC
-    var diaryHeaderDelegate: HeaderDiaryVCDelegate?
+    var headerDiaryVCDelegate: HeaderDiaryVCDelegate?
     // HomeView
     var headerHomeDelegate: HeaderHomeDelegate?
     
@@ -181,7 +181,7 @@ extension HeaderView {
             // MainVC -> MenuVC
         case .mainViewButton:
             // 메뉴 오픈 - Delegate
-            self.mainHeaderDelegate?.handleMainToMenu()
+            self.headerMainDelegate?.handleMainToMenu()
             break
             
             
@@ -191,7 +191,7 @@ extension HeaderView {
         case .menuViewButton:
             // blackViewTapped()를 통해 MainVC로 돌아가므로 따로 코드 X
                 // 또한 blackViewTapped()에서 .mainButton으로 바뀜
-            self.mainHeaderDelegate?.handleMenuToMain()
+            self.headerMainDelegate?.handleMenuToMain()
             break
             
             
@@ -199,20 +199,14 @@ extension HeaderView {
             self.headerTitle(title: "추억 일기")
             self.leftButtonAlpha(.menu)
             // 뒤로가기
-            self.mainHeaderDelegate?.handleAchievementToMain()
+            self.headerMainDelegate?.handleAchievementToMain()
             break
-            
-            
-            
-//        case .achieveDetailViewButton:
-//            self.mainHeaderDelegate?.handleDetailToAchieve()
-//            break
         case .achieveTableButton:
-            self.mainHeaderDelegate?.achieveTableToAchieve()
+            self.headerMainDelegate?.achieveTableToAchieve()
             break
             
         case .achieveDiaryVeiwButton:
-            self.mainHeaderDelegate?.achieveDiaryToTable()
+            self.headerMainDelegate?.achieveDiaryToTable()
             break
             
             
@@ -220,7 +214,7 @@ extension HeaderView {
         case .homeViewButton:
             self.headerTitle(title: "추억 일기")
             self.leftButtonAlpha(.menu)
-            self.mainHeaderDelegate?.handleHomeToMain()
+            self.headerMainDelegate?.handleHomeToMain()
             self.rightButtonHide()
             break
             
@@ -230,11 +224,15 @@ extension HeaderView {
             self.headerTitle(title: "추억 일기")
             self.leftButtonAlpha(.menu)
             // 뒤로가기
-            self.mainHeaderDelegate?.handleShopToMain()
+            self.headerMainDelegate?.handleShopToMain()
             break
         case .shopDetailViewButton:
-            self.mainHeaderDelegate?.handleDetailToShop()
+            self.headerMainDelegate?.handleDetailToShop()
             break
+//        case .shopPurchaseBtn:
+//            print("shopPurchaseBtn")
+//            self.headerMainDelegate?.purchaseTodetailShop()
+//            break
             
             
             
@@ -242,10 +240,10 @@ extension HeaderView {
             self.headerTitle(title: "추억 일기")
             self.leftButtonAlpha(.menu)
             // 뒤로가기
-            self.mainHeaderDelegate?.handleSetupToMain()
+            self.headerMainDelegate?.handleSetupToMain()
             break
         case .logoutSetupButton:
-            self.mainHeaderDelegate?.handleLogoutToSetup()
+            self.headerMainDelegate?.handleLogoutToSetup()
             break
             
             
@@ -256,7 +254,7 @@ extension HeaderView {
             self.headerTitle(title: "추억 일기")
             self.leftButtonAlpha(.menu)
             // MainVC 로 dismiss(테이블뷰 내리기) - Delegate
-            self.mainHeaderDelegate?.handleTableToMain()
+            self.headerMainDelegate?.handleTableToMain()
             break
             
             
@@ -265,7 +263,7 @@ extension HeaderView {
             // DiaryVC -> TableView
         case .diaryViewButton:
             // DiaryVC 사라지기
-            self.mainHeaderDelegate?.handleDiaryToTable()
+            self.headerMainDelegate?.handleDiaryToTable()
             // 저장뷰인 상태에서 나가면 ( - rightButtonConfig느 fixMode인 상태)
                 // -> headerRightbuttonTapped()에서 fixMode로 넘어가는 애니메이션이 나옴
                     // 이를 방지하기 위해 saveMode로 바꾸고 실행
@@ -311,7 +309,7 @@ extension HeaderView {
             // rightButton 이미지 변경 + 애니메이션
             self.rightButtonShow(.check)
             // fix모드 진입
-            self.diaryHeaderDelegate?.diaryFixMode(true)
+            self.headerDiaryVCDelegate?.diaryFixMode(true)
             // save모드로 변경
                 // fix모드에서 rightButton 누르면 save모드로 들어갈 수 있게
             self.rightButtonConfig = .saveMode
@@ -325,13 +323,14 @@ extension HeaderView {
             // rightButton 이미지 변경 + 애니메이션
             self.rightButtonShow(.fix)
             // save모드 진입
-            self.diaryHeaderDelegate?.diaryFixMode(false)
+            self.headerDiaryVCDelegate?.diaryFixMode(false)
             // fix모드로 변경
                 // save모드에서 rightButton 누르면 fix모드로 들어갈 수 있게
             self.rightButtonConfig = .fixMode
             break
             
         case .cannotBeModified:
+            self.headerDiaryVCDelegate?.observationMode()
             break
             
             
@@ -341,13 +340,8 @@ extension HeaderView {
             break
             
             
-//        case .achieveDetail:
-//            break
-            
-            
         case .shopDetail:
-            print("Right_Button_Tapped ----- Shop_Detail")
-            self.mainHeaderDelegate?.handleDetailToShop()
+            self.headerMainDelegate?.detailToPurchase()
             break
             
         case .home:
@@ -440,12 +434,17 @@ extension HeaderView {
             self.rightButtonConfig = .shopDetail
             self.rightButtonShow(.coin)
             break
+//        case .shopPurchaseBtn:
+            
+//            break
             
             
             
         case .setupVCButton:
             self.headerTitle(title: "설정")
             self.leftButtonAlpha(.back)
+            break
+        case .logoutSetupButton:
             break
             
             
@@ -468,8 +467,7 @@ extension HeaderView {
 
             
             
-        case .logoutSetupButton:
-            break
+        
         }
     }
     

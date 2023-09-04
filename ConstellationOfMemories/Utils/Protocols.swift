@@ -21,35 +21,41 @@ protocol LoginMainDelegate {
 
 protocol HeaderMainDelegate {
     // MenuVC -> MainVC는 MainVC의 BlackView로 대체
+// [Main]
     // MainVC -> MenuVC
     func handleMainToMenu()
+// [Menu]
     // Menu -> MainVC
     func handleMenuToMain()
-    
+// [Diary_Table]
     // tableView -> MainVC
     func handleTableToMain()
-    // TableView -> DiaryVC -> TableView Cell을 통해
+// [Diary_View]
     // DiaryVC -> TableView
     func handleDiaryToTable()
     
+// [Achieve]
     // Achieve -> Main
     func handleAchievementToMain()
-    // Shop - > Main
-    func handleShopToMain()
-    // Setup -> Main
-    func handleSetupToMain()
-    // Home -> Main
-    func handleHomeToMain()
-    
     // Achieve -> Achieve_Diary_Table
     func achieveTableToAchieve()
-    
     // Achieve_Diary_View -> Achieve_Diary_Table
     func achieveDiaryToTable()
-    
-    // [Detail]_Shop -> Shop
+// [Home]
+    // Home -> Main
+    func handleHomeToMain()
+// [Shop]
+    // Shop - > Main
+    func handleShopToMain()
+    // Detail_Shop -> Shop
     func handleDetailToShop()
-    
+    // Detail_Shop -> purchase
+    func detailToPurchase()
+    // purchase -> Detail_Shop
+//    func purchaseTodetailShop()
+// [Setup]
+    // Setup -> Main
+    func handleSetupToMain()
     // Logout -> Setup
     func handleLogoutToSetup()
 }
@@ -57,6 +63,7 @@ protocol HeaderMainDelegate {
 
 protocol HeaderDiaryVCDelegate {
     func diaryFixMode(_ fixMode: Bool)
+    func observationMode()
 }
 
 protocol MenuMainDelegate {
@@ -99,15 +106,15 @@ protocol SecondHomeDelegate {
     func homeSecondTapped(index: Int)
 }
 protocol FirstHomeDelegate {
-    func homeFirstTapped(index: Int, backgroundImg: BackgroundImg)
+    func homeFirstTapped(index: Int, backgroundImg: HaveImg)
 }
 protocol HeaderHomeDelegate {
     func checkButtonTapped()
 }
 
 protocol HomeMainDelegate {
-    func imgChanged(currentTime: CurrentTime, img: String)
-    func fontChanged(currentTime: CurrentTime, fontInt: Int)
+    func imgChanged(currentTime: CurrentTime, img: String, font: Int)
+//    func fontChanged(currentTime: CurrentTime, fontInt: Int)
 }
 
 
@@ -153,4 +160,10 @@ protocol SetupInfoHeaderDelegate {
 protocol homeHeaderViewDelegate {
     func showCheckRightBtn()
     func hideRightBtn()
+}
+
+
+protocol PurchaseMainDelegate {
+    func cancelTapped()
+    func purchaseTapped()
 }

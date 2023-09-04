@@ -23,11 +23,13 @@
 		5F15D1DF2A815C0E005A00E1 /* DiaryVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F15D1DE2A815C0E005A00E1 /* DiaryVC.swift */; };
 		5F15D1E12A815C75005A00E1 /* DiaryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F15D1E02A815C75005A00E1 /* DiaryTableViewCell.swift */; };
 		5F15D1E32A817765005A00E1 /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F15D1E22A817765005A00E1 /* HeaderView.swift */; };
+		5F226DD32AA56673004F73C6 /* PurchaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F226DD22AA56673004F73C6 /* PurchaseView.swift */; };
 		5F2E705D2A9D3A3500D0BFE0 /* HomeSecondView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F2E705C2A9D3A3500D0BFE0 /* HomeSecondView.swift */; };
 		5F2E705F2A9D3B0200D0BFE0 /* HomeSecondCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F2E705E2A9D3B0200D0BFE0 /* HomeSecondCell.swift */; };
 		5F2E70612A9D3B6300D0BFE0 /* HomeFirstView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F2E70602A9D3B6300D0BFE0 /* HomeFirstView.swift */; };
 		5F2E70632A9D3C0300D0BFE0 /* HomeFirstCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F2E70622A9D3C0300D0BFE0 /* HomeFirstCell.swift */; };
-		5F396BC12A9E45DD0095D3F8 /* BackgroundImg.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F396BC02A9E45DC0095D3F8 /* BackgroundImg.swift */; };
+		5F396BC12A9E45DD0095D3F8 /* HaveImg.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F396BC02A9E45DC0095D3F8 /* HaveImg.swift */; };
+		5F54D9682AA50F17006ABFC3 /* UserImgFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F54D9672AA50F17006ABFC3 /* UserImgFont.swift */; };
 		5F6D99EA2A9FA9250072E2FD /* MenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F6D99E92A9FA9250072E2FD /* MenuView.swift */; };
 		5F6D99EC2A9FA99E0072E2FD /* AchieveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F6D99EB2A9FA99E0072E2FD /* AchieveView.swift */; };
 		5F6D99EE2A9FA9D60072E2FD /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F6D99ED2A9FA9D60072E2FD /* HomeView.swift */; };
@@ -70,11 +72,13 @@
 		5F15D1DE2A815C0E005A00E1 /* DiaryVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiaryVC.swift; sourceTree = "<group>"; };
 		5F15D1E02A815C75005A00E1 /* DiaryTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiaryTableViewCell.swift; sourceTree = "<group>"; };
 		5F15D1E22A817765005A00E1 /* HeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderView.swift; sourceTree = "<group>"; };
+		5F226DD22AA56673004F73C6 /* PurchaseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseView.swift; sourceTree = "<group>"; };
 		5F2E705C2A9D3A3500D0BFE0 /* HomeSecondView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeSecondView.swift; sourceTree = "<group>"; };
 		5F2E705E2A9D3B0200D0BFE0 /* HomeSecondCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeSecondCell.swift; sourceTree = "<group>"; };
 		5F2E70602A9D3B6300D0BFE0 /* HomeFirstView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeFirstView.swift; sourceTree = "<group>"; };
 		5F2E70622A9D3C0300D0BFE0 /* HomeFirstCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeFirstCell.swift; sourceTree = "<group>"; };
-		5F396BC02A9E45DC0095D3F8 /* BackgroundImg.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundImg.swift; sourceTree = "<group>"; };
+		5F396BC02A9E45DC0095D3F8 /* HaveImg.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HaveImg.swift; sourceTree = "<group>"; };
+		5F54D9672AA50F17006ABFC3 /* UserImgFont.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserImgFont.swift; sourceTree = "<group>"; };
 		5F6D99E92A9FA9250072E2FD /* MenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuView.swift; sourceTree = "<group>"; };
 		5F6D99EB2A9FA99E0072E2FD /* AchieveView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AchieveView.swift; sourceTree = "<group>"; };
 		5F6D99ED2A9FA9D60072E2FD /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
@@ -189,8 +193,9 @@
 			children = (
 				5FEB58F02A9388DB00F62205 /* User.swift */,
 				5FEB58F22A938E3900F62205 /* Diary.swift */,
-				5F396BC02A9E45DC0095D3F8 /* BackgroundImg.swift */,
+				5F396BC02A9E45DC0095D3F8 /* HaveImg.swift */,
 				5F0CA46B2A9FE89F00177570 /* MyFontColor.swift */,
+				5F54D9672AA50F17006ABFC3 /* UserImgFont.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -215,6 +220,7 @@
 				5F6D99EF2A9FA9F70072E2FD /* DetailView.swift */,
 				5F6D99F12A9FAA210072E2FD /* SetupHeaderView.swift */,
 				5F6D99F32A9FAA370072E2FD /* LogoutView.swift */,
+				5F226DD22AA56673004F73C6 /* PurchaseView.swift */,
 			);
 			name = Menu;
 			path = Main/Menu;
@@ -351,6 +357,7 @@
 				5F2E705D2A9D3A3500D0BFE0 /* HomeSecondView.swift in Sources */,
 				5F8200BC2A8D3FEF0068345B /* AchieveCell.swift in Sources */,
 				5FCDDA402A8FAABE0040D126 /* DiaryTableView.swift in Sources */,
+				5F226DD32AA56673004F73C6 /* PurchaseView.swift in Sources */,
 				5F6D99EA2A9FA9250072E2FD /* MenuView.swift in Sources */,
 				5F15D1AF2A812768005A00E1 /* AppDelegate.swift in Sources */,
 				5F6D99F42A9FAA370072E2FD /* LogoutView.swift in Sources */,
@@ -360,7 +367,7 @@
 				5F15D1CC2A8136B3005A00E1 /* Extension.swift in Sources */,
 				5F15D1DF2A815C0E005A00E1 /* DiaryVC.swift in Sources */,
 				5F6D99EE2A9FA9D60072E2FD /* HomeView.swift in Sources */,
-				5F396BC12A9E45DD0095D3F8 /* BackgroundImg.swift in Sources */,
+				5F396BC12A9E45DD0095D3F8 /* HaveImg.swift in Sources */,
 				5F15D1D22A81390F005A00E1 /* DBString.swift in Sources */,
 				5FEB58F62A93A7B600F62205 /* LoginVC.swift in Sources */,
 				5F15D1D42A813917005A00E1 /* Protocols.swift in Sources */,
@@ -370,6 +377,7 @@
 				5F2E70612A9D3B6300D0BFE0 /* HomeFirstView.swift in Sources */,
 				5F07745E2AA260C6005C2942 /* AchieveDiaryTable.swift in Sources */,
 				5F0BE8182A8664D40090AC1F /* SetupTableViewCell.swift in Sources */,
+				5F54D9682AA50F17006ABFC3 /* UserImgFont.swift in Sources */,
 				5FEB58F12A9388DB00F62205 /* User.swift in Sources */,
 				5FA855712A8FDB750020F8C4 /* SetupTableView.swift in Sources */,
 				5F15D1CE2A813746005A00E1 /* Enum.swift in Sources */,

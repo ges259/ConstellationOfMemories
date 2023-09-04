@@ -11,66 +11,72 @@ import FirebaseAuth
 final class MainVC: UIViewController {
     
 // MARK: - Properties
-    
-    
-    
-    // MARK: - Singleton
+// [Singleton]
     // Service 싱글톤
     private let service = Service.shared
     
     
 
-    // MARK: - Data
+// [Data]
     // User
     private var user: User?
     // Diary_Data
         // Diary_Table로   [Diary] 데이터 보내기
     private var diaryData: [Diary] = []
     // background
-    private var backgroundImg: BackgroundImg? {
-        didSet {
-            self.achieveView.backgroundData = backgroundImg
-            self.homeView.backgroundData = backgroundImg
-            self.shopView.backgroundData = backgroundImg
-        }
-    }
+    private var haveImg: HaveImg?
+    
+    private var userImgFont: UserImgFont?
+    
+    private var coin: Int = 0
     
     
 
-    // MARK: - Toggle
+// [Toggle]
     // Black_View_Toggle
     private var blackViewToggle: BlackViewToggle = .menu 
     
     
     
-    // MARK: - Time
+// [Time]
     // 현재 시간( 새벽 / 아침 / 노을 / 밤 )
     private var currentTime: CurrentTime? {
         didSet {
             // MARK: - Fix
             // Timer
             
+            
+            // update_Time
+            // fetchImgFont
+            // settingApp
+            
         }
     }
-    
     // 오늘의 시간
         // month / day / hour
     private var todayArray: [String] = []
     
+    // Animate_Time
+    private var animateTime: Double = 0.5
     
     
-    // MARK: - Static_Properties
+    
+// [Static_Properties]
     // Today_Diary_Toggle
         // 오늘 일기를 썻는지
     static var todayDiaryToggle: Bool = false
-    // Font
+    
+
+    
+
+// [Font_Changed]
     var currentFont: UIColor? {
         didSet {
             if let currentFont = currentFont {
-                // Header_View
-                self.headerView.headerColor(currentFont)
                 // Main_View
                 self.footerButton.tintColor = currentFont
+                // Header_View
+                self.headerView.headerColor(currentFont)
                 // Menu_View
                 self.menuView.menuColor(currentFont)
                 // Achieve_View
@@ -88,33 +94,22 @@ final class MainVC: UIViewController {
                 // Detail_View
                 self.detailView.detailColor(currentFont)
                 // Logout_View
-                
+//                self.logoutView.logoutColor(currentFont)
             }
         }
     }
     
     
     
-    
-    
-    
-    // MARK: - Disposable_Properties
+// [Disposable_Properties]
     // Background
-//            let backgroundArray: [String] = self.settinglaunchImg()
-//            self.backgroundImage.image = UIImage(named: backgroundArray[3])
-    // Background
-    var backgroundArray: [String]? {
-        didSet {
-            
-        }
-    }
-            
+    var ImgArray: [String] = ["100", "200", "300", "400"]
+    
     // Frame - (편의성)
     private lazy var width = self.view.frame.width
     private lazy var height = self.view.frame.height
     
     
-    private var animateTime: Double = 0.5
     
     
     
@@ -157,6 +152,7 @@ final class MainVC: UIViewController {
     
     
     // MARK: - ImageView
+    // launch_Background
     private lazy var launchScreen1: LaounchSccreen = {
         let frame = CGRect(x: self.width * 2,
                            y: 0,
@@ -254,7 +250,7 @@ final class MainVC: UIViewController {
                            width: self.width,
                            height: self.height - 150)
         let view = ShopCollectionView(frame: frame)
-            view.mainShopDelgate = self
+            view.shopMainDelgate = self
         return view
     }()
     // MARK: - Shop_Detail
@@ -265,8 +261,19 @@ final class MainVC: UIViewController {
                            height: self.width / 10 * 16)
         return DetailView(frame: frame)
     }()
+    // MARK: - Purchase_View
+    private lazy var purchaseView: PurchaseView = {
+        let frame = CGRect(x: 20,
+                           y: self.height,
+                           width: self.width - 40,
+                           height: 135)
+        let view = PurchaseView(frame: frame)
+        view.purchaseMainDelegate = self
+        
+        return view
+    }()
     
-    
+        
     
     // MARK: - Setup_Table
     private lazy var setupView: SetupTableView = {
@@ -343,9 +350,9 @@ final class MainVC: UIViewController {
     // black_View + 로그아웃 창
     private lazy var logoutView: LogoutView = {
         let frame = CGRect(x: self.width / 6,
-                           y: self.height / 5 * 2,
+                           y: self.height / 5 * 1.8,
                            width: self.width / 3 * 2,
-                           height: 150)
+                           height: 170)
         let view = LogoutView(frame: frame)
             view.logoutMainDelegate = self
         return view
@@ -442,7 +449,7 @@ final class MainVC: UIViewController {
 // backgroundArray[0]
         } completion: { _ in
             // launchScreen1 이미지 바꾸기
-            self.launchScreen1.imageView.image = UIImage(named: self.backgroundArray?[0] ?? "100")
+            self.launchScreen1.imageView.image = UIImage(named: self.ImgArray[0])
             
             UIView.animate(withDuration: 0.5) {
                 // launchScreen1 보이게 하기
@@ -454,7 +461,7 @@ final class MainVC: UIViewController {
 // backgroundArray[1]
             } completion: { _ in
                 // launchScreen2 이미지 바꾸기
-                self.launchScreen2.imageView.image = UIImage(named: self.backgroundArray?[1] ?? "200")
+                self.launchScreen2.imageView.image = UIImage(named: self.ImgArray[1])
                 // launchScreen2 위치 바꾸기
                 self.launchScreen2.frame.origin.x = self.width
 
@@ -468,7 +475,7 @@ final class MainVC: UIViewController {
 // backgroundArray[2]
                 } completion: { _ in
                     // launchScreen1 이미지 바꾸기
-                    self.launchScreen1.imageView.image = UIImage(named: self.backgroundArray?[2] ?? "300")
+                    self.launchScreen1.imageView.image = UIImage(named: self.ImgArray[2])
                     // launchScreen1 위치 바꾸기
                     self.launchScreen1.frame.origin.x = self.width
                     
@@ -481,12 +488,8 @@ final class MainVC: UIViewController {
                         
 // backgroundArray[3]
                     } completion: { _ in
-                        if self.backgroundArray == nil { sleep(3) }
-                        
-                        self.backgroundImage.image = UIImage(named: self.backgroundArray?[3] ?? "400")
-                        
                         // launchScreen1 이미지 바꾸기
-                        self.launchScreen2.imageView.image = UIImage(named: self.backgroundArray?[3] ?? "400")
+                        self.launchScreen2.imageView.image = UIImage(named: self.ImgArray[3])
                         // launchScreen1 위치 바꾸기
                         self.launchScreen2.frame.origin.x = self.width
                         
@@ -520,32 +523,33 @@ final class MainVC: UIViewController {
     
     
     // MARK: - launch_Image
-    private func settinglaunchImg() {
+    /** 현재 시간에 맞춰, 이미지 , 폰트를 바꿔주는 코드 */
+    private func settingApp() {
         guard let hour = Int(self.todayArray[2]),
-              let user = self.user
+              let ImgFont = self.userImgFont
         else { return }
         
-        // MARK: - Fix
         if hour < 7 {
-            self.backgroundArray = [user.morningImg, user.sunsetImg, user.nightImg, user.dawnImg]
+            self.ImgArray = [ImgFont.morningImg, ImgFont.sunsetImg, ImgFont.nightImg, ImgFont.dawnImg]
             self.currentTime = .dawn
-            self.currentFont = fontColor(index: user.dawnFont)
+            self.currentFont = fontColor(index: ImgFont.dawnFont)
             
         } else if 7 <= hour && hour < 18 {
-            self.backgroundArray = [user.sunsetImg, user.nightImg, user.dawnImg, user.morningImg]
+            self.ImgArray = [ImgFont.sunsetImg, ImgFont.nightImg, ImgFont.dawnImg, ImgFont.morningImg]
             self.currentTime = .morning
-            self.currentFont = fontColor(index: user.dawnFont)
+            self.currentFont = fontColor(index: ImgFont.morningFont)
             
         } else if 18 <= hour && hour < 19 {
-            self.backgroundArray = [user.nightImg, user.dawnImg, user.morningImg, user.sunsetImg]
+            self.ImgArray = [ImgFont.nightImg, ImgFont.dawnImg, ImgFont.morningImg, ImgFont.sunsetImg]
             self.currentTime = .sunset
-            self.currentFont = fontColor(index: user.dawnFont)
+            self.currentFont = fontColor(index: ImgFont.sunsetFont)
             
         } else if 19 <= hour && hour <= 24 {
-            self.backgroundArray = [user.dawnImg, user.morningImg, user.sunsetImg, user.nightImg]
+            self.ImgArray = [ImgFont.dawnImg, ImgFont.morningImg, ImgFont.sunsetImg, ImgFont.nightImg]
             self.currentTime = .night
-            self.currentFont = fontColor(index: user.dawnFont)
+            self.currentFont = fontColor(index: ImgFont.nightFont)
         }
+        self.backgroundImage.image = UIImage(named: self.ImgArray[3])
     }
     
     
@@ -593,7 +597,9 @@ final class MainVC: UIViewController {
             // User_Dat와 Diary_Data - 가져오기
             self.fetchUserData()
             self.fetchDiaryDatas()
-            self.fetchBackgroundImg()
+            self.fetchHaveImg()
+            self.fetchImgFont()
+            self.fetchCoin()
             
             
         // user가 없다면 -> Login_View 로 이동
@@ -646,8 +652,8 @@ final class MainVC: UIViewController {
     private func configureMainVC() {
         // header_View
         self.view.addSubview(self.headerView)
-        self.headerView.mainHeaderDelegate = self
-        self.headerView.diaryHeaderDelegate = self.diaryView
+        self.headerView.headerMainDelegate = self
+        self.headerView.headerDiaryVCDelegate = self.diaryView
         self.headerView.headerHomeDelegate = self.homeView
         
         
@@ -699,9 +705,9 @@ final class MainVC: UIViewController {
     
     
     // MARK: - Fetch_Background_Img
-    private func fetchBackgroundImg() {
-        self.service.fetchBackground { [self] array in
-            self.backgroundImg = array
+    private func fetchHaveImg() {
+        self.service.fetchHaveImg { [self] array in
+            self.haveImg = array
         }
     }
     
@@ -711,9 +717,6 @@ final class MainVC: UIViewController {
     private func fetchUserData() {
         self.service.fetchUserData() { user in
             self.user = user
-            
-            // 첫 fetch_User에서만 작동
-            if self.backgroundArray == nil { self.settinglaunchImg() }
         }
     }
     
@@ -740,6 +743,23 @@ final class MainVC: UIViewController {
                 
                 self.diaryTable.diaryData = self.diaryData
             }
+        }
+    }
+    
+    
+    // MARK: - Fetch_User-Img-Font
+    private func fetchImgFont() {
+        self.service.fetchImgFont { imgFont in
+            self.userImgFont = imgFont
+            
+            if self.currentFont == nil { self.settingApp() }
+        }
+    }
+    
+    
+    private func fetchCoin() {
+        self.service.fetchCoin { coin in
+            self.coin = coin
         }
     }
 }
@@ -987,6 +1007,7 @@ extension MainVC {
             self.view.addSubview(self.shopView)
             self.view.addSubview(self.detailView)
             self.view.bringSubviewToFront(self.blackView)
+            self.view.addSubview(self.purchaseView)
             
             // menuView 숨기기
             self.menuShow(false, itemTapped: true, footerHide: true)
@@ -1010,6 +1031,7 @@ extension MainVC {
                 self.shopView.removeFromSuperview()
                 self.blackView.removeFromSuperview()
                 self.detailView.removeFromSuperview()
+                self.purchaseView.removeFromSuperview()
             }
         }
     }
@@ -1036,6 +1058,26 @@ extension MainVC {
                 self.blackView.alpha = 0
                 // detailview 보이게 하기
                 self.detailView.alpha = 0
+            }
+        }
+    }
+    // MARK: - Shop_Purchase_View
+    private func purchaseViewShow(_ show: Bool) {
+        // purchase_View 보이게 하기
+        if show == true {
+            UIView.animate(withDuration: self.animateTime) {
+                self.detailView.frame.origin.y = 50
+                self.purchaseView.frame.origin.y = self.width / 10 * 16 + 50
+                self.purchaseView.alpha = 1
+            }
+            
+            
+        // purchase_View 숨기기
+        } else {
+            UIView.animate(withDuration: self.animateTime) {
+                self.detailView.frame.origin.y = 150
+                self.purchaseView.frame.origin.y = self.height
+                self.purchaseView.alpha = 0
             }
         }
     }
@@ -1273,7 +1315,7 @@ extension MainVC {
     // 뷰 전환
     // 왼쪽 버튼의 역할 및 이미지를 바꿈
     // 상황에 따라 필요한 토글 설정
-extension MainVC: LoginMainDelegate, HeaderMainDelegate, MenuMainDelegate, FirstMainDelegate, DiaryTableMainDelegate, ShopMainDelegate, SetupMainDelegate, LogoutMainDelegate {
+extension MainVC: LoginMainDelegate, HeaderMainDelegate, MenuMainDelegate, FirstMainDelegate, DiaryTableMainDelegate, ShopMainDelegate, SetupMainDelegate, LogoutMainDelegate, PurchaseMainDelegate {
     
     // MARK: - Menu
 // [Left_Button]
@@ -1300,6 +1342,9 @@ extension MainVC: LoginMainDelegate, HeaderMainDelegate, MenuMainDelegate, First
 // [Menu - Button]
     // menu -> achieveView
     func handleAchievement() {
+        //
+        self.achieveView.backgroundData = haveImg
+        //
         service.fetchDiaryMonth(completion: { months in
             self.achieveView.everyMonth = months
         })
@@ -1323,8 +1368,10 @@ extension MainVC: LoginMainDelegate, HeaderMainDelegate, MenuMainDelegate, First
 // [Collection_Cell]
     // Achieve_View -> Achieve_Table
     func monthDiaryTapped(month: String) {
-        self.diaryTable.diaryTableEnum = .achieve
         
+        //
+        self.diaryTable.diaryTableEnum = .achieve
+        //
         self.service.fetchDiaryDatas(month: month) { datas in
             if let datas = datas { self.diaryTable.diaryData = datas }
             // 버튼의 역할을 바꿈
@@ -1353,9 +1400,13 @@ extension MainVC: LoginMainDelegate, HeaderMainDelegate, MenuMainDelegate, First
 // [Table_Cell]
     // Achieve_Diary_TAble -> Diary_View
     func achieveDiaryView(month: String, day: String) {
+        
+        self.diaryView.observationMode()
+        //
         self.headerView.headerTitle(title: "\(month)월 \(day)일의 일기장")
         // 버튼의 역할 바꾸기
         self.headerView.buttonConfig = .achieveDiaryVeiwButton
+        
         // achieve_Diary_View 숨기기
         self.achieveDiaryViewShow(true)
     }
@@ -1381,8 +1432,10 @@ extension MainVC: LoginMainDelegate, HeaderMainDelegate, MenuMainDelegate, First
 // [Menu - Button]
     // menu -> HomeView
     func handleHome() {
+        //
+        self.homeView.backgroundData = haveImg
         // user 전달
-        self.homeView.user = self.user
+        self.homeView.imageFont = self.userImgFont
         // 버튼의 이미지 + 역할을 바꿈
         self.headerView.buttonConfig = .homeViewButton
         // Home_View_보이게 하기
@@ -1392,12 +1445,12 @@ extension MainVC: LoginMainDelegate, HeaderMainDelegate, MenuMainDelegate, First
 // [Left_Button]
     // Home -> Main
     func handleHomeToMain() {
+        // fetch_ImgFont
+        self.fetchImgFont()
         // 버튼의 이미지 + 역할을 바꿈
         self.headerView.buttonConfig = .mainViewButton
         // home_View_숨기기
         self.HomeViewShow(false)
-        // fetch_User
-        self.fetchUserData()
     }
     
     
@@ -1406,6 +1459,8 @@ extension MainVC: LoginMainDelegate, HeaderMainDelegate, MenuMainDelegate, First
 // [Menu - Button]
     // menu -> ShopView
     func handleShop() {
+        //
+        self.shopView.backgroundData = haveImg
         // 버튼의 이미지 + 역할을 바꿈
         self.headerView.buttonConfig = .shopVCButton
         // shop_View_보이게 하기
@@ -1422,31 +1477,95 @@ extension MainVC: LoginMainDelegate, HeaderMainDelegate, MenuMainDelegate, First
         // shop_View_숨기기
         self.shopViewShow(false)
     }
+    // MARK: - Shop_Detail_View
+// [Item]
+    // Shop_View -> detail_View
+    func shopCellTapped(index: String) {
+        // 이미지 바꾸기
+        self.detailView.detailBackground.image = UIImage(named: index)
+        // detail_View + detail_Black_View 보이게 하기
+        self.blackViewToggle = .shop
+        // left 버튼의 용도 바꾸기
+        self.headerView.buttonConfig = .shopDetailViewButton
+        // detail_View + black_View 보이게 하기
+        self.detailViewShow(true)
+    }
+        
+// [Left_Button]
+    // detail_View -> Shop_View
+    func handleDetailToShop() {
+        // left 버튼의 용도 바꾸기
+        self.headerView.buttonConfig = .shopVCButton
+        // detail_View + black_View 숨기기
+        self.detailViewShow(false)
+    }
     
     
-// [Shop_Detail_View]
-    // [Item]
-        // Shop_View -> detail_View
-        func shopCellTapped(index: String) {
-            // 이미지 바꾸기
-            self.detailView.detailBackground.image = UIImage(named: index)
-            
-            // detail_View + detail_Black_View 보이게 하기
-            self.blackViewToggle = .shop
-            // left 버튼의 용도 바꾸기
-            self.headerView.buttonConfig = .shopDetailViewButton
-            // detail_View + black_View 보이게 하기
-            self.detailViewShow(true)
+    // MARK: - Shop_Purchase_View
+// [Right_Button]
+    // Shop_Detail_View -> Purchase_View
+    func detailToPurchase() {
+        self.purchaseView.coin = self.coin
+        
+        // black_View_Toggle
+        self.blackViewToggle = .purchase
+        // 버튼의 역할 바꾸기
+//        self.headerView.buttonConfig = .shopPurchaseBtn
+        // purchase_View 보이게 하기
+        self.purchaseViewShow(true)
+    }
+    
+    
+    // MARK: - Fix
+    /** [Left_Button] - Purchase_View -> Shop_Detail_View */
+//    func purchaseTodetailShop() {
+//        // 버튼의 역할 바꾸기
+//        self.headerView.buttonConfig = .shopDetailViewButton
+//        // purchase_View 숨기기
+//        self.purchaseViewShow(false)
+//    }
+    
+    /** [cancel_Btn] - purchase_View -> Shop_Detail_View */
+    func cancelTapped() {
+//        self.headerView.buttonConfig = .shopDetailViewButton
+        self.blackViewToggle = .shop
+        self.purchaseViewShow(false)
+    }
+    /** */
+    func purchaseTapped() {
+        self.cancelTapped()
+        // DB업데이트
+            // coin 마이너스
+        self.service.minusCoin(coin: self.coin)
+        
+        
+        
+        // MARK: - Fix
+        // update_haveImg
+        guard let img = self.shopView.selectedImg else { return }
+        self.service.updatehaveImg(num: img) { haveImg in
+            self.haveImg = haveImg
+            // shop_View 업데이트
+            self.shopView.backgroundData = self.haveImg
+            self.homeView.backgroundData = self.haveImg
         }
         
-    // [Left_Button]
-        // detail_View -> Shop_View
-        func handleDetailToShop() {
-            // left 버튼의 용도 바꾸기
-            self.headerView.buttonConfig = .shopVCButton
-            // detail_View + black_View 숨기기
-            self.detailViewShow(false)
+        // currentImg-ImgFont
+        self.service.fetchImgFont { userImgFont in
+            self.userImgFont = userImgFont
         }
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     
     
@@ -1537,28 +1656,20 @@ extension MainVC: LoginMainDelegate, HeaderMainDelegate, MenuMainDelegate, First
     @objc private func detailBlackViewTapped() {
         switch self.blackViewToggle {
         case .menu:
-            // menu 숨기기
-            self.menuShow(false, itemTapped: false, footerHide: false)
-            // 버튼의 이미지 + 역할 바꾸기
-            self.headerView.buttonConfig = .mainViewButton
+            self.handleMenuToMain()
             break
             
             
         case .shop:
-            self.headerView.buttonConfig = .shopVCButton
-            self.detailViewShow(false)
+            self.handleDetailToShop()
             break
-            
-            
-        case .achieve:
-            self.headerView.buttonConfig = .achieveViewButton
-//            self.achieveDetailHideOrShow(show: false)
+        case .purchase:
+            self.cancelTapped()
             break
             
             
         case .logout:
-            self.headerView.buttonConfig = .setupVCButton
-            self.logoutViewShow(false)
+            self.handleLogoutToSetup()
             break
         }
     }
@@ -1669,14 +1780,14 @@ extension MainVC: DiaryVCMainDelegate {
 // Home_View에서 이미지 -> check버튼 누름
     // -> 현재 시간대가 맞다면 이미지가 바뀜
 extension MainVC: HomeMainDelegate {
-    func imgChanged(currentTime: CurrentTime, img: String) {
+    func imgChanged(currentTime: CurrentTime, img: String, font: Int) {
         if self.currentTime == currentTime {
             self.backgroundImage.image = UIImage(named: img)
-        }
-    }
-    func fontChanged(currentTime: CurrentTime, fontInt: Int) {
-        if self.currentTime == currentTime {
-            self.currentFont = fontColor(index: fontInt)
+            self.currentFont = fontColor(index: font)
+            // DB_Update
+            self.service.updateImgFont(currentTime: currentTime,
+                                       font: font,
+                                       img: img)
         }
     }
 }

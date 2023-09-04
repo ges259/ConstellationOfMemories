@@ -12,18 +12,8 @@ struct User {
     let email: String
     // 알림 설정
     let noti: Int
-    
-    // 글자 색상
-    let dawnFont: Int
-    let morningFont: Int
-    let sunsetFont: Int
-    let nightFont: Int
-    
-    // 배경 화면
-    let dawnImg: String
-    let morningImg: String
-    let sunsetImg: String
-    let nightImg: String
+    // 코인
+    let coin: Int
     
     
     
@@ -36,17 +26,7 @@ struct User {
         self.email = dictionary[DBString.email] as? String ?? ""
         // info(알림)
         self.noti = dictionary[DBString.noti] as? Int ?? 0
-        // font_Color
-        self.dawnFont = dictionary[DBString.dawnFont] as? Int ?? -1
-        self.morningFont = dictionary[DBString.morningFont] as? Int ?? -2
-        self.sunsetFont = dictionary[DBString.sunsetFont] as? Int ?? -3
-        self.nightFont = dictionary[DBString.nightFont] as? Int ?? -4
-        
-        // background_Image
-        self.dawnImg = dictionary[DBString.dawnImg] as? String ?? "100"
-        self.morningImg = dictionary[DBString.morningImg] as? String ?? "200"
-        self.sunsetImg = dictionary[DBString.sunsetImg] as? String ?? "300"
-        self.nightImg = dictionary[DBString.nightImg] as? String ?? "400"
+        self.coin = dictionary[DBString.coin] as? Int ?? 0
     }
     
     

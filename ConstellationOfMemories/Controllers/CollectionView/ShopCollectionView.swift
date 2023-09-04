@@ -11,19 +11,21 @@ final class ShopCollectionView: UIView {
     
     // MARK: - Properties
     // background_Image_Data
-    var backgroundData: BackgroundImg? {
+    var backgroundData: HaveImg? {
         didSet {
             if let backgroundData = backgroundData {
                 self.dontHaveImage = backgroundData.dontHaveDawnImg()
+                self.shopCollectionView.reloadData()
             }
         }
     }
     
     private var dontHaveImage = [Int]()
     
+    var selectedImg: Int?
     
     // Delegate
-    var mainShopDelgate: ShopMainDelegate?
+    var shopMainDelgate: ShopMainDelegate?
     
     
     
@@ -141,12 +143,14 @@ extension ShopCollectionView: UICollectionViewDelegate, UICollectionViewDataSour
         
         cell.haveImage.image = UIImage(named: "\(self.dontHaveImage[indexPath.row])")
         
+        
+        
         return cell
     }
     
     // MARK: - Did_Select_Row_At
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
-        self.mainShopDelgate?.shopCellTapped(index: "\(self.dontHaveImage[indexPath.row])")
+        self.selectedImg = self.dontHaveImage[indexPath.row]
+        self.shopMainDelgate?.shopCellTapped(index: "\(self.dontHaveImage[indexPath.row])")
     }
 }

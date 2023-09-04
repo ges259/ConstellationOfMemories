@@ -33,6 +33,7 @@ enum LeftBtnTapImgChange {
 // [Shop]
     case shopVCButton
     case shopDetailViewButton
+//    case shopPurchaseBtn
 // [Setup]
     case setupVCButton
     case logoutSetupButton
@@ -45,7 +46,6 @@ enum RightBtnTapImgChange {
     case cannotBeModified
     
     case coin
-//    case achieveDetail
     case shopDetail
     case home
 }
@@ -102,15 +102,16 @@ enum CurrentTime {
     case night
 }
 
-enum SegementCollection {
-    case first
-    case second
-}
+//enum SegementCollection {
+//    case first
+//    case second
+//}
 
 enum BlackViewToggle {
     case menu
     case shop
-    case achieve
+    case purchase
+//    case achieve
     case logout
 }
 

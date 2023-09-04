@@ -28,6 +28,8 @@ struct Service {
     
     
     
+// MARK: - User
+
     
     
     // MARK: - Login
@@ -43,7 +45,6 @@ struct Service {
     
     // MARK: - SignUp
     func signUp(fullName: String, email: String, password: String, completion: @escaping () -> Void) {
-        print(#function)
         Auth.auth().createUser(withEmail: email, password: password) { result, error in
             if let error = error {
                 print("Frailed to register user with error \(error.localizedDescription)")
@@ -76,7 +77,6 @@ struct Service {
             let uid = snapshot.key
             
             let user = User(uid: uid,dictionary: dictionary)
-            dump(user)
             // completion
             completion(user)
         }
@@ -88,8 +88,105 @@ struct Service {
     
     
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+// MARK: - Coin
+    
+    
+    
+    // MARK: - Plus_Coin
+    func plusCoin(coin: Int) {
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        Users_REF.child(uid).child(DBString.coin).setValue(coin + 10)
+    }
+    
+    
+    // MARK: - MinusCoin
+    func minusCoin(coin: Int) {
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        Users_REF.child(uid).child(DBString.coin).setValue(coin - 10)
+    }
+    
+    
+    
+    
+    // MARK: - Fetch_Coin
+    func fetchCoin(completion: @escaping (Int) -> Void) {
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        Users_REF.child(uid).child(DBString.coin).observeSingleEvent(of: .value) { snapshot in
+            
+            guard let coin = snapshot.value as? Int else { return }
+            completion(coin)
+        }
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+// MARK: - User-Img-Font
+    
+    
+    
     // MARK: - Update_Font & Image
-    func updateFontImage(currentTime: CurrentTime, font: Int, img: String) {
+    func updateImgFont(currentTime: CurrentTime, font: Int, img: String) {
         // uid
         guard let uid = Auth.auth().currentUser?.uid else { return }
         
@@ -113,12 +210,26 @@ struct Service {
             fontString = DBString.nightFont
             imgString = DBString.nightImg
         }
-        
-        
         // Font
-        Users_REF.child(uid).child(fontString).setValue(font)
+        imgFont_REF.child(uid).child(fontString).setValue(font)
         // Background_Image
-        Users_REF.child(uid).child(imgString).setValue(img)
+        imgFont_REF.child(uid).child(imgString).setValue(img)
+    }
+    
+    
+    
+    // MARK: - Fetch_Font & Image
+    func fetchImgFont(completion: @escaping (UserImgFont) -> Void) {
+        // uid
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        
+        imgFont_REF.child(uid).observeSingleEvent(of: .value) { snapshot in
+            
+            guard let dictionary = snapshot.value as? [String: Any] else { return }
+            
+            let userImgFont = UserImgFont(dictionary: dictionary)
+            completion(userImgFont)
+        }
     }
     
     
@@ -134,8 +245,29 @@ struct Service {
     
     
     
-    // MARK: - Update_Background
-    func backgroundBackground(num: Int, completion: @escaping () -> Void) {
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+// MARK: - haveImg
+    
+    
+    
+    // MARK: - Update_haveImg
+    func updatehaveImg(num: Int, completion: @escaping (HaveImg) -> Void) {
         // uid
         guard let uid = Auth.auth().currentUser?.uid else { return }
         // create_Dictionary_____background_number
@@ -143,13 +275,15 @@ struct Service {
         // create_Background
         Image_REF.child(uid).updateChildValues(value)
         // completion
-        completion()
+        self.fetchHaveImg { haveImg in
+            completion(haveImg)
+        }
     }
     
     
     
-    // MARK: - Fetch_Background
-    func fetchBackground(completion: @escaping (BackgroundImg) -> Void) {
+    // MARK: - Fetch_haveImg
+    func fetchHaveImg(completion: @escaping (HaveImg) -> Void) {
         // uid
         guard let uid = Auth.auth().currentUser?.uid else { return }
         // return Array
@@ -165,7 +299,7 @@ struct Service {
                 numArray.append(ddd)
             }
             
-            let imageArray = BackgroundImg(dictionary: numArray)
+            let imageArray = HaveImg(dictionary: numArray)
             
             completion(imageArray)
         }
@@ -200,6 +334,13 @@ struct Service {
     
     
     
+    
+    
+    
+    
+    
+    
+// MARK: - Diary
     
     
     
@@ -310,6 +451,7 @@ struct Service {
     
     
     
+    
     // MARK: - Fetcch_Month
     // 몇월이 있는지 (예시: 7월 8월 9월)
     func fetchDiaryMonth(completion: @escaping ([String]) -> Void) {
@@ -342,7 +484,7 @@ struct Service {
     
     
     
-    // MARK: - Info
+// MARK: - Info
     func updateInfo(on: Bool) {
         // uid
         guard let uid = Auth.auth().currentUser?.uid else { return }

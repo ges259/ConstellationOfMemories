@@ -269,6 +269,15 @@ extension DiaryVC: HeaderDiaryVCDelegate {
         // delegate
         self.diaryVCMainDelegate?.updateDiaryData()
     }
+    
+    
+    func observationMode() {
+        self.diarywhiteView.alpha = 0
+        self.diaryTextView.isEditable = false
+        self.diarywhiteView.backgroundColor = .clear
+        // share버튼 보이게 하기
+        self.footerButton.alpha = 1
+    }
 }
 
 

@@ -182,6 +182,7 @@ extension DiaryTableView: UITableViewDelegate, UITableViewDataSource {
         // Achieve_Table_View
         } else {
             cell.diaryString = "\(diaryData[indexPath.row].month)월 \(diaryData[indexPath.row].day)일에 떠올린 추억"
+            
         }
         
         return cell
@@ -237,7 +238,9 @@ extension DiaryTableView: UITableViewDelegate, UITableViewDataSource {
             self.diaryTableDiaryDelegate?.achieveDiary(diaryString: self.diaryData[indexPath.row].diaryText)
             
             // 뷰 전환
-            self.diaryTableMainDelegate?.achieveDiaryView(month: self.diaryData[indexPath.row].month, day: self.diaryData[indexPath.row].day)
+            self.diaryTableMainDelegate?.achieveDiaryView(
+                month: self.diaryData[indexPath.row].month,
+                day: self.diaryData[indexPath.row].day)
         }
     }
 }

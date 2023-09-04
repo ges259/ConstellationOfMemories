@@ -16,7 +16,7 @@ final class DetailView: UIView {
     
     // MARK: - Layout
     lazy var detailBackground: UIImageView = {
-        return UIImageView(image: UIImage(named: "0"))
+        return UIImageView()
     }()
     
     
@@ -64,7 +64,7 @@ final class DetailView: UIView {
         self.addSubview(self.detailBackground)
         self.detailBackground.anchor(width: self.frame.width, height: self.frame.height,
                                      centerX: self, centerY: self,
-                                     cornerRadius: 12)
+                                     cornerRadius: 15)
         // titleLabel
         self.addSubview(self.detailTitle)
         self.detailTitle.anchor(top: self.detailBackground.topAnchor, paddingTop: 20,
