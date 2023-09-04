@@ -171,9 +171,9 @@ final class HomeView: UIView {
     private lazy var backButton2: UIButton = {
         return UIButton().buttonSustemImage(btnSize: 10, imageString: .back)
     }()
-    private lazy var shareButton: UIButton = {
-        return UIButton().buttonSustemImage(btnSize: 10, imageString: .share)
-    }()
+//    private lazy var shareButton: UIButton = {
+//        return UIButton().buttonSustemImage(btnSize: 10, imageString: .share)
+//    }()
     
     
     
@@ -365,9 +365,9 @@ final class HomeView: UIView {
                              trailing: self.diaryViewImg.trailingAnchor, paddingTrailing: 10,
                              height: 30)
         // shareButton
-        self.addSubview(self.shareButton)
-        self.shareButton.anchor(bottom: self.diaryViewImg.bottomAnchor, paddingBottom: 10,
-                                centerX: self.diaryViewImg)
+//        self.addSubview(self.shareButton)
+//        self.shareButton.anchor(bottom: self.diaryViewImg.bottomAnchor, paddingBottom: 10,
+//                                centerX: self.diaryViewImg)
     }
     
     
@@ -457,7 +457,7 @@ final class HomeView: UIView {
         self.separatorView.backgroundColor = color
         self.textView.textColor = color
         self.backButton2.tintColor = color
-        self.shareButton.tintColor = color
+//        self.shareButton.tintColor = color
         
         // 폰트 임시저장
         self.temporaryFont = Int_index

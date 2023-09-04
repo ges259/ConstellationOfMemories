@@ -262,12 +262,13 @@ extension UIButton {
     }
     
     func authButton(title: String,
+                    titleColor: UIColor = .lightGray,
                     backgroundColor: UIColor = UIColor(white: 1, alpha: 0.3))
     -> UIButton {
         let btn = UIButton(type: .system)
         
             btn.setTitle(title, for: .normal)
-            btn.setTitleColor(.lightGray, for: .normal)
+            btn.setTitleColor(titleColor, for: .normal)
             btn.titleLabel?.font = UIFont.boldSystemFont(ofSize: 18)
             btn.backgroundColor = backgroundColor
 //        btn.isEnabled = false

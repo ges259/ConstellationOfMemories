@@ -143,6 +143,7 @@ protocol SetupMainDelegate {
 
 protocol DiaryVCMainDelegate {
     func updateDiaryData()
+    func createDiaryData()
 }
 
 protocol SetupInfoHeaderDelegate {

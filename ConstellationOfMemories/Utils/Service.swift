@@ -59,6 +59,33 @@ struct Service {
             // Create_User_Data
                 // user정보를 uid를 통해 DB에 저장
             Users_REF.child(uid).updateChildValues(values) { error, ref in
+                self.updatehaveImg(num: 100) { _ in
+                    self.updateImgFont(currentTime: .dawn,
+                                       font: -1,
+                                       img: "100")
+                }
+                self.updatehaveImg(num: 200) { _ in
+                    self.updateImgFont(currentTime: .morning,
+                                       font: -2,
+                                       img: "200")
+                }
+                self.updatehaveImg(num: 300) { _ in
+                    self.updateImgFont(currentTime: .sunset,
+                                       font: -3,
+                                       img: "300")
+                }
+                self.updatehaveImg(num: 400) { _ in
+                    self.updateImgFont(currentTime: .night,
+                                       font: -4,
+                                       img: "400")
+                }
+                
+                
+                
+                
+                
+                
+                
                 completion()
             }
         }
@@ -112,14 +139,15 @@ struct Service {
     
     
     // MARK: - Plus_Coin
-    func plusCoin(coin: Int) {
+    func plusCoin(coin: Int, completion: @escaping () -> Void) {
         guard let uid = Auth.auth().currentUser?.uid else { return }
-        Users_REF.child(uid).child(DBString.coin).setValue(coin + 10)
+        Users_REF.child(uid).child(DBString.coin).setValue(coin + 3)
+        
     }
     
     
     // MARK: - MinusCoin
-    func minusCoin(coin: Int) {
+    func minusCoin(coin: Int, completion: @escaping () -> Void) {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         Users_REF.child(uid).child(DBString.coin).setValue(coin - 10)
     }

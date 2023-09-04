@@ -36,8 +36,7 @@ final class HeaderView: UIView {
         - headerLeftButtonTapped() - HeaderView
         - didSelectRowAt           - MainVC
         - blackViewTapped()        - MainVC
-        - starButtonTapped()       - MainVC 등
-     */
+        - starButtonTapped()       - MainVC 등ㅇ     */
     var buttonConfig: LeftBtnTapImgChange = .mainViewButton {
         didSet {
 //            print(buttonConfig)

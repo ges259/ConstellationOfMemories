@@ -15,6 +15,7 @@ final class PurchaseView: UIView {
     
     var coin: Int = 0 {
         didSet {
+            self.configTitle(black: true)
             self.coinLabel.text = "코인 10개 필요, 현재 코인 \(self.coin)개"
         }
     }
@@ -22,12 +23,13 @@ final class PurchaseView: UIView {
     
     // MARK: - Layout
     private lazy var logoutView: UIView = {
-        return UIView().viewConfig(backgroundColor: UIColor(white: 1, alpha: 0.75))
+        return UIView().viewConfig(backgroundColor: UIColor(white: 1, alpha: 0.6))
     }()
     
     
     private lazy var titleLabel: UILabel = {
         return UILabel().labelConfig(labelText: "구매하시겠습니까?",
+                                     LabelTextColor: .black,
                                      fontSize: 18,
                                      textAlignment: .center)
     }()
@@ -38,6 +40,7 @@ final class PurchaseView: UIView {
     
     private lazy var cancelBtn: UIButton = {
         let btn = UIButton().authButton(title: "취소",
+                                        titleColor: .darkGray,
                                         backgroundColor: .clear)
             btn.addTarget(self, action: #selector(self.cancelTapped), for: .touchUpInside)
         return btn
@@ -45,6 +48,7 @@ final class PurchaseView: UIView {
     
     private lazy var logoutBtn: UIButton = {
         let btn = UIButton().authButton(title: "구매",
+                                        titleColor: .darkGray,
                                         backgroundColor: .clear)
         btn.addTarget(self, action: #selector(self.purchaseTapped), for: .touchUpInside)
         return btn
@@ -87,7 +91,6 @@ final class PurchaseView: UIView {
     private func configureUI() {
         // alpha = 0
         self.alpha = 0
-        
         // logoutView
         self.addSubview(self.logoutView)
         self.logoutView.anchor(width: self.frame.width,
@@ -99,7 +102,7 @@ final class PurchaseView: UIView {
                                leading: self.logoutView.leadingAnchor,
                                trailing: self.logoutView.trailingAnchor,
                                height: 30)
-        
+        // coinLabel
         self.addSubview(self.coinLabel)
         self.coinLabel.anchor(top: self.titleLabel.bottomAnchor,
                               leading: self.titleLabel.leadingAnchor,
@@ -111,6 +114,18 @@ final class PurchaseView: UIView {
                               trailing: self.logoutView.trailingAnchor)
     }
     
+    
+    
+    private func configTitle(black: Bool) {
+        if black == true {
+            self.titleLabel.text = "구매하시겠습니까?"
+            self.titleLabel.textColor = .black
+            
+        } else {
+            self.titleLabel.text = "코인 \(10 - self.coin)개 부족"
+            self.titleLabel.textColor = .red
+        }
+    }
     
     
     
@@ -125,6 +140,11 @@ final class PurchaseView: UIView {
     }
     
     @objc private func purchaseTapped() {
-        self.purchaseMainDelegate?.purchaseTapped()
+        // 구매에 성공했다면 ( 돈이 있다면 )
+        if self.coin >= 10 {
+            self.purchaseMainDelegate?.purchaseTapped()
+            
+        // 코인 부족으로 -> 구매에 실패했다면
+        } else { self.configTitle(black: false) }
     }
 }

@@ -352,7 +352,7 @@ final class MainVC: UIViewController {
         let frame = CGRect(x: self.width / 6,
                            y: self.height / 5 * 1.8,
                            width: self.width / 3 * 2,
-                           height: 170)
+                           height: 150)
         let view = LogoutView(frame: frame)
             view.logoutMainDelegate = self
         return view
@@ -488,6 +488,8 @@ final class MainVC: UIViewController {
                         
 // backgroundArray[3]
                     } completion: { _ in
+                        self.backgroundImage.image = UIImage(named: self.ImgArray[3])
+                        
                         // launchScreen1 이미지 바꾸기
                         self.launchScreen2.imageView.image = UIImage(named: self.ImgArray[3])
                         // launchScreen1 위치 바꾸기
@@ -549,7 +551,6 @@ final class MainVC: UIViewController {
             self.currentTime = .night
             self.currentFont = fontColor(index: ImgFont.nightFont)
         }
-        self.backgroundImage.image = UIImage(named: self.ImgArray[3])
     }
     
     
@@ -882,7 +883,7 @@ extension MainVC {
                 self.achieveView.alpha = 0
                 
             } completion: { _ in
-                self.achieveView.resetAchieveView()
+//                self.achieveView.resetAchieveView()
                 // remove View
                 
                 self.achieveView.removeFromSuperview()
@@ -1235,8 +1236,10 @@ extension MainVC {
             self.view.addSubview(self.logoutView)
             
             UIView.animate(withDuration: self.animateTime) {
+                // header_View 숨기기
+                self.headerView.alpha = 0
                 // setup_View 숨기기
-                self.setupView.alpha = 0.3
+                self.setupView.alpha = 0
                 // login_View 보이게 하기
                 self.logoutView.alpha = 1
                 // Black_View 보이게 하기
@@ -1246,6 +1249,8 @@ extension MainVC {
             
         } else {
             UIView.animate(withDuration: self.animateTime) {
+                // header_View 보이게 하기
+                self.headerView.alpha = 1
                 // setup_View 보이게 하기
                 self.setupView.alpha = 1
                 // login_View 숨기기
@@ -1534,38 +1539,25 @@ extension MainVC: LoginMainDelegate, HeaderMainDelegate, MenuMainDelegate, First
     /** */
     func purchaseTapped() {
         self.cancelTapped()
+        
         // DB업데이트
-            // coin 마이너스
-        self.service.minusCoin(coin: self.coin)
+        // coin 마이너스
+        self.service.minusCoin(coin: self.coin) {
+            // fetch Coin
+            self.fetchCoin()
+        }
         
-        
-        
-        // MARK: - Fix
         // update_haveImg
-        guard let img = self.shopView.selectedImg else { return }
-        self.service.updatehaveImg(num: img) { haveImg in
+        guard let imgNum = self.shopView.selectedImg else { return }
+        
+        // 구매한 이미지를 DB에 추가
+        self.service.updatehaveImg(num: imgNum) { haveImg in
             self.haveImg = haveImg
             // shop_View 업데이트
             self.shopView.backgroundData = self.haveImg
             self.homeView.backgroundData = self.haveImg
         }
-        
-        // currentImg-ImgFont
-        self.service.fetchImgFont { userImgFont in
-            self.userImgFont = userImgFont
-        }
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
     
     
@@ -1683,9 +1675,19 @@ extension MainVC: LoginMainDelegate, HeaderMainDelegate, MenuMainDelegate, First
     func handleLoginToMain() {
         // Login_View 숨기기
         self.loginViewShow(false)
-        // fetch_User & fetch_Diary
+//        self.updateTime()
+//        // fetch_User & fetch_Diary
+//        self.fetchUserData()
+//        self.fetchDiaryDatas()
+        
+        // 시간 업데이트
+        self.updateTime()
+        // User_Dat와 Diary_Data - 가져오기
         self.fetchUserData()
         self.fetchDiaryDatas()
+        self.fetchHaveImg()
+        self.fetchImgFont()
+        self.fetchCoin()
     }
     
     
@@ -1744,6 +1746,11 @@ extension MainVC: LoginMainDelegate, HeaderMainDelegate, MenuMainDelegate, First
                         // user 비우기
                             // 그래야 checkLogin()을 했을 때 로그아웃이 됨
                         self.user = nil
+                        self.userImgFont = nil
+                        self.coin = 0
+                        self.headerView.leftButtonAlpha(.menu)
+                        self.headerView.headerTitle(title: "추억 일기")
+                        self.currentFont = nil
                         // login_View 보이게 하기
                         self.loginViewShow(true)
                     }
@@ -1769,7 +1776,15 @@ extension MainVC: LoginMainDelegate, HeaderMainDelegate, MenuMainDelegate, First
 
 // MARK: - DiaryVCMainDelegate
 extension MainVC: DiaryVCMainDelegate {
-    func updateDiaryData() { self.fetchDiaryDatas() }
+    func updateDiaryData() {
+        self.fetchDiaryDatas()
+    }
+    func createDiaryData() {
+        self.fetchDiaryDatas()
+        self.service.plusCoin(coin: self.coin) {
+            self.fetchCoin()
+        }
+    }
 }
 
 
@@ -1781,13 +1796,15 @@ extension MainVC: DiaryVCMainDelegate {
     // -> 현재 시간대가 맞다면 이미지가 바뀜
 extension MainVC: HomeMainDelegate {
     func imgChanged(currentTime: CurrentTime, img: String, font: Int) {
+        // DB_Update
+        self.service.updateImgFont(currentTime: currentTime,
+                                   font: font,
+                                   img: img)
+        
         if self.currentTime == currentTime {
             self.backgroundImage.image = UIImage(named: img)
             self.currentFont = fontColor(index: font)
-            // DB_Update
-            self.service.updateImgFont(currentTime: currentTime,
-                                       font: font,
-                                       img: img)
+            
         }
     }
 }

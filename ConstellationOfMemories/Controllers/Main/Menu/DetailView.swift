@@ -31,10 +31,10 @@ final class DetailView: UIView {
     
     
     private lazy var menuButton: UIButton = {
-        return UIButton().buttonSustemImage(btnSize: 25, imageString: .menu)
+        return UIButton().buttonSustemImage(btnSize: 27, imageString: .menu)
     }()
     private lazy var footerButton: UIButton = {
-        return UIButton().buttonSustemImage(btnSize: 25, imageString: .moon)
+        return UIButton().buttonSustemImage(btnSize: 27, imageString: .moon)
     }()
     
     
@@ -67,16 +67,18 @@ final class DetailView: UIView {
                                      cornerRadius: 15)
         // titleLabel
         self.addSubview(self.detailTitle)
-        self.detailTitle.anchor(top: self.detailBackground.topAnchor, paddingTop: 20,
+        self.detailTitle.anchor(top: self.detailBackground.topAnchor, paddingTop: 25,
                                centerX: self)
         // leftButton
         self.addSubview(self.menuButton)
         self.menuButton.anchor(leading: self.detailBackground.leadingAnchor, paddingLeading: 20,
                                centerY: self.detailTitle)
+        self.menuButton.isEnabled = false
         // footerButton
         self.addSubview(self.footerButton)
-        self.footerButton.anchor(bottom: self.detailBackground.bottomAnchor, paddingBottom: 20,
+        self.footerButton.anchor(bottom: self.detailBackground.bottomAnchor, paddingBottom: 25,
                                  centerX: self)
+        self.footerButton.isEnabled = false
     }
     
     

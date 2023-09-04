@@ -21,7 +21,12 @@ final class DiaryVC: UIView {
     // Delegate
     var diaryVCMainDelegate: DiaryVCMainDelegate?
     
-    
+    var coin: Int? {
+        didSet {
+            guard let coin = coin else { return }
+            print(coin)
+        }
+    }
     
     
     
@@ -52,7 +57,6 @@ final class DiaryVC: UIView {
             tv.backgroundColor = UIColor.clear
             tv.font = UIFont.systemFont(ofSize: 16)
             tv.text = "텍스트를 여기에 입력하세요."
-            tv.textColor = UIColor.white
             tv.isEditable = false
         return tv
     }()
@@ -62,7 +66,6 @@ final class DiaryVC: UIView {
     // MARK: - Label
     private lazy var diaryLabel: UILabel = {
         return UILabel().labelConfig(labelText: "오늘의 하루는 어땠나요?",
-                                     LabelTextColor: UIColor.white,
                                      fontName: .bold,
                                      fontSize: 25,
                                      numberOfLines: 0,
@@ -72,12 +75,12 @@ final class DiaryVC: UIView {
     
     
     // MARK: - Button
-    private lazy var footerButton: UIButton = {
-        // 버튼 시스템 이미지 크기 바꾸기
-        let btn = UIButton().buttonSustemImage(btnSize: 30, imageString: .share)
-            btn.addTarget(self, action: #selector(self.shareButtonTapped), for: .touchUpInside)
-        return btn
-    }()
+//    private lazy var footerButton: UIButton = {
+//        // 버튼 시스템 이미지 크기 바꾸기
+//        let btn = UIButton().buttonSustemImage(btnSize: 30, imageString: .share)
+//            btn.addTarget(self, action: #selector(self.shareButtonTapped), for: .touchUpInside)
+//        return btn
+//    }()
     
     
     
@@ -97,13 +100,8 @@ final class DiaryVC: UIView {
     
     // MARK: - HelperFunctions
     private func configureDiaryVC() {
-        // background Color
-        self.backgroundColor = .clear
-        
         // alpha
         self.alpha = 0
-        
-        // UI - AutoLayout
         // diaryLabel
         self.addSubview(self.diaryLabel)
         self.diaryLabel.anchor(top: self.safeAreaLayoutGuide.topAnchor, paddingTop: 20,
@@ -123,8 +121,6 @@ final class DiaryVC: UIView {
                                    trailing: self.diaryLabel.trailingAnchor,
                                    height: 200,
                                    cornerRadius: 20)
-        
-        
         // diaryTextView
         self.addSubview(self.diaryTextView)
         self.diaryTextView.delegate = self
@@ -134,13 +130,12 @@ final class DiaryVC: UIView {
                                   trailing: self.diarywhiteView.trailingAnchor, paddingTrailing: 5,
                                   cornerRadius: 20)
         // footerButton
-        self.addSubview(self.footerButton)
-        self.footerButton.anchor(bottom: self.safeAreaLayoutGuide.bottomAnchor, paddingBottom: 10,
-                                   centerX: self)
+//        self.addSubview(self.footerButton)
+//        self.footerButton.anchor(bottom: self.safeAreaLayoutGuide.bottomAnchor, paddingBottom: 10,
+//                                   centerX: self)
     }
     // 화면터치하면 키보드가 내려가도록
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-//        diaryTextView.endEditing(true)
         self.diaryTextView.resignFirstResponder()
     }
     
@@ -150,9 +145,8 @@ final class DiaryVC: UIView {
         self.diaryTextView.textColor = color
         self.diaryLabel.textColor = color
         self.separatorView.backgroundColor = color
-        self.footerButton.tintColor = color
+//        self.footerButton.tintColor = color
     }
-    
     
     
     
@@ -171,9 +165,9 @@ final class DiaryVC: UIView {
     
     
     // MARK: - Selectors
-    @objc private func shareButtonTapped() {
-        print(#function)
-    }
+//    @objc private func shareButtonTapped() {
+//        print(#function)
+//    }
 }
 
 
@@ -219,7 +213,7 @@ extension DiaryVC: HeaderDiaryVCDelegate {
                 self.diaryTextView.isEditable = true
                 self.diarywhiteView.backgroundColor = UIColor(white: 1, alpha: 0.4)
                 // share버튼 숨기기
-                self.footerButton.alpha = 0
+//                self.footerButton.alpha = 0
             }
             
             
@@ -240,7 +234,7 @@ extension DiaryVC: HeaderDiaryVCDelegate {
                 self.diaryTextView.isEditable = false
                 self.diarywhiteView.backgroundColor = .clear
                 // share버튼 보이게 하기
-                self.footerButton.alpha = 1
+//                self.footerButton.alpha = 1
             }
         }
     }
@@ -259,15 +253,17 @@ extension DiaryVC: HeaderDiaryVCDelegate {
         // Create
         if self.diaryData == nil {
             self.service.createDiaryData(diaryText: diaryText)
-
+            
+            // delegate - create
+            self.diaryVCMainDelegate?.createDiaryData()
+            
         // Update
         } else {
             guard let diaryData = diaryData else { return }
             self.service.updateDiaryData(diary: diaryData, diaryText: diaryText)
+            // delegate - update
+            self.diaryVCMainDelegate?.updateDiaryData()
         }
-        
-        // delegate
-        self.diaryVCMainDelegate?.updateDiaryData()
     }
     
     
@@ -276,7 +272,7 @@ extension DiaryVC: HeaderDiaryVCDelegate {
         self.diaryTextView.isEditable = false
         self.diarywhiteView.backgroundColor = .clear
         // share버튼 보이게 하기
-        self.footerButton.alpha = 1
+//        self.footerButton.alpha = 1
     }
 }
 
@@ -306,7 +302,6 @@ extension DiaryVC: UITextViewDelegate {
     func textViewDidBeginEditing(_ textView: UITextView) {
         if self.diaryTextView.text == "텍스트를 여기에 입력하세요." {
             self.diaryTextView.text = ""
-            self.diaryTextView.textColor = .white
         }
     }
     
@@ -316,7 +311,6 @@ extension DiaryVC: UITextViewDelegate {
     func textViewDidEndEditing(_ textView: UITextView) {
         if self.diaryTextView.text == "" {
             self.diaryTextView.text = "텍스트를 여기에 입력하세요."
-            self.diaryTextView.textColor = .white
         }
     }
 }

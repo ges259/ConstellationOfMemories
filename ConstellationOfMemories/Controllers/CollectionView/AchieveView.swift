@@ -32,6 +32,10 @@ final class AchieveView: UIView {
     // 일기를 쓴 달 배열
     var everyMonth: [String] = [] {
         didSet {
+            if totalImageInt.count - everyMonth.count < 0 {
+                self.totalImageInt = [100, 200, 300, 400, 101, 201, 202].shuffled()
+                
+            }
             self.achieveCollection.reloadData()
         }
     }

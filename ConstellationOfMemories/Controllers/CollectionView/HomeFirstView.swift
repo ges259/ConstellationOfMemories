@@ -32,23 +32,7 @@ final class HomeFirstView: UIView {
     
     
     // 셀에 background_image를 표시하기 위한 데이터
-    var backgroundData: HaveImg? {
-        didSet {
-//            guard let backgroundData = self.backgroundData else { return }
-//
-//            self.secondDawn = backgroundData.havedawn
-//            self.secondMorning = backgroundData.haveMorning
-//            self.secondSunset = backgroundData.haveSunset
-//            self.secondNight = backgroundData.haveNight
-        }
-    }
-    
-//    private var secondDawn: [Int] = []
-//    private var secondMorning: [Int] = []
-//    private var secondSunset: [Int] = []
-//    private var secondNight: [Int] = []
-    
-    
+    var backgroundData: HaveImg?
     
     
     
