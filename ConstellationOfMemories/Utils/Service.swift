@@ -80,12 +80,8 @@ struct Service {
                                        img: "400")
                 }
                 
-                
-                
-                
-                
-                
-                
+                // 기본 코인 10개
+                Users_REF.child(uid).child(DBString.coin).setValue(10)
                 completion()
             }
         }
@@ -139,7 +135,7 @@ struct Service {
     
     
     // MARK: - Plus_Coin
-    func plusCoin(coin: Int, completion: @escaping () -> Void) {
+    func plusCoin(coin: Int) {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         Users_REF.child(uid).child(DBString.coin).setValue(coin + 3)
         
@@ -147,7 +143,7 @@ struct Service {
     
     
     // MARK: - MinusCoin
-    func minusCoin(coin: Int, completion: @escaping () -> Void) {
+    func minusCoin(coin: Int) {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         Users_REF.child(uid).child(DBString.coin).setValue(coin - 10)
     }

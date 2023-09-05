@@ -12,6 +12,7 @@ final class LaounchSccreen: UIView {
     // MARK: - Properties
     lazy var imageView: UIImageView = {
         return UIImageView(image: UIImage(named: "0"))
+//        return UIImageView()
     }()
     
     
@@ -20,7 +21,7 @@ final class LaounchSccreen: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        
+//        self.alpha = 0
         
         self.addSubview(self.imageView)
         self.imageView.anchor(top: self.topAnchor,

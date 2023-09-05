@@ -12,35 +12,39 @@ final class HomeView: UIView {
     
     // MARK: - Properties
 // [DB_Data]
+    var backgroundData: HaveImg? {
+        didSet { self.homeFirstView.backgroundData = self.backgroundData }
+    }
+    
     var imageFont : UserImgFont? {
         didSet {
             if let user = self.imageFont {
                 // img 바꾸기
-                self.imgString = [user.dawnImg, user.morningImg, user.sunsetImg, user.nightImg]
+                self.imgString = [user.dawnImg,
+                                  user.morningImg,
+                                  user.sunsetImg,
+                                  user.nightImg]
                 // font 바꾸기
-                self.fontInt = [user.dawnFont, user.morningFont, user.sunsetFont, user.nightFont]
-                // 첫 화면을 0으로 설정
-                self.topSegementValue = 0
+                self.fontInt = [user.dawnFont,
+                                user.morningFont,
+                                user.sunsetFont,
+                                user.nightFont]
                 
                 self.homeFirstView.firstCollection.reloadData()
             }
         }
     }
+// [Img_Font_Data]
     // 서버에 저장되어 있는 user의 시간별 Image_String
     private var imgString: [String] = ["100", "200", "300", "400"]
     // 서버에 저장되어 있는 user의 시간별 Font_Int
     private var fontInt: [Int] = [-1, -1, -1, -1]
     
+    private var temporaryFont: Int = -1
+    private var temporaryImg: String = "100"
+
     
-    
-    var backgroundData: HaveImg? {
-        didSet { self.homeFirstView.backgroundData = self.backgroundData }
-    }
-    
-    
-    
-    
-    
+// [Segement_Value_Changed]
     // segement 선택 시 해당 변수가 바뀜 -> 이미지 바꿈
     private var topSegementValue: Int = 0 {
         didSet {
@@ -54,16 +58,28 @@ final class HomeView: UIView {
     }
     
     
-    private var temporaryFont: Int = -1
-    private var temporaryImg: String = "100"
-
-    
     
 // [Delegate]
     // Home_Main_Delegate
     var homeMainDelegate: HomeMainDelegate?
     // home_HeaderView_Delegate
     var homeHeaderDelegaet: homeHeaderViewDelegate?
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     
     
@@ -171,9 +187,6 @@ final class HomeView: UIView {
     private lazy var backButton2: UIButton = {
         return UIButton().buttonSustemImage(btnSize: 10, imageString: .back)
     }()
-//    private lazy var shareButton: UIButton = {
-//        return UIButton().buttonSustemImage(btnSize: 10, imageString: .share)
-//    }()
     
     
     
@@ -218,6 +231,21 @@ final class HomeView: UIView {
     
     
 
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     
     
@@ -364,17 +392,7 @@ final class HomeView: UIView {
                              leading: self.diaryViewImg.leadingAnchor, paddingLeading: 10,
                              trailing: self.diaryViewImg.trailingAnchor, paddingTrailing: 10,
                              height: 30)
-        // shareButton
-//        self.addSubview(self.shareButton)
-//        self.shareButton.anchor(bottom: self.diaryViewImg.bottomAnchor, paddingBottom: 10,
-//                                centerX: self.diaryViewImg)
     }
-    
-    
-    
-    
-    
-    
     
     
     
@@ -407,7 +425,15 @@ final class HomeView: UIView {
     
 // MARK: - Helper Functions
     func resetHomeView() {
+        // [Top_Segement]
         self.headerSegment.selectedSegmentIndex = 0
+        self.topSegementValue = 0
+        
+        // [Bottom_Segement]
+        self.firstViewShow(show: true)
+        self.bottomsegement.selectedSegmentIndex = 0
+        self.homeFirstView.currentTime = .dawn
+        self.homeFirstView.upCollectionView()
     }
     
     
@@ -418,7 +444,6 @@ final class HomeView: UIView {
         self.mainImg.image = UIImage(named: indexString)
         self.diaryTableImg.image = UIImage(named: indexString)
         self.diaryViewImg.image = UIImage(named: indexString)
-        
         // 이미지 임시저장
         self.temporaryImg = indexString
     }
@@ -427,17 +452,14 @@ final class HomeView: UIView {
     
     // MARK: - Font
     private func homeFontChange(Int_index: Int = 1, UI_color: UIColor? = nil) {
-        
         let color = UI_color != nil
-        ? UI_color ?? .white
-        : fontColor(index: Int_index)
-        
+            ? UI_color ?? .white
+            : fontColor(index: Int_index)
         
         // Main_View
         self.mainLbl.textColor = color
         self.menuButton.tintColor = color
         self.moonButton.tintColor = color
-        
         
         // Diary_Table
         self.backButton1.tintColor = color
@@ -457,7 +479,6 @@ final class HomeView: UIView {
         self.separatorView.backgroundColor = color
         self.textView.textColor = color
         self.backButton2.tintColor = color
-//        self.shareButton.tintColor = color
         
         // 폰트 임시저장
         self.temporaryFont = Int_index
@@ -465,8 +486,12 @@ final class HomeView: UIView {
     
     // MARK: - Font_DB
     func homeColor(_ color: UIColor) {
-        self.headerSegment.setTitleTextAttributes([NSAttributedString.Key.font : UIFont.systemFont(ofSize: 14), NSAttributedString.Key.foregroundColor : color], for: .normal)
-        self.bottomsegement.setTitleTextAttributes([NSAttributedString.Key.font : UIFont.systemFont(ofSize: 14), NSAttributedString.Key.foregroundColor : color], for: .normal)
+        self.headerSegment.setTitleTextAttributes(
+            [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 14),
+             NSAttributedString.Key.foregroundColor : color], for: .normal)
+        self.bottomsegement.setTitleTextAttributes([
+            NSAttributedString.Key.font : UIFont.systemFont(ofSize: 14),
+            NSAttributedString.Key.foregroundColor : color], for: .normal)
         
         self.homeFontChange(UI_color: color)
     }
@@ -510,7 +535,12 @@ final class HomeView: UIView {
     
     
     @objc private func homeSegmentedChanged(segment: UISegmentedControl) {
-        if segment.selectedSegmentIndex == 0 {
+        segment.selectedSegmentIndex == 0
+            ? self.firstViewShow(show: true)
+            : self.firstViewShow(show: false)
+    }
+    private func firstViewShow(show: Bool) {
+        if show == true {
             UIView.animate(withDuration: 0.5) {
                 // first 보이게 하기
                 self.homeFirstView.alpha = 1
@@ -548,7 +578,6 @@ final class HomeView: UIView {
 // MARK: - Delegate
 extension HomeView: SecondHomeDelegate, FirstHomeDelegate {
     func homeSecondTapped(index: Int) {
-        // MARK: - Fix
         // right_Button 생기게 함
         self.homeHeaderDelegaet?.showCheckRightBtn()
         // 폰트 바꾸기

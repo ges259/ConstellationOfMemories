@@ -184,7 +184,6 @@ extension HeaderView {
             break
             
             
-            
         // menu_LeftButton_Tapped
             // Menu -> MainVC
         case .menuViewButton:
@@ -203,11 +202,9 @@ extension HeaderView {
         case .achieveTableButton:
             self.headerMainDelegate?.achieveTableToAchieve()
             break
-            
         case .achieveDiaryVeiwButton:
             self.headerMainDelegate?.achieveDiaryToTable()
             break
-            
             
             
         case .homeViewButton:
@@ -216,7 +213,6 @@ extension HeaderView {
             self.headerMainDelegate?.handleHomeToMain()
             self.rightButtonHide()
             break
-            
             
             
         case .shopVCButton:
@@ -228,11 +224,6 @@ extension HeaderView {
         case .shopDetailViewButton:
             self.headerMainDelegate?.handleDetailToShop()
             break
-//        case .shopPurchaseBtn:
-//            print("shopPurchaseBtn")
-//            self.headerMainDelegate?.purchaseTodetailShop()
-//            break
-            
             
             
         case .setupVCButton:
@@ -246,7 +237,6 @@ extension HeaderView {
             break
             
             
-            
         // Diary_Table_LeftButton_Tapped
             // Diary_Table -> MainVC
         case .diaryTableViewButton:
@@ -255,7 +245,6 @@ extension HeaderView {
             // MainVC 로 dismiss(테이블뷰 내리기) - Delegate
             self.headerMainDelegate?.handleTableToMain()
             break
-            
             
             
         // Diary_LeftButton_Tapped
@@ -270,7 +259,8 @@ extension HeaderView {
             // check표시를 클릭하지 않고 왼쪽버튼을 통해 나가도 저장이 될 수 있도록 함
 //            self.headerRightButtonTapped()
             // right Button 숨기기
-            self.rightButton.alpha = 0
+//            self.rightButton.alpha = 0
+            self.rightButtonHide()
             break
         }
     }
@@ -315,7 +305,6 @@ extension HeaderView {
             break
             
             
-            
         // 현재: saveMode
             // rightButton을 누르면 FixMode로 진입
         case .saveMode:
@@ -327,6 +316,7 @@ extension HeaderView {
                 // save모드에서 rightButton 누르면 fix모드로 들어갈 수 있게
             self.rightButtonConfig = .fixMode
             break
+            
             
         case .cannotBeModified:
             self.headerDiaryVCDelegate?.observationMode()
@@ -343,14 +333,13 @@ extension HeaderView {
             self.headerMainDelegate?.detailToPurchase()
             break
             
+            
         case .home:
             // 버튼은 처음에 숨겨져 있음
                 // cell을 클릭하면 버튼이 생김
             // 버튼을 누르면
                 // 업데이트
             self.headerHomeDelegate?.checkButtonTapped()
-            
-            
             break
         }
     }
@@ -393,11 +382,9 @@ extension HeaderView {
             break
             
             
-            
         // MenuVC 화면들어오면 -> 버튼 이미지
         case .menuViewButton:
             break
-            
             
             
         case .achieveViewButton:
@@ -405,14 +392,8 @@ extension HeaderView {
             self.leftButtonAlpha(.back)
             self.rightButtonHide()
             break
-//        case .achieveDetailViewButton:
-//            self.rightButtonConfig = .achieveDetail
-//            break
         case .achieveTableButton:
-//            self.headerTitle(title: "월의 일기장")
             break
-            
-            
         case .achieveDiaryVeiwButton:
             break
             
@@ -423,20 +404,14 @@ extension HeaderView {
             break
             
             
-            
         // shopVC 화면들어오면 -> 버튼 이미지 및 텍스트 설정
         case .shopVCButton:
-            self.leftButtonAlpha(.back)
             self.rightButtonHide()
             break
         case .shopDetailViewButton:
             self.rightButtonConfig = .shopDetail
             self.rightButtonShow(.coin)
             break
-//        case .shopPurchaseBtn:
-            
-//            break
-            
             
             
         case .setupVCButton:
@@ -447,12 +422,10 @@ extension HeaderView {
             break
             
             
-            
         // TableView 화면들어오면 -> 버튼 이미지 및 설정
         case .diaryTableViewButton:
             self.headerTitle(title: "일기 목록")
             break
-            
             
             
         // DiaryVC 화면들어오면 -> 버튼 설정
@@ -463,10 +436,6 @@ extension HeaderView {
                 // -> 설정값에 따라 headerRightButtonTapped()를 하여 뷰를 바꿈
             self.headerRightButtonTapped()
             break
-
-            
-            
-        
         }
     }
     

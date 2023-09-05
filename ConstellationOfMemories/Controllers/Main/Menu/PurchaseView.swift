@@ -23,7 +23,7 @@ final class PurchaseView: UIView {
     
     // MARK: - Layout
     private lazy var logoutView: UIView = {
-        return UIView().viewConfig(backgroundColor: UIColor(white: 1, alpha: 0.6))
+        return UIView().viewConfig(backgroundColor: UIColor(white: 1, alpha: 0.75))
     }()
     
     

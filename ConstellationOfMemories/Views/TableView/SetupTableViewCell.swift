@@ -33,9 +33,7 @@ final class SetupTableviewCell: UITableViewCell {
     
     // MARK: - Layout
     lazy var titleLabel: UILabel = {
-        return UILabel().labelConfig(labelText: "로그아웃",
-                                     LabelTextColor: UIColor.nightFontColor,
-                                     fontName: .system,
+        return UILabel().labelConfig(fontName: .system,
                                      fontSize: 20)
     }()
     
@@ -43,7 +41,6 @@ final class SetupTableviewCell: UITableViewCell {
         let btn = UIButton()
         
             btn.backgroundColor = UIColor(white: 1, alpha: 0.3)
-            btn.setTitle("Logout", for: .normal)
             btn.titleLabel?.textAlignment = .center
             btn.titleLabel?.font = .boldSystemFont(ofSize: 16)
         
@@ -60,7 +57,6 @@ final class SetupTableviewCell: UITableViewCell {
         
         // config Cell
         self.configureCell()
-        
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -68,9 +64,9 @@ final class SetupTableviewCell: UITableViewCell {
     
     // MARK: - Helper Functions
     private func configureCell() {
-        // background Color
+        // background_Color
         self.backgroundColor = .clear
-
+        
         // Selection Style
         self.selectionStyle = .none
         
@@ -98,7 +94,6 @@ final class SetupTableviewCell: UITableViewCell {
             // Button_Title_Change
                 // ON -> OFF
                 if self.cellButton.titleLabel?.text == "ON" {
-                    print("ON")
                     Service.shared.updateInfo(on: false)
                     
                     self.cellButton.setTitle("OFF", for: .normal)
@@ -108,7 +103,6 @@ final class SetupTableviewCell: UITableViewCell {
                     
                 // OFF -> ON
                 } else {
-                    print("OFF")
                     Service.shared.updateInfo(on: true)
                     
                     self.cellButton.setTitle("ON", for: .normal)

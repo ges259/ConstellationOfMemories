@@ -23,10 +23,7 @@ final class SignUp: UIView {
     
     
     
-     
-    
-    
-    
+
     
     
     
@@ -46,22 +43,24 @@ final class SignUp: UIView {
     
     // MARK: - TextField
     private lazy var emailTextField: UITextField = {
-        let view = UITextField().textField(withPlaceholder: "Email",
-                                       keyboardType: .emailAddress)
-            view.addTarget(self, action: #selector(textFieldChanged), for: .editingChanged)
+        let view = UITextField().textField(keyboardType: .emailAddress)
+            view.addTarget(self, action: #selector(self.textFieldChanged),
+                           for: .editingChanged)
         return view
     }()
     
     private lazy var fullNameTextField: UITextField = {
-        let view = UITextField().textField(withPlaceholder: "FullName")
-            view.addTarget(self, action: #selector(textFieldChanged), for: .editingChanged)
+        let view = UITextField().textField(fontSize: 14)
+            view.addTarget(self, action: #selector(self.textFieldChanged),
+                           for: .editingChanged)
         return view
     }()
     
     private lazy var passwordTextField: UITextField = {
-        let view = UITextField().textField(withPlaceholder: "pasword",
-                                       isSecureTextEntry: true)
-            view.addTarget(self, action: #selector(textFieldChanged), for: .editingChanged)
+        let view = UITextField().textField(fontSize: 14,
+                                           isSecureTextEntry: true)
+            view.addTarget(self, action: #selector(self.textFieldChanged),
+                           for: .editingChanged)
         return view
     }()
 
@@ -70,7 +69,8 @@ final class SignUp: UIView {
     // MARK: - Button
     private lazy var signUpButton: UIButton = {
         let btn = UIButton().authButton(title: "Login")
-            btn.addTarget(self, action: #selector(signUpBtnTapped), for: .touchUpInside)
+            btn.addTarget(self, action: #selector(self.signUpBtnTapped),
+                          for: .touchUpInside)
         return btn
     }()
     
@@ -79,7 +79,8 @@ final class SignUp: UIView {
             type1TextString: "Already have an account?   ",
             type2TextString: "Sign In")
  
-            btn.addTarget(self, action: #selector(bottomBtnTapped), for: .touchUpInside)
+            btn.addTarget(self, action: #selector(self.bottomBtnTapped),
+                          for: .touchUpInside)
         return btn
     }()
     
@@ -166,7 +167,39 @@ final class SignUp: UIView {
     }
     
     
-    
+    // MARK: - Signup_Color
+    func signupColor(_ color: UIColor) {
+        self.titleLabel.textColor = color
+        
+        self.emailTextField.textColor = color
+        self.emailTextField.attributedPlaceholder =
+        NSAttributedString(
+            string: "email",
+            attributes: [NSAttributedString.Key.foregroundColor: color]
+        )
+        self.passwordTextField.textColor = color
+        self.passwordTextField.attributedPlaceholder =
+        NSAttributedString(
+            string: "password",
+            attributes: [NSAttributedString.Key.foregroundColor: color]
+        )
+        self.fullNameTextField.textColor = color
+        self.fullNameTextField.attributedPlaceholder =
+        NSAttributedString(
+            string: "fullName",
+            attributes: [NSAttributedString.Key.foregroundColor: color]
+        )
+        
+        
+        
+        self.signUpButton.setTitleColor(color, for: .normal)
+        
+        self.alreadyHaveButton.setAttributedTitle(    NSMutableAttributedString().mutableAttributedText(
+            type1TextString: "Already have an account?   ",
+            type1Foreground: color,
+            type2TextString: "Sign In",
+            type2Foreground: color), for: .normal)
+    }
     
     
     

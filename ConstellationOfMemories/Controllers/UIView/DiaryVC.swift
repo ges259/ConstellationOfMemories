@@ -11,22 +11,39 @@ import FirebaseAuth
 final class DiaryVC: UIView {
     
     // MARK: - Properties
+// [Singleton]
     // service 싱글톤
     private let service: Service = Service.shared
     
     
+// [DB_Data]
     // diary_Data
-    var diaryData: Diary? 
+    var diaryData: Diary?
+    // Coin_Data
+    var coin: Int?
     
+// [Delegate]
     // Delegate
     var diaryVCMainDelegate: DiaryVCMainDelegate?
     
-    var coin: Int? {
-        didSet {
-            guard let coin = coin else { return }
-            print(coin)
-        }
-    }
+    
+    
+    
+   
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     
     
@@ -71,16 +88,6 @@ final class DiaryVC: UIView {
                                      numberOfLines: 0,
                                      textAlignment: .center)
     }()
-    
-    
-    
-    // MARK: - Button
-//    private lazy var footerButton: UIButton = {
-//        // 버튼 시스템 이미지 크기 바꾸기
-//        let btn = UIButton().buttonSustemImage(btnSize: 30, imageString: .share)
-//            btn.addTarget(self, action: #selector(self.shareButtonTapped), for: .touchUpInside)
-//        return btn
-//    }()
     
     
     
@@ -129,10 +136,6 @@ final class DiaryVC: UIView {
                                   leading: self.diarywhiteView.leadingAnchor, paddingLeading: 5,
                                   trailing: self.diarywhiteView.trailingAnchor, paddingTrailing: 5,
                                   cornerRadius: 20)
-        // footerButton
-//        self.addSubview(self.footerButton)
-//        self.footerButton.anchor(bottom: self.safeAreaLayoutGuide.bottomAnchor, paddingBottom: 10,
-//                                   centerX: self)
     }
     // 화면터치하면 키보드가 내려가도록
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -140,35 +143,60 @@ final class DiaryVC: UIView {
     }
     
     
+    
+    
+    
     // MARK: - Font_Color
     func diaryColor(_ color: UIColor) {
         self.diaryTextView.textColor = color
         self.diaryLabel.textColor = color
         self.separatorView.backgroundColor = color
-//        self.footerButton.tintColor = color
     }
     
     
     
     
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    // MARK: - Selectors
-//    @objc private func shareButtonTapped() {
-//        print(#function)
-//    }
+    // MARK: - API
+    private func saveOrUpdate() {
+        // text_View 옵셔널 바인딩
+        guard let diaryText = self.diaryTextView.text else { return }
+        
+        
+        // [Create Or Update]
+        // Create
+        if self.diaryData == nil && MainVC.todayDiaryToggle == false {
+            self.service.createDiaryData(diaryText: diaryText)
+            // delegate - create
+            self.diaryVCMainDelegate?.createDiaryData()
+            
+            
+            
+        // Update
+        } else {
+            guard let diaryData = diaryData else { return }
+            self.service.updateDiaryData(diary: diaryData, diaryText: diaryText)
+            // delegate - update
+            self.diaryVCMainDelegate?.updateDiaryData()
+        }
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -201,23 +229,23 @@ extension DiaryVC: HeaderDiaryVCDelegate {
     
     func diaryFixMode(_ fixMode: Bool) {
         // 수정뷰로 진입
+        // Fix_Mode
         if fixMode == true {
             if self.diaryTextView.text == "" {
                 self.diaryTextView.text = "텍스트를 여기에 입력하세요."
             }
             
             
-            UIView.animate(withDuration: 0.3) {
+            UIView.animate(withDuration: 0.5) {
                 self.diarywhiteView.alpha = 1
                 
                 self.diaryTextView.isEditable = true
                 self.diarywhiteView.backgroundColor = UIColor(white: 1, alpha: 0.4)
-                // share버튼 숨기기
-//                self.footerButton.alpha = 0
             }
             
             
         // 저장뷰로 진입
+            // Save_Mode
         } else {
             if self.diaryTextView.text != "텍스트를 여기에 입력하세요."
                 && self.diaryTextView.text != ""
@@ -229,50 +257,18 @@ extension DiaryVC: HeaderDiaryVCDelegate {
                 self.diaryTextView.text = ""
             }
             
-            UIView.animate(withDuration: 0.3) {
+            UIView.animate(withDuration: 0.5) {
                 self.diarywhiteView.alpha = 0
                 self.diaryTextView.isEditable = false
                 self.diarywhiteView.backgroundColor = .clear
-                // share버튼 보이게 하기
-//                self.footerButton.alpha = 1
             }
         }
     }
-    
-    
-    
-    
-    
-    // MARK: - API
-    private func saveOrUpdate() {
-        print(#function)
-        // text
-        guard let diaryText = self.diaryTextView.text else { return }
-        
-        // [Create Or Update]
-        // Create
-        if self.diaryData == nil {
-            self.service.createDiaryData(diaryText: diaryText)
-            
-            // delegate - create
-            self.diaryVCMainDelegate?.createDiaryData()
-            
-        // Update
-        } else {
-            guard let diaryData = diaryData else { return }
-            self.service.updateDiaryData(diary: diaryData, diaryText: diaryText)
-            // delegate - update
-            self.diaryVCMainDelegate?.updateDiaryData()
-        }
-    }
-    
-    
+    // Observation_Mode
     func observationMode() {
         self.diarywhiteView.alpha = 0
         self.diaryTextView.isEditable = false
         self.diarywhiteView.backgroundColor = .clear
-        // share버튼 보이게 하기
-//        self.footerButton.alpha = 1
     }
 }
 
@@ -305,8 +301,8 @@ extension DiaryVC: UITextViewDelegate {
         }
     }
     
-    // 입력을 끝낸 후 텍스트뷰에 아무것도 없다면 "텍스트를 여기에 입력하세요."로 바꿈
     
+    // 입력을 끝낸 후 텍스트뷰에 아무것도 없다면 "텍스트를 여기에 입력하세요."로 바꿈
     // 글자 생상 바꾸기
     func textViewDidEndEditing(_ textView: UITextView) {
         if self.diaryTextView.text == "" {

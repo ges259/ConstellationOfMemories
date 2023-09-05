@@ -290,12 +290,13 @@ extension UIButton {
                                  type1TextString: String,
                                  type1FontName: FontStyle = .system,
                                  type1FontSize: CGFloat = 14,
-                                 type1Foreground: UIColor = .lightGray,
+                                 type1Foreground: UIColor = UIColor.lightGray,
                                  
                                  type2TextString: String,
                                  type2FontName: FontStyle = .bold,
-                                 type2FontSize: CGFloat = 14,
-                                 type2Foreground: UIColor = .black) -> UIButton {
+                                 type2FontSize: CGFloat = 16,
+                                 type2Foreground: UIColor = UIColor.lightGray)
+    -> UIButton {
         // UIFont 설정
         let type1Font: UIFont = type1FontName == FontStyle.system ? UIFont.systemFont(ofSize: type1FontSize) : UIFont.boldSystemFont(ofSize: type1FontSize)
         
@@ -338,11 +339,7 @@ extension UIImage {
 // MARK: - TextField
 extension UITextField {
     
-    func textField(withPlaceholder placeholder: String,
-                   
-                   textColor: UIColor? = .black,
-                   
-                   fontSize: CGFloat? = 16,
+    func textField(fontSize: CGFloat = 16,
                    
                    keyboardType: UIKeyboardType = .webSearch,
                    
@@ -352,20 +349,12 @@ extension UITextField {
         
         let tf = UITextField()
         
-        // set placeholder _ FontColor
-        tf.attributedPlaceholder = NSAttributedString(
-            string: placeholder,
-            attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray]
-        )
         
         // set keyboardType
         tf.keyboardType = keyboardType
         
-        // set text color
-        tf.textColor = textColor
-        
         // set font size
-        tf.font = UIFont.systemFont(ofSize: fontSize!)
+        tf.font = UIFont.systemFont(ofSize: fontSize)
         
         // set background color
         tf.backgroundColor = UIColor(white: 1, alpha: 0.3)
@@ -392,5 +381,40 @@ extension UITextField {
         tf.textContentType = .oneTimeCode
         
         return tf
+    }
+}
+
+
+// MARK: - NSMutableAttributedString
+extension NSMutableAttributedString {
+    
+    func mutableAttributedText(type1TextString: String,
+                               type1FontName: FontStyle = .system,
+                               type1FontSize: CGFloat = 14,
+                               type1Foreground: UIColor,
+                               
+                               type2TextString: String,
+                               type2FontName: FontStyle = .bold,
+                               type2FontSize: CGFloat = 16,
+                               type2Foreground: UIColor
+    ) -> NSMutableAttributedString {
+        
+        // UIFont 설정
+        let type1Font: UIFont = type1FontName == FontStyle.system ? UIFont.systemFont(ofSize: type1FontSize) : UIFont.boldSystemFont(ofSize: type1FontSize)
+        
+        let type2Font: UIFont = type2FontName == FontStyle.system ? UIFont.systemFont(ofSize: type2FontSize) : UIFont.boldSystemFont(ofSize: type2FontSize)
+        
+        // Mutable_Attributed_String 설정
+        let attributedTitle = NSMutableAttributedString(
+            string: type1TextString,
+            attributes: [NSAttributedString.Key.font : type1Font,
+                         NSAttributedString.Key.foregroundColor : type1Foreground]
+        )
+        attributedTitle.append(NSAttributedString(
+            string: type2TextString,
+            attributes: [NSAttributedString.Key.font : type2Font,
+                         NSAttributedString.Key.foregroundColor : type2Foreground])
+        )
+        return attributedTitle
     }
 }

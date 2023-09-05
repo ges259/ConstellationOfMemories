@@ -224,10 +224,11 @@ extension SetupTableView: UITableViewDelegate, UITableViewDataSource {
         } else {
             cell.setupCellTitle = .logout
             cell.titleLabel.text = "로그아웃"
+            cell.cellButton.setTitle("Logout", for: .normal)
         }
         
-        cell.setupCellSetupDelegate = self
-        cell.fontColor = self.fontColor
+            cell.setupCellSetupDelegate = self
+            cell.fontColor = self.fontColor
         return cell
     }
 }

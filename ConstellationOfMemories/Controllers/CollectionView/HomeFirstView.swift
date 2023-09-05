@@ -18,10 +18,8 @@ final class HomeFirstView: UIView {
             UIView.animate(withDuration: 0.2) {
                 self.firstCollection.alpha = 0
                 
-                
             } completion: { _ in
                 self.firstCollection.reloadData()
-                
                 
                 UIView.animate(withDuration: 0.5) {
                     self.firstCollection.alpha = 1
@@ -100,7 +98,7 @@ final class HomeFirstView: UIView {
         self.addSubview(self.firstCollection)
     }
     
-    private func upCollectionView() {
+    func upCollectionView() {
         // item이 항상 맨위로 가도록 설정
         self.firstCollection.scrollToItem(at: IndexPath(item: 0, section: 0),
                                           at: .top, animated: true)

@@ -21,7 +21,7 @@ final class LogoutView: UIView {
     
     // MARK: - Layout
     private lazy var logoutView: UIView = {
-        return UIView().viewConfig(backgroundColor: UIColor(white: 1, alpha: 0.75))
+        return UIView().viewConfig(backgroundColor: UIColor(white: 1, alpha: 0.3))
     }()
     
     
@@ -105,12 +105,12 @@ final class LogoutView: UIView {
     
     
     // MARK: - Logout_Font
-//    func logoutColor(_ color: UIColor) {
-//        self.cancelBtn.setTitleColor(color, for: .normal)
-//        self.logoutBtn.setTitleColor(color, for: .normal)
-//        self.logoutBtn.tintColor = color
-//        self.titleLabel.textColor = color
-//    }
+    func logoutColor(_ color: UIColor) {
+        self.cancelBtn.setTitleColor(color, for: .normal)
+        self.logoutBtn.setTitleColor(color, for: .normal)
+        self.logoutBtn.tintColor = color
+        self.titleLabel.textColor = color
+    }
     
     
     

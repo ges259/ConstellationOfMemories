@@ -17,10 +17,7 @@ final class LoginVC: UIView {
     
     
     
-    
-    
-    
-    
+
     
     
     
@@ -42,18 +39,18 @@ final class LoginVC: UIView {
     
     // MARK: - TextField
     private lazy var emailTextField: UITextField = {
-        let tf = UITextField().textField(withPlaceholder: "Email",
-                                         fontSize: 14)
-        tf.addTarget(self, action: #selector(self.textFieldChanged), for: .editingChanged)
+        let tf = UITextField().textField(fontSize: 14)
+        tf.addTarget(self, action: #selector(self.textFieldChanged),
+                     for: .editingChanged)
         
         return tf
     }()
     
     private lazy var passwordTextField: UITextField = {
-        let tf = UITextField().textField(withPlaceholder: "Password",
-                                         fontSize: 14,
+        let tf = UITextField().textField(fontSize: 14,
                                          isSecureTextEntry: true)
-        tf.addTarget(self, action: #selector(self.textFieldChanged), for: .editingChanged)
+        tf.addTarget(self, action: #selector(self.textFieldChanged),
+                     for: .editingChanged)
         return tf
     }()
     
@@ -63,14 +60,13 @@ final class LoginVC: UIView {
     // MARK: - Button
     private lazy var loginButton: UIButton = {
         let btn = UIButton().authButton(title: "Login")
-            btn.addTarget(self, action: #selector(loginBtnTapped), for: .touchUpInside)
+            btn.addTarget(self, action: #selector(self.loginBtnTapped),
+                          for: .touchUpInside)
         return btn
     }()
     
     private lazy var dontHaveAccountButton: UIButton = {
-        let btn = UIButton().mutableAttributedString(
-            type1TextString: "Dont't have an account?   ",
-            type2TextString: "Sign in")
+        let btn = UIButton()
  
         btn.addTarget(self, action: #selector(bottomBtnTapped), for: .touchUpInside)
         return btn
@@ -164,10 +160,38 @@ final class LoginVC: UIView {
         
         self.addSubview(self.signUpView)
     }
-    func goToMainVC() {
-        print(#function)
-    }
     
+    
+    
+    // MARK: - Login_Color
+    func loginColor(_ color: UIColor) {
+        self.titleLabel.textColor = color
+        self.emailTextField.textColor = color
+        self.emailTextField.attributedPlaceholder =
+        NSAttributedString(
+            string: "email",
+            attributes: [NSAttributedString.Key.foregroundColor: color]
+        )
+        self.passwordTextField.textColor = color
+        self.passwordTextField.attributedPlaceholder =
+        NSAttributedString(
+            string: "password",
+            attributes: [NSAttributedString.Key.foregroundColor: color]
+        )
+        
+        
+        
+        self.loginButton.setTitleColor(color, for: .normal)
+        
+        self.dontHaveAccountButton.setAttributedTitle(    NSMutableAttributedString().mutableAttributedText(
+            type1TextString: "Dont't have an account?   ",
+            type1Foreground: color,
+            type2TextString: "Sign Up",
+            type2Foreground: color), for: .normal)
+        
+        
+        self.signUpView.signupColor(color)
+    }
     
     
     
